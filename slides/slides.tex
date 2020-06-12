@@ -1,0 +1,618 @@
+\documentclass{beamer}
+%
+% Choose how your presentation looks.
+%
+% For more themes, color themes and font themes, see:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+%
+\mode<presentation>
+{
+  \usetheme{default}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{default} % or try albatross, beaver, crane, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+  \setbeamertemplate{footline}[frame number]
+}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{alltt}
+\usepackage{tabularx}
+
+\def\code#1{\texttt{\frenchspacing#1}}
+
+\title[FPV revision course]{Functional Programming and Verification \\ revision course}
+\author{Jonas Hübotter}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Uncomment these lines for an automatically generated outline.
+\begin{frame}{Outline}
+ \tableofcontents
+\end{frame}
+
+\section{1 Functional Programming and Haskell}
+
+\subsection{Basic Haskell}
+
+\begin{frame}{1.1 Basic Haskell}
+\begingroup
+\setlength{\tabcolsep}{10pt}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{ll}
+    function types & \code{f :: a -> b -> c} \\
+    function definitions & \code{f a b = a + b} \\
+    function application & \code{f 1 2} \\
+    function composition & \code{f . g} means $f(g(x))$ \\
+    conditional & \code{if True then a else b} \\
+    prefix/infix precedence & \code{f a `g` b} means \code{(f a) `g` b} \\
+    \code{\$} sign & \code{f \$ a `g` b} means \code{f (a `g` b)} \\
+\end{tabularx}
+\endgroup
+
+\end{frame}
+
+\begin{frame}{Types}
+
+\begingroup
+\setlength{\tabcolsep}{10pt}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{ll}
+    \code{Bool} & \code{True} or \code{False} \\
+    \code{Int} & fixed-width integers \\
+    \code{Integer} & unbounded integers \\
+    \code{Char} & \code{'a'} \\
+    \code{String} & \code{"hello"} (type \code{[Char]}) \\
+    \code{(a,b)} (Tuple) & \code{("hello",1) :: (String,Int)}
+\end{tabularx}
+\endgroup
+
+\end{frame}
+
+\begin{frame}[fragile]{Tuples}
+
+\begin{verbatim}
+(1,"hello") :: (Int,String)
+(x,y,z) :: (a,b,c)
+-- ...
+\end{verbatim}
+
+Prelude functions: \code{fst}, \code{snd}
+
+\end{frame}
+
+\begin{frame}[fragile]{Lists}
+
+Two ways of constructing a list:
+
+\begin{verbatim}
+a = [1,2,3]
+b = 1 : 2 : 3 : []
+\end{verbatim}
+
+Cons \code{(:)} and \code{[]} are \textcolor{blue}{constructors} of lists, that is a function that \textcolor{blue}{uniquely constructs} a value of the list type.
+
+\pause
+
+\vspace{1cm}
+Intuitively: \code{(:) :: a -> [a] -> [a]}.
+
+\end{frame}
+
+\begin{frame}{Prelude functions}
+
+\begin{tabularx}{\textwidth}{ll}
+    \code{head :: [a] -> a} & first element \\
+    \code{last :: [a] -> a} & last element \\
+    \code{init :: [a] -> [a]} & every element but last \\
+    & element \\
+    \code{tail :: [a] -> [a]} & every element but first \\
+    & element \\
+    \code{elem :: a -> [a] -> Bool} & element in list? \\
+    \code{(++) :: [a] -> [a] -> [a]} & append lists \\
+    \code{reverse :: [a] -> [a]} & reverse list \\
+    \code{length :: [a] -> Int} & length of list \\
+    \code{null :: [a] -> Bool} & empty? \\
+    \code{concat :: [[a]] -> [a]} & flatten list \\
+    \code{zip :: [a] -> [b] -> [(a,b)]} & combine lists element-wise \\
+    \code{unzip :: [(a,b)] -> ([a],[b])} & separate list of tuples into \\
+    & list of components \\
+\end{tabularx}
+
+\end{frame}
+
+\begin{frame}{Prelude functions (2)}
+
+\begin{tabularx}{\textwidth}{ll}
+    \code{replicate :: Int -> a -> [a]} & build list from repeated \\
+    & element \\
+    \code{take :: Int -> [a] -> [a]} & prefix of list with given length \\
+    \code{drop :: Int -> [a] -> [a]} & suffix of list with given length \\
+    \code{and ::[Bool] -> Bool} & conjunction over all elements \\
+    \code{or ::[Bool] -> Bool} & disjunction over all elements \\
+    \code{sum ::[Int] -> Int} & sum over all elements \\
+    \code{product ::[Int] -> Int} & product over all elements \\
+\end{tabularx}
+
+\pause
+
+\vspace{1cm}
+search for functions by type signature on \url{https://hoogle.haskell.org/}.
+
+\end{frame}
+
+\begin{frame}[fragile]{Ranges}
+
+\begin{alltt}
+[1..5]\pause
+= [1,2,3,4,5]
+
+[1,3..10]\pause
+= [1,3,5,7,9]
+
+[1..]\pause
+= \textit{[1,2,3...]}
+
+[1,3..]\pause
+= \textit{[1,3,5...]}
+\end{alltt}
+
+\end{frame}
+
+\begin{frame}[fragile]{Local definitions}
+
+\begin{alltt}
+let x = \(e\sb1\) in \(e\sb2\)
+\end{alltt}
+defines \code{x} locally in $e_2$.
+
+\pause
+
+\vspace{1cm}
+\begin{alltt}
+\(e\sb2\) where x = \(e\sb1\)
+\end{alltt}
+also defines \code{x} locally in $e_2$ where $e_2$ has to be a function definition.
+
+\end{frame}
+
+\subsection{Recursion, guards, pattern matching}
+
+\begin{frame}[fragile]{1.2 Recursion, guards, pattern matching}
+
+\begin{block}{Guards}
+\begin{exampleblock}{Example: maximum of two integers.}
+\begin{verbatim}
+max2 :: Integer -> Integer -> Integer
+max2 x y
+  | x >= y    = x
+  | otherwise = y
+\end{verbatim}
+\end{exampleblock}
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Recursion}
+
+\begin{block}{\centering Reduce problem into a solving a series of smaller problems of a similar kind.}
+\end{block}
+
+\begin{exampleblock}{Example}
+\begin{alltt}
+factorial :: Integer -> Integer
+factorial n\pause
+  | n == 0 = 1                       -- base case
+  | n > 0  = n * factorial (n – 1)   -- recursive case
+\end{alltt}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Accumulating parameter}
+
+Alternatively, \code{factorial} could be defined as
+
+\begin{alltt}
+factorial :: Integer -> Integer\pause
+factorial n = aux n 0
+  where
+    aux :: Integer -> Integer -> Integer
+    aux n acc\pause
+      | n == 0 = acc
+      | n > 0  = factorial (n - 1) (n * acc)
+\end{alltt}
+
+\pause
+
+The resulting function is \textcolor{blue}{tail recursive}, that is the recursive call is located at the very end of its body. \par
+Therefore, no computation is done after the recursive function call returns.
+
+\pause
+
+\vspace{1cm}
+In general, recursion using accumulating parameters is less readable.
+
+\end{frame}
+
+\begin{frame}[fragile]{Pattern matching}
+
+A more compact syntax for recursion:
+
+\begin{verbatim}
+factorial 0 = 1
+factorial n | n > 0 = n * factorial (n – 1)
+\end{verbatim}
+
+\pause
+
+\begin{block}{\centering Patterns are expressions consisting only of constructors,  variables, and literals.}
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Pattern matching}
+
+\begin{exampleblock}{Examples}
+\begin{alltt}
+head :: [a] -> a\pause
+head (x : _) = x
+
+tail :: [a] -> [a]\pause
+tail (_ : xs) = xs
+
+null :: [a] -> Bool\pause
+null []      = True
+null (_ : _) = False
+\end{alltt}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Constructors vs Types}
+
+What is the difference between \code{True} and \code{Bool}?
+
+\begin{itemize}
+    \item \code{True} is a \textcolor{blue}{constructor}, \code{Bool} is a \textcolor{blue}{type}.
+    \item \code{True} can be used \textcolor{red}{in expressions} to build values of a type.
+    \item \code{Bool} can be used \textcolor{red}{in type signatures} to hint at the type of bindings.
+\end{itemize}
+
+\pause
+
+\vspace{1cm}
+Constructor or type?
+\begin{alltt}
+False\pause    \textcolor{green}{yes}
+(:)\pause      \textcolor{green}{yes}
+Maybe\pause    \textcolor{red}{no}
+Just\pause     \textcolor{green}{yes}
+Nothing  \textcolor{green}{yes}
+\end{alltt}
+
+\end{frame}
+
+\begin{frame}[fragile]{Case}
+
+Pattern matching in nested expressions
+
+\begin{verbatim}
+singleOrEmpty :: [a] -> Bool
+singleOrEmpty xs = case xs of []  -> True
+                              [_] -> True
+                              _   -> False
+\end{verbatim}
+
+\end{frame}
+
+\subsection{List comprehensions}
+
+\begin{frame}{1.3 List comprehensions}
+
+\begin{block}{\centering \code{[ $expr$ | $E_1$, ..., $E_n$ ]}}
+\end{block}
+
+where $expr$ is an expression and each $E_i$ is a generator or a test.
+
+\begin{itemize}
+    \item a \textcolor{blue}{generator} is of the form \code{$pattern$ <- $list expression$}
+    \item a \textcolor{blue}{test} is a Boolean expression
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{List comprehensions}
+
+\begin{exampleblock}{Examples}
+\begin{alltt}
+[ x ^ 2 | x <- [1..5]]\pause
+= [1, 4, 9, 16, 25]
+
+[ toLower c | c <- “Hello World!”]\pause
+= “hello world!”
+
+[ (x, even x) | x <- [1..3]]\pause
+= [(1, False), (2, True), (3, False)]
+\end{alltt}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Multiple generators}
+
+Generators are reduced from left to right. \par
+A generator or test can depend on any generator to its left.
+
+\pause
+
+\begin{exampleblock}{Example}
+\begin{alltt}
+[(i,j) | i <- [1 .. 3], j <- [i .. 3]]\pause
+= [(1,j) | j <- [1..3]] ++
+  [(2,j) | j <- [2..3]] ++
+  [(3,j) | j <- [3..3]]\pause
+= [(1,1), (1,2), (1,3), (2,2), (2,3), (3,3)]
+\end{alltt}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{The meaning of list comprehensions}
+
+\begin{alltt}
+[e | x <- [a1,...,an]]\pause
+= (let x = a1 in [e]) ++ · · · ++ (let x = an in [e])
+
+[e | b]\pause
+= if b then [e] else []
+
+[e | x <- [a1,...,an], E]\pause
+= (let x = a1 in [e | E]) ++ · · · ++
+  (let x = an in [e | E])
+
+[e | b, E]\pause
+= if b then [e | E] else []
+\end{alltt}
+
+\end{frame}
+
+\subsection{QuickCheck}
+
+\begin{frame}[fragile]{1.4 QuickCheck}
+
+QuickCheck tests check if a proposition holds true for a large number of random arguments.
+It can be used to \textit{test} the equivalence of two functions.
+
+\pause
+
+\begin{exampleblock}{Examples}
+\begin{alltt}
+import Test.QuickCheck
+
+prop_max2 x y =
+  max2 x y = max x y\pause
+
+prop_max2_assoc x y z =
+  max2 x (max2 y z) = max2 (max2 x y) z\pause
+
+prop_factorial n =
+  n > 2 ==> n < factorial n
+\end{alltt}
+\end{exampleblock}
+
+\pause
+
+Run \code{quickCheck prop\_max2} from GHCI to check the property.
+
+\end{frame}
+
+\subsection{Polymorphism}
+
+\begin{frame}[fragile]{1.5 Polymorphism}
+
+\begin{block}{\centering One function definition, having many types.}
+\end{block}
+
+\pause
+
+\vspace{1cm}
+\code{length :: [a] -> Int} is defined for all types \code{a} \\
+where \code{a} is a \textcolor{blue}{type variable}.
+
+\end{frame}
+
+\begin{frame}{Subtype vs parametric polymorphism}
+
+\begin{itemize}
+    \item \textcolor{blue}{parametric polymorphism} - types may contain universally quantified type variables that are then replaced by actual types.
+    \item \textcolor{blue}{subtype polymorphism} - any object of type \code{T'} where \code{T'} is a subtype of \code{T} can be used in place of objects of type \code{T}.
+\end{itemize}
+
+\pause
+
+\vspace{1cm}
+Haskell uses parametric polymorphism.
+
+\end{frame}
+
+\begin{frame}[fragile]{Type constraints}
+
+Type variables can be constrained by \textcolor{blue}{type constraints}.
+
+\begin{alltt}
+(+) :: \textcolor{red}{Num a =>} a -> a -> a
+\end{alltt}
+
+Function \code{(+)} has type \code{a -> a -> a} for any type \code{a} of the \textcolor{blue}{type class} \code{Num}.
+
+\pause
+
+\vspace{1cm}
+Some type classes:
+\begin{enumerate}
+    \item \code{Num}
+    \item \code{Integral}
+    \item \code{Fractional}
+    \item \code{Ord}
+    \item \code{Eq}
+    \item \code{Show}
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{Quiz}
+
+\begin{alltt}
+f x y z = if x then y else z\pause
+f :: Bool -> a -> a -> a
+
+f x y = [(x,y), (y,x)]\pause
+f :: a -> a -> [(a,a)]
+
+f x = [ length u + v | (u,v) <- x ]\pause
+f :: [([a],Int)] -> [Int]
+
+f x y = [ u ++ x | u <- y, length u < x ]\pause
+\textcolor{red}{invalid}
+
+f x y = [[ (u,v) | u <- w, u, v <- x] | w <- y]\pause
+f :: [a] -> [[Bool]] -> [[(Bool, a)]]
+\end{alltt}
+
+\end{frame}
+
+\subsection{Currying, partial application, higher-order functions}
+
+\begin{frame}{1.6 Currying, partial application, higher-order functions}
+
+A function is \textcolor{blue}{curried} when it takes its arguments one at a time, each time returning a new function.
+
+\pause
+
+\begin{exampleblock}{Example}
+\begin{tabularx}{\textwidth}{ll}
+    \code{f :: Int -> Int -> Int} & \code{f :: Int -> (Int -> Int)} \\
+    \code{f x y = x + y} & \code{f x = \textbackslash y -> x + y} \\
+    & \\
+    \code{f a b} & \code{(f a) b} \\
+    \code{= a + b} & \code{= (\textbackslash y -> a + y) b} \\
+    & \code{= a + b}
+\end{tabularx}
+\end{exampleblock}
+
+\pause
+
+\begin{block}{\centering Any function of two arguments can be viewed as a function of the first argument that returns a function of the second argument.}
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Anonymous functions (lambdas)}
+
+An \textcolor{blue}{anonymous function} (or lambda abstraction\textcolor{blue}{anonymous function}) is a function without a name.
+
+\begin{exampleblock}{Examples}
+\begin{alltt}
+({\textbackslash}x -> x + 1) 4\pause
+= 5
+
+({\textbackslash}x y -> x + y) 3 5\pause
+= 8
+\end{alltt}
+\end{exampleblock}
+
+\pause
+
+What is the type of \code{\textbackslash n -> iter n succ} where \\
+\code{i :: Integer -> (a -> a) -> (a -> a)} \\
+\code{succ :: Integer -> Integer}
+
+\pause
+
+\vspace{0.25cm}
+\code{Integer -> (Integer -> Integer)}
+
+\end{frame}
+
+\begin{frame}[fragile]{Partial application}
+
+Every function of $n$ parameters can be applied to less than $n$ arguments.
+
+A function is \textcolor{blue}{partially applied} when some arguments have already been applied to a function (that is some parameters are already \textit{fixed}), but some parameters are missing.
+
+\pause
+
+\vspace{1cm}
+Partially applied?
+\begin{alltt}
+elem 5\pause             \textcolor{green}{yes}
+(`elem` [1..5]) 0  \textcolor{red}{no}
+\end{alltt}
+
+\pause
+
+Expressions of the form \code{($infixop$ $expr$)} or \code{($expr$ $infixop$)} are called \textcolor{blue}{sections}.
+
+\end{frame}
+
+\begin{frame}[fragile]{Higher-order functions}
+
+A \textcolor{blue}{higher-order function} is a function that takes another function as an argument or returns a function.
+
+\pause
+
+\begin{exampleblock}{Examples}
+\begin{alltt}
+filter :: (a -> Bool) -> [a] -> [a]\pause
+
+map :: (a -> b) -> [a] -> [b]\pause
+
+all, any :: (a -> Bool) -> [a] -> Bool\pause
+
+takeWhile, dropWhile :: (a -> Bool) -> [a] -> [a]\pause
+
+(.) :: (b -> c) -> (a -> b) -> (a -> c)
+\end{alltt}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Fold}
+
+\begin{block}{\centering Folding is the most elementary way of combining elements of a list.}
+\end{block}
+
+Right-associative (\code{foldr}):
+
+\begin{verbatim}
+foldr :: (b -> a -> a) -> a -> [b] -> a
+foldr f a []     = a
+foldr f a (x:xs) = f x (foldr f a xs)
+\end{verbatim}
+
+\pause
+
+Why is this right-associative?
+
+\pause
+
+\begin{alltt}
+foldr (+) 0 [1,2,3]\pause
+= 1 + foldr (+) 0 [2,3]\pause
+= 1 + (2 + foldr (+) 0 [3])\pause
+= 1 + (2 + (3 + foldr (+) 0 []))\pause
+= 1 + (2 + (3 + 0))\pause
+= 1 + (2 + 3)\pause
+= 1 + 5 = 6
+\end{alltt}
+
+\end{frame}
+
+\end{document}

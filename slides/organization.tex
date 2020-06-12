@@ -1,0 +1,145 @@
+\documentclass{beamer}
+%
+% Choose how your presentation looks.
+%
+% For more themes, color themes and font themes, see:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+%
+\mode<presentation>
+{
+  \usetheme{default}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{default} % or try albatross, beaver, crane, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tabularx}
+
+\def\code#1{\texttt{#1}}
+
+\title[FPV revision course]{Functional Programming and Verification \\ revision course}
+\author{Jonas Hübotter}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Uncomment these lines for an automatically generated outline.
+% \begin{frame}{Outline}
+%  \tableofcontents
+% \end{frame}
+
+\begin{frame}{Organization}
+
+\begingroup
+\setlength{\tabcolsep}{10pt}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{lX}
+    Wednesday, June 17th &
+        \begin{tabular}[t]{ll}
+        recursion, & \\
+        list comprehensions, & \\
+        higher-order functions & \\
+        \end{tabular} \\
+    Wednesday, June 24th &
+        \begin{tabular}[t]{ll}
+        algebraic data types, & \\
+        type classes, & \\
+        abstract data types, & \\
+        type inference & \\
+        \end{tabular} \\
+    Friday, June 26th &
+        \begin{tabular}[t]{ll}
+        automated theorem proving & \\
+        \end{tabular} \\
+    Wednesday, July 1st &
+        \begin{tabular}[t]{ll}
+        IO, & \\
+        evaluation/reduction & \\
+        \end{tabular} \\
+\end{tabularx}
+\endgroup
+
+\end{frame}
+
+\begin{frame}{Schedule}
+
+\begin{block}{Session 1}
+\begin{itemize}
+    \item Haskell fundamentals
+    \item recursion, guards, pattern matching
+    \item list comprehensions
+    \item QuickCheck
+    \item polymorphism
+    \item currying, partial application
+    \item higher-order functions (incl. \code{fold})
+\end{itemize}
+\end{block}
+
+\begin{block}{Session 2}
+\begin{itemize}
+    \item type classes
+    \item algebraic data types (incl. \code{Maybe})
+    \item modules, abstract data types
+    \item type inference
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Schedule}
+
+\begin{block}{Session 3}
+\begin{itemize}
+    \item structural induction
+    \item case analysis
+    \item extensionality
+    \item computation induction
+\end{itemize}
+\end{block}
+
+\begin{block}{Session 4}
+\begin{itemize}
+    \item correctness
+    \item IO
+    \item evaluation strategy (incl. infinite data structures)
+    \item complexity and optimization
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Structure}
+
+\begin{enumerate}
+    \item I give a brief introduction to a topic
+    \item we go over an example problem together
+    \item you work on problems
+    \item we compare results
+    \item I provide additional practice problems and further references
+\end{enumerate}
+
+\vskip 1cm
+\pause
+
+Important for you:
+\begin{itemize}
+    \item ask questions!
+    \item let me know when you want to spend more time on a topic
+\end{itemize}
+
+\vskip 1cm
+\pause
+
+Slides, problems, and solutions can be found on GitHub:
+\url{https://github.com/jonhue/teaching-fpv-rev}
+
+\end{frame}
+
+\end{document}
