@@ -12,6 +12,8 @@
   \usefonttheme{default}  % or try serif, structurebold, ...
   \setbeamertemplate{navigation symbols}{}
   \setbeamertemplate{caption}[numbered]
+  \setbeamertemplate{footline}[frame number]
+  \setbeamertemplate{itemize items}[circle]
 }
 
 \usepackage[english]{babel}
@@ -37,9 +39,6 @@
 
 \begin{frame}{Organization}
 
-\begingroup
-\setlength{\tabcolsep}{10pt}
-\renewcommand{\arraystretch}{1.5}
 \begin{tabularx}{\textwidth}{lX}
     Wednesday, June 17th &
         \begin{tabular}[t]{ll}
@@ -64,7 +63,6 @@
         evaluation/reduction & \\
         \end{tabular} \\
 \end{tabularx}
-\endgroup
 
 \end{frame}
 
@@ -107,8 +105,8 @@
 \begin{block}{Session 4}
 \begin{itemize}
     \item correctness
-    \item IO
-    \item evaluation strategy (incl. infinite data structures)
+    \item I/O
+    \item lazy evaluation, infinite data structures
     \item complexity and optimization
 \end{itemize}
 \end{block}

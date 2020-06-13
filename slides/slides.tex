@@ -13,6 +13,7 @@
   \setbeamertemplate{navigation symbols}{}
   \setbeamertemplate{caption}[numbered]
   \setbeamertemplate{footline}[frame number]
+  \setbeamertemplate{itemize items}[circle]
 }
 
 \usepackage[english]{babel}
@@ -33,15 +34,22 @@
 \end{frame}
 
 % Uncomment these lines for an automatically generated outline.
-\begin{frame}{Outline}
- \tableofcontents
-\end{frame}
+% \begin{frame}{Outline}
+%  \tableofcontents
+% \end{frame}
+\AtBeginSection[]
+  {
+     \begin{frame}<beamer>
+     \frametitle{Plan}
+     \tableofcontents[currentsection]
+     \end{frame}
+  }
 
-\section{1 Functional Programming and Haskell}
+\section{Functional Programming and Haskell}
 
 \subsection{Basic Haskell}
 
-\begin{frame}{1.1 Basic Haskell}
+\begin{frame}{Basic Haskell}
 \begingroup
 \setlength{\tabcolsep}{10pt}
 \renewcommand{\arraystretch}{1.5}
@@ -184,7 +192,7 @@ also defines \code{x} locally in $e_2$ where $e_2$ has to be a function definiti
 
 \subsection{Recursion, guards, pattern matching}
 
-\begin{frame}[fragile]{1.2 Recursion, guards, pattern matching}
+\begin{frame}[fragile]{Recursion, guards, pattern matching}
 
 \begin{block}{Guards}
 \begin{exampleblock}{Example: maximum of two integers.}
@@ -314,7 +322,7 @@ singleOrEmpty xs = case xs of []  -> True
 
 \subsection{List comprehensions}
 
-\begin{frame}{1.3 List comprehensions}
+\begin{frame}{List comprehensions}
 
 \begin{block}{\centering \code{[ $expr$ | $E_1$, ..., $E_n$ ]}}
 \end{block}
@@ -385,7 +393,7 @@ A generator or test can depend on any generator to its left.
 
 \subsection{QuickCheck}
 
-\begin{frame}[fragile]{1.4 QuickCheck}
+\begin{frame}[fragile]{QuickCheck}
 
 QuickCheck tests check if a proposition holds true for a large number of random arguments.
 It can be used to \textit{test} the equivalence of two functions.
@@ -415,7 +423,7 @@ Run \code{quickCheck prop\_max2} from GHCI to check the property.
 
 \subsection{Polymorphism}
 
-\begin{frame}[fragile]{1.5 Polymorphism}
+\begin{frame}[fragile]{Polymorphism}
 
 \begin{block}{\centering One function definition, having many types.}
 \end{block}
@@ -490,7 +498,7 @@ f :: [a] -> [[Bool]] -> [[(Bool, a)]]
 
 \subsection{Currying, partial application, higher-order functions}
 
-\begin{frame}{1.6 Currying, partial application, higher-order functions}
+\begin{frame}{Currying, partial application, higher-order functions}
 
 A function is \textcolor{blue}{curried} when it takes its arguments one at a time, each time returning a new function.
 
@@ -615,11 +623,11 @@ foldr (+) 0 [1,2,3]\pause
 
 \end{frame}
 
-\section{2. Types}
+\section{Types}
 
 \subsection{Type aliases}
 
-\begin{frame}[fragile]{2.1 Type aliases}
+\begin{frame}[fragile]{Type aliases}
 
 Allows the renaming of a more complex type expression.
 
@@ -634,7 +642,7 @@ type List a = [a]
 
 \subsection{Type Classes}
 
-\begin{frame}{2.2 Type Classes}
+\begin{frame}{Type Classes}
 
 \begin{block}{\centering Type classes are collections of types that implement some fixed set of functions.}
 \end{block}
@@ -652,7 +660,7 @@ Creating and using a type class:
 
 \end{frame}
 
-\begin{frame}[fragile]{2.2 Type Classes}
+\begin{frame}[fragile]{Type Classes}
 
 \begin{exampleblock}{Examples}
 \begin{alltt}
@@ -711,7 +719,7 @@ instance Ord Bool where\pause
 
 \subsection{Algebraic Data Types}
 
-\begin{frame}{2.3 Algebraic Data Types}
+\begin{frame}{Algebraic Data Types}
 
 \begin{itemize}
     \item data types with a custom shape
@@ -725,7 +733,7 @@ instance Ord Bool where\pause
 
 \end{frame}
 
-\begin{frame}[fragile]{2.3 Algebraic Data Types}
+\begin{frame}[fragile]{Algebraic Data Types}
 
 \begin{exampleblock}{Examples}
 \begin{alltt}
@@ -803,7 +811,7 @@ insert x (Node a l r)\pause
 
 \subsection{Modules, Abstract Data Types}
 
-\begin{frame}{2.4 Modules, Abstract Data Types}
+\begin{frame}{Modules, Abstract Data Types}
 
 \begin{block}{Modules}
 Collection of type, function, class and other definitions.
@@ -895,7 +903,7 @@ size (Set xs) = length xs
 
 \subsection{Type inference}
 
-\begin{frame}{2.5 Type inference}
+\begin{frame}{Type inference}
 
 \begin{block}{\centering How to infer/reconstruct the type of an expression.}
 \end{block}
@@ -912,7 +920,7 @@ Given an expression $e$.\pause
 
 \end{frame}
 
-\begin{frame}{2.5 Type inference}
+\begin{frame}{Type inference}
 
 \begin{exampleblock}{Example}
 Given \code{f u v = min (head u) (last (concat v))}
@@ -936,7 +944,7 @@ Step 2\pause
 
 \end{frame}
 
-\begin{frame}{2.5 Type inference}
+\begin{frame}{Type inference}
 
 \begin{exampleblock}{Example}
 Given \code{f u v = min (head u) (last (concat v))}
@@ -953,7 +961,7 @@ Step 3\pause
 
 \end{frame}
 
-\begin{frame}{2.5 Type inference}
+\begin{frame}{Type inference}
 
 \begin{exampleblock}{Example}
 Given \code{f u v = min (head u) (last (concat v))} \par
@@ -985,7 +993,7 @@ Step 4\pause
 
 \end{frame}
 
-\begin{frame}{2.5 Type inference}
+\begin{frame}{Type inference}
 
 \begin{exampleblock}{Example}
 Given \code{f u v = min (head u) (last (concat v))} \par
@@ -1003,6 +1011,456 @@ Step 4 (cont.)\pause
     \item no further simplification possible, \\ return \textcolor{blue}{\code{f :: Ord f => [f] -> [[f]] -> f}}
 \end{enumerate}
 \end{exampleblock}
+
+\end{frame}
+
+\section{Correctness}
+
+\begin{frame}{Correctness}
+
+\begin{block}{\centering How can we prove that two modules implement the same structure?}
+\end{block}\pause
+\begin{block}{\centering $\iff$}
+\end{block}
+\begin{block}{\centering How can we prove that the implementation of one module simulates its counterpart?}
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Lists and sets}
+
+Each list \code{[$x_1$, ..., $x_n$]} represents the set $\{x_1, \dots, x_n\}$.
+
+\pause
+
+In mathematical terms:
+\begin{alltt}
+\(\alpha\) :: [a] -> \(\{a\}\)
+\(\alpha\) [\(x_1\), ..., \(x_n\)]  = \(\{x_1, \dots, x_n\}\)
+\end{alltt}
+
+$\alpha$ is an \textcolor{blue}{abstraction function}.
+
+\pause
+
+\vspace{1cm}
+Lists simulate sets $\implies$ \textcolor{red}{$\alpha$ must be a homomorphism}.
+
+\end{frame}
+
+\begin{frame}[fragile]{Lists and sets}
+
+\begin{alltt}
+empty = []
+insert x xs = if elem x xs then xs else x:xs
+isin x xs = elem x xs
+size xs = length xs\pause
+
+invar :: [a] -> Bool\pause
+invar []     = True\pause
+invar (x:xs) = not (elem x xs) && invar xs
+\end{alltt}
+
+Simulation requirements: \par\pause
+\textcolor{blue}{\code{$\alpha$ empty = $\{\}$}} \par\pause
+\textcolor{blue}{\code{invar xs $\implies$ $\alpha$ (insert x xs) = $\{$x$\}$ $\cup$ $\alpha$ xs}} \par\pause
+\textcolor{blue}{\code{invar xs $\implies$ isin x xs = x $\in$ $\alpha$ xs}} \par\pause
+\textcolor{blue}{\code{invar xs $\implies$ size xs = $\lvert \alpha$ xs$\rvert$}}
+
+\pause
+
+\begin{alertblock}{\centering \code{invar} must be preserved by every operation.}
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}{Correctness proof strategy}
+
+Let $C$ and $A$ be two modules that have the same interface: a type $T$ and a set of functions $F$.
+
+\pause
+
+To prove that $C$ is a correct implementation of $A$ define
+\begin{enumerate}
+    \item an \textcolor{blue}{abstraction function} \code{$\alpha$ :: $C.T$ -> $A.T$}
+    \item and an \textcolor{blue}{invariant} \code{invar :: $C.T$ -> Bool}
+\end{enumerate}
+and prove for each $f \in F$:\pause
+\begin{itemize}
+    \item \code{invar} is invariant \\
+        \textcolor{blue}{\code{invar $x_1$ $\land \dots \land$ invar $x_n$ $\implies$ invar ($C.f$ $x_1$ $\dots$ $x_n$)}}\pause
+    \item $C.f$ simulates $A.f$ \\
+        \textcolor{blue}{\code{invar $x_1$ $\land \dots \land$ invar $x_n$ $\implies$}} \\
+        \textcolor{blue}{\code{$\alpha$ ($C.f$ $x_1$ $\dots$ $x_n$) = $A.f$ ($\alpha$ $x_1$) $\dots$ ($\alpha$ $x_n$)}}
+\end{itemize}
+
+\end{frame}
+
+\section{I/O}
+
+\begin{frame}{I/O}
+
+\begin{block}{Side effects}
+Up until now we only considered programs that do not have side effects.
+
+\pause
+
+To reason about programs like in mathematics, the programming language must have \textcolor{blue}{referential transparency}. That is, any expression can be replaced by its value without changing the meaning of the program.
+
+\pause
+
+Programming languages that have referential transparency are called \textcolor{blue}{pure}.
+\end{block}
+
+\end{frame}
+
+\begin{frame}{I/O in Haskell}
+
+Haskell distinguishes expressions without side effects (\textcolor{blue}{pure expressions}) from expressions with side effects (\textcolor{blue}{actions}) by their type:
+
+\begin{block}{\centering \code{IO a}}
+\end{block}
+
+is the type of (I/O) actions that return a value of type \code{a}.
+
+\pause
+
+\begin{exampleblock}{Examples}
+\begin{itemize}
+    \item \code{Char}: the type of pure expressions returning a \code{Char}\pause
+    \item \code{IO Char}: the type of actions returning a \code{Char}\pause
+    \item \code{IO ()}: the type of actions returning nothing
+\end{itemize}
+\end{exampleblock}
+
+\pause
+
+\begin{alertblock}{\centering \code{()} is the type of empty tuples with the only value \code{()}.}
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}{Basic actions}
+
+\begin{itemize}
+    \item \textcolor{blue}{\code{getChar :: IO Char}} \\
+        Reads a \code{Char} from standard input, \\
+        echoes it to standard output, \\
+        and returns it as the result\pause
+    \item \textcolor{blue}{\code{putChar :: Char -> IO ()}} \\
+        Writes a \code{Char} to standard output, \\
+        and returns no result\pause
+    \item \textcolor{blue}{\code{return :: a -> IO a}} \\
+        Performs no action, \\
+        just returns the given value as a result
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Sequencing}
+
+A sequence of actions can be combined into a single action with the keyword \textcolor{blue}{\code{do}}.
+
+\pause
+
+\begin{exampleblock}{Example}
+\begin{verbatim}
+get2 :: IO (Char,Char)
+get2 = do x <- getChar   -- result is named x
+          getChar        -- result is ignored
+          y <- getChar
+          return (x,y)
+\end{verbatim}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Sequencing}
+
+General format:
+\begin{alltt}
+do \(a\sb1\)
+   \vdots
+   \(a\sb{n}\)
+\end{alltt}
+
+\pause
+
+where each $a_i$ can be one of
+\begin{itemize}
+    \item an action \\
+        Effect: execute action
+    \item \code{$x$ <- $action$} \\
+        Effect: execute \code{$action$ :: IO a}, give result the name \code{x :: a}
+    \item \code{let x = $expr$} \\
+        Effect: give \code{$expr$} the name \code{x}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Interlude: Monads}
+
+\begin{block}{\centering Monads are a general approach to computations \\ that incur side effects.}
+\end{block}
+
+\pause
+
+Idea: pipe data through the program implicitly.
+
+\pause
+
+In Haskell:
+\begin{alltt}
+class Monad m where\pause
+  (>>=) :: m a -> (a -> m b) -> m b\pause
+  return :: a -> m a
+\end{alltt}
+
+\pause
+
+\vspace{0.25cm}
+\begin{alltt}
+\textcolor{blue}{do x <- act1}
+   \textcolor{blue}{act2}
+\end{alltt}
+
+is syntactic sugar for
+
+\begin{alltt}
+\textcolor{blue}{act1 >>= ({\textbackslash}x -> act2)}
+\end{alltt}
+
+\end{frame}
+
+\begin{frame}[fragile]{Interlude: Monads}
+
+\begin{exampleblock}{Example: \code{Maybe} as a monad}
+\begin{alltt}
+\textcolor{blue}{instance Monad Maybe where}
+  \textcolor{blue}{m >>= f = case m of}
+              \textcolor{blue}{Nothing -> Nothing}
+              \textcolor{blue}{Just x  -> f x}
+  \textcolor{blue}{return v = Just v}
+\end{alltt}
+
+\pause
+
+Using \code{do}, failure propagation and unwrapping of \code{Just} happens automatically.
+
+\pause
+
+\begin{alltt}
+x :: Maybe Int
+y :: Maybe Int
+sum2 :: Maybe Int\pause
+sum2 = do
+  a <- someMaybeInt
+  b <- anotherMaybeInt
+  return (a + b)
+\end{alltt}
+
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Read/Show}
+
+\begin{itemize}
+    \item \code{Read}: parsing \code{String}
+\begin{alltt}
+\textcolor{blue}{class Read a where}
+  \textcolor{blue}{read :: String -> a}
+\end{alltt}\pause
+    \item \code{Show}: converting to \code{String}
+\begin{alltt}
+\textcolor{blue}{class Show a where}
+  \textcolor{blue}{show :: a -> String}
+\end{alltt}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Important actions}
+
+\begin{tabularx}{\textwidth}{ll}
+    \code{putStr :: String -> IO ()} & print string to standard output \\
+    \code{putStrLn :: String -> IO ()} & print string followed by \\
+    & newline to standard output \\
+    \code{getLine :: IO String} & read everything up until \\
+    & newline from standard input \\
+\end{tabularx}
+
+\end{frame}
+
+\section{Lazy evaluation}
+
+\begin{frame}[fragile]{Lazy evaluation}
+
+Expressions are evaluated (\textcolor{blue}{reduced}) by successively applying definitions until no further reduction is possible.
+
+\pause
+
+\vspace{1cm}
+An expression may have many reducible sub-expressions:
+
+\begin{alltt}
+\centering \underline{sq \underline{(3+4)}}
+\end{alltt}
+
+A reducible expression is also called \textcolor{blue}{redex}.
+
+\end{frame}
+
+\begin{frame}{Reduction strategies}
+
+\begin{block}{Innermost}
+Reduces innermost redex first. \par\pause
+$\implies$ arguments are evaluated before they are substituted into the function body. \par\pause
+$\implies$ corresponds to \textcolor{blue}{call by value}
+\end{block}
+
+\pause
+
+\begin{block}{Outermost}
+Reduces outermost redex first. \par\pause
+$\implies$ unevaluated arguments are substituted into the function body. \par\pause
+$\implies$ corresponds to \textcolor{blue}{call by name}
+\end{block}
+
+\pause
+
+\begin{block}{Lazy}
+Combines an outermost reduction strategy with the \textcolor{blue}{sharing} of expressions. \par\pause
+$\implies$ unevaluated arguments are substituted into the function body, but are only evaluated once for all copies of the same expression. \par\pause
+$\implies$ \textit{\textcolor{blue}{call by need}}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Theorems}
+
+\begin{itemize}
+    \item Any two terminating evaluations of the same Haskell expression lead to the same final result.\pause
+    \item If expression $e$ has a terminating reduction sequence, then outermost reduction of $e$ also terminates. \\ \pause
+        $\implies$ outermost reduction terminates as often as possible\pause
+    \item Lazy evaluation never needs more steps than innermost reduction.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Principles of lazy evaluation}
+
+\begin{itemize}
+    \item Arguments of functions are evaluated only if needed to continue the evaluation of the function.
+    \item Arguments are not necessarily evaluated fully, but only far enough to evaluate the function.
+    \item Each argument is evaluated at most once. (sharing!)
+\end{itemize}
+
+\pause
+
+\vspace{1cm}
+\begin{alertblock}{\centering Haskell never reduces inside a lambda}
+\end{alertblock}
+
+Why?\pause
+\begin{itemize}
+    \item lazy evaluation uses as few steps as possible
+    \item functions can only be applied
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Infinite lists}
+
+\begin{exampleblock}{Example: \code{head ones}}
+\begin{alltt}
+ones :: [Int]
+ones = 1 : ones
+\end{alltt}
+
+\code{ones} defines an infinite list of $1$s. \code{ones} is called a \textcolor{blue}{producer}.
+
+\pause
+
+\vspace{0.5cm}
+Outermost reduction: \par
+\textcolor{blue}{\code{head ones}} \par\pause
+\textcolor{blue}{\code{= head (1 : ones)}} \par\pause
+\textcolor{blue}{\code{= 1}}
+
+\vspace{0.5cm}
+Innermost reduction: \par
+\textcolor{red}{\code{head ones}} \par\pause
+\textcolor{red}{\code{= head (1 : ones)}} \par\pause
+\textcolor{red}{\code{= head (1 : 1 : ones)}} \par
+\textcolor{red}{\code{= ...}}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{Infinite lists}
+
+\begin{block}{\centering Haskell lists are never actually infinite \\ but only potentially infinite}
+\end{block}
+
+\begin{block}{\centering Lazy evaluation computes as much of the infinite list as needed}
+\end{block}
+
+\end{frame}
+
+\section{Complexity and optimization}
+
+\begin{frame}{Time complexity analysis}
+
+Assumption: \textcolor{blue}{One reduction step takes one time unit}
+
+\pause
+
+\vspace{0.5cm}
+\textcolor{blue}{$T_f(n) = $} number of steps for the evaluation of $f$ when applied to an argument of size $n$ in the worst case
+
+\pause
+
+\vspace{0.5cm}
+Size is a specific measure based on the argument type of $f$.
+
+\pause
+
+\vspace{0.5cm}
+Calculating $T_f(n)$:
+\begin{enumerate}
+    \item from the equations for $f$ derive equations for $T_f$
+    \item if the equations for $T_f$ are recursive, solve them
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{Time complexity analysis}
+
+\begin{exampleblock}{Example}
+\begin{alltt}
+[] ++ ys = ys
+(x:xs) ++ ys = x : (xs ++ ys)
+\end{alltt}
+
+\pause
+
+$T_{\code{++}}(0, n) = O(1)$ \par\pause
+$T_{\code{++}}(m + 1, n) = T_{\code{++}}(m, n) + O(1)$ \par\pause
+$\implies$ \textcolor{blue}{$T_{\code{++}}(m, n) = O(m)$}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{Optimization}
+
+\begin{itemize}
+    \item no duplication (use \code{where} or \code{let})\pause
+    \item use tail recursion\pause
+    \item avoid multiple traversals of the same data structure\pause
+    \item avoid intermediate data structures\pause
+    \item pre-compute expensive operations
+\end{itemize}
 
 \end{frame}
 
