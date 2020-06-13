@@ -332,13 +332,13 @@ where $expr$ is an expression and each $E_i$ is a generator or a test.
 
 \begin{exampleblock}{Examples}
 \begin{alltt}
-[ x ^ 2 | x <- [1..5]]\pause
+[x ^ 2 | x <- [1..5]]\pause
 = [1, 4, 9, 16, 25]
 
-[ toLower c | c <- “Hello World!”]\pause
+[toLower c | c <- “Hello World!”]\pause
 = “hello world!”
 
-[ (x, even x) | x <- [1..3]]\pause
+[(x, even x) | x <- [1..3]]\pause
 = [(1, False), (2, True), (3, False)]
 \end{alltt}
 \end{exampleblock}
@@ -612,6 +612,397 @@ foldr (+) 0 [1,2,3]\pause
 = 1 + (2 + 3)\pause
 = 1 + 5 = 6
 \end{alltt}
+
+\end{frame}
+
+\section{2. Types}
+
+\subsection{Type aliases}
+
+\begin{frame}[fragile]{2.1 Type aliases}
+
+Allows the renaming of a more complex type expression.
+
+\begin{exampleblock}{Examples}
+\begin{verbatim}
+type String = [Char]
+type List a = [a]
+\end{verbatim}
+\end{exampleblock}
+
+\end{frame}
+
+\subsection{Type Classes}
+
+\begin{frame}{2.2 Type Classes}
+
+\begin{block}{\centering Type classes are collections of types that implement some fixed set of functions.}
+\end{block}
+
+Similar concepts are commonly called \textit{interfaces}.
+
+\pause
+
+\vspace{1cm}
+Creating and using a type class:
+\begin{enumerate}
+    \item creating a type class $\sim$ creating an interface (define set of functions)
+    \item instantiating a type class $\sim$ implementing an interface (implement a set of functions for a member of a type class)
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{2.2 Type Classes}
+
+\begin{exampleblock}{Examples}
+\begin{alltt}
+class Eq a where
+  (==) :: a -> a -> Bool\pause
+
+instance Eq Bool where
+  True  == True  = True
+  False == False = True
+  _     == _     = False
+\end{alltt}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Constrained instances}
+
+Instances of type classes can be constrained.
+
+\begin{exampleblock}{Example}
+\begin{alltt}
+instance (Eq a) => Eq [a] where\pause
+  [] == [] = True\pause
+  (x:xs) == (y:ys) = x == y && xs == ys\pause
+  _ == _ = False
+\end{alltt}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Subclasses}
+
+\begin{exampleblock}{Example}
+\begin{verbatim}
+class (Eq a) => Ord a where
+  (<=), (<) :: a -> a -> Bool
+\end{verbatim}
+
+Class \code{Ord} inherits all functions of class \code{Eq}.
+\end{exampleblock}
+
+\pause
+
+\vspace{1cm}
+Before instantiating a subclass with a type, the type must be an instance of all \textit{"superclasses"}.
+
+\pause
+
+\begin{alltt}
+instance Ord Bool where\pause
+  b1 <= b2 = not b1 || b2\pause
+  b1 < b2 = b1 <= b2 && not(b1 == b2)
+\end{alltt}
+
+\end{frame}
+
+\subsection{Algebraic Data Types}
+
+\begin{frame}{2.3 Algebraic Data Types}
+
+\begin{itemize}
+    \item data types with a custom shape
+    \item defines a type along with constructors to build values of that type
+\end{itemize}
+
+\pause
+
+\begin{block}{\centering \code{data $type$ $a_1 \dots a_n$ = $constructor$ $a_1 \dots a_n$ | ...}}
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{2.3 Algebraic Data Types}
+
+\begin{exampleblock}{Examples}
+\begin{alltt}
+data Bool = False | True\pause
+
+data Maybe a = Nothing | Just a
+  deriving (Eq, Show)\pause
+
+data Nat = Zero | Suc Nat
+  deriving (Eq, Show)\pause
+
+data [a] = [] | (:) a [a]
+  deriving Eq\pause
+
+data Tree a = Empty | Node a (Tree a) (Tree a)
+  deriving (Eq, Show)
+\end{alltt}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{Constructors vs Types (again)}
+
+Repetition:
+\begin{itemize}
+    \item constructors can be used \textcolor{red}{in expressions} to build values of a type.
+    \item types can be used \textcolor{red}{in type signatures} to hint at the type of bindings.
+\end{itemize}
+
+\pause
+
+\begin{block}{\centering An algebraic data types is a custom type with one or more constructors.}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Constructors vs Types (again)}
+
+Constructors can have varying arity:\pause
+\begin{itemize}
+    \item a constructor with arity $0$ acts like a value of the algebraic data type\pause
+    \item a constructor with arity $k$ combines $k$ values of different types into a single value of the algebraic data type
+\end{itemize}
+
+\pause
+
+\begin{alertblock}{\centering Constructors are functions that unambiguously construct the value of a type.}
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Pattern matching}
+
+Pattern matching works just the same for custom constructors as for predefined constructors.
+
+\begin{exampleblock}{Examples}
+\begin{alltt}
+find :: Ord a => a -> Tree a -> Bool\pause
+find _ Empty = False\pause
+find x (Node a l r)\pause
+  | x < a     = find x l\pause
+  | a < x     = find x r\pause
+  | otherwise = True
+
+insert :: Ord => a -> Tree a -> Tree a\pause
+insert x Empty = Node x Empty Empty\pause
+insert x (Node a l r)\pause
+  | x < a     = Node a (insert x l) r\pause
+  | a < x     = Node a l (insert x r)\pause
+  | otherwise = Node a l r
+\end{alltt}
+\end{exampleblock}
+
+\end{frame}
+
+\subsection{Modules, Abstract Data Types}
+
+\begin{frame}{2.4 Modules, Abstract Data Types}
+
+\begin{block}{Modules}
+Collection of type, function, class and other definitions.
+
+\pause
+
+\begin{exampleblock}{Examples}
+\code{module M where} \par
+exports everything defined in \code{M}\pause
+
+\vspace{0.25cm}
+\code{module M (T, f, ...) where} \par
+exports everything defined in \code{T, f, ...}
+\end{exampleblock}
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exporting data types}
+
+\code{module M (T) where} \par
+\code{data T = ...} \par
+\textcolor{blue}{exports only \code{T} but not its constructors}\pause
+
+\vspace{0.25cm}
+\code{module M (T(C,D,...)) where} \par
+\code{data T = ...} \par
+\textcolor{blue}{exports \code{T} and its constructors \code{C, D, ...}}\pause
+
+\vspace{0.25cm}
+\code{module M (T(..)) where} \par
+\code{data T = ...} \par
+\textcolor{blue}{exports \code{T} and all its constructors}\pause
+
+\vspace{0.25cm}
+Not allowed (why?): \par
+\textcolor{red}{\code{module M (T,C,D) where}}
+
+\pause
+
+Constructors could have the same name as a type.
+
+\end{frame}
+
+\begin{frame}{Abstract Data Types}
+
+\begin{block}{\centering Hides data representation by wrapping data in a constructor that is not exported.}
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Abstract Data Types}
+
+\begin{exampleblock}{Example}
+\begin{alltt}
+module Set (Set, empty, insert, isin, size) where
+-- Interface
+empty :: Set a
+insert :: Eq a => a -> Set a -> Set a
+isin :: Eq a => a -> Set a -> Bool
+size :: Set a -> Int\pause
+-- Implementation
+\textcolor{blue}{newtype Set a = Set [a]}\pause
+
+empty = Set []\pause
+insert x (Set xs) = Set (if elem x xs then xs else x:xs)\pause
+isin x (Set xs) = elem x xs\pause
+size (Set xs) = length xs
+\end{alltt}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{\code{type} vs \code{data} vs \code{newtype}}
+
+\begin{itemize}
+    \item \code{type} is used to create type aliases\pause
+    \item \code{data} is used to create algebraic data types (types witha custom shape)\pause
+    \item \code{newtypre} is used to create a custom constructor for a single type\pause
+        \begin{itemize}
+            \item syntax "subset" of the syntax for \code{data}
+            \item may only have a \textit{single} constructor taking a \textit{single} argument
+            \item introduces no runtime overhead
+            \item creates \textit{strict} types while \code{data} creates \textit{lazy} types
+        \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\subsection{Type inference}
+
+\begin{frame}{2.5 Type inference}
+
+\begin{block}{\centering How to infer/reconstruct the type of an expression.}
+\end{block}
+
+\pause
+
+Given an expression $e$.\pause
+\begin{enumerate}
+    \item give all variables in $e$ distinct type variables\pause
+    \item give each function $f :: T$ in $e$ a new general type with fresh type variables\pause
+    \item for each sub-expression in $e$ set up an equation linking the type of parameters and arguments\pause
+    \item simplify the set of equations by replacing equivalences
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{2.5 Type inference}
+
+\begin{exampleblock}{Example}
+Given \code{f u v = min (head u) (last (concat v))}
+
+\pause
+
+\vspace{0.25cm}
+Step 1\pause
+\begin{enumerate}
+    \item \code{u :: a}
+    \item \code{v :: b}
+\end{enumerate}
+Step 2\pause
+\begin{enumerate}
+    \item \code{head :: [c] -> c}\pause
+    \item \code{concat :: [[d]] -> [d]}\pause
+    \item \code{last :: [e] -> e}\pause
+    \item \code{min :: Ord f => f -> f -> f}
+\end{enumerate}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{2.5 Type inference}
+
+\begin{exampleblock}{Example}
+Given \code{f u v = min (head u) (last (concat v))}
+
+\vspace{0.25cm}
+Step 3\pause
+\begin{enumerate}
+    \item from \code{head u} derive \code{[c] = a}\pause
+    \item from \code{concat v} derive \code{[[d]] = b}\pause
+    \item from \code{last (concat v)} derive \code{[e] = [d]}\pause
+    \item from \code{min (head u) (last (concat v))} derive \code{f = c} and \code{f = e}
+\end{enumerate}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{2.5 Type inference}
+
+\begin{exampleblock}{Example}
+Given \code{f u v = min (head u) (last (concat v))} \par
+Goal \code{f :: a -> b -> f}
+
+\vspace{0.25cm}
+Step 4\pause
+\begin{enumerate}
+    \item apply \code{[c] = a} and update\pause
+        \begin{itemize}
+            \item \code{u :: [c]}\pause
+        \end{itemize}
+    \item apply \code{[[d]] = b} and update\pause
+        \begin{itemize}
+            \item \code{v :: [[d]]}\pause
+        \end{itemize}
+    \item apply \code{[e] = [d]} to get \code{e = d} and update\pause
+        \begin{itemize}
+            \item \code{v :: [[e]]}\pause
+            \item \code{concat :: [[e]] -> [e]}\pause
+        \end{itemize}
+    \item apply \code{f = c} and update\pause
+        \begin{itemize}
+            \item \code{u :: [f]}\pause
+            \item \code{head :: [f] -> f}
+        \end{itemize}
+\end{enumerate}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{2.5 Type inference}
+
+\begin{exampleblock}{Example}
+Given \code{f u v = min (head u) (last (concat v))} \par
+Goal \code{f :: a -> b -> f}
+
+\vspace{0.25cm}
+Step 4 (cont.)\pause
+\begin{enumerate}
+    \item apply \code{f = e} and update\pause
+        \begin{itemize}
+            \item \code{v :: [[f]]}\pause
+            \item \code{concat :: [[f]] -> [f]}\pause
+            \item \code{last :: [[f]] -> [f]}\pause
+        \end{itemize}
+    \item no further simplification possible, \\ return \textcolor{blue}{\code{f :: Ord f => [f] -> [[f]] -> f}}
+\end{enumerate}
+\end{exampleblock}
 
 \end{frame}
 
