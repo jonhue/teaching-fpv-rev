@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+
+\usepackage{biblatex}
+\addbibresource{sources.bib}
+
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+
+\title{Functional Programming and Verification \\ revision course \\ Types}
+\author{Jonas Hübotter}
+\date{June 24, 2020}
+
+\begin{document}
+
+\maketitle
+
+\section{Exercises}
+
+\subsection{Review}
+\begin{enumerate}
+\item {[endterm 2015, 3]}
+\item {[endterm 2014]} A \textit{Collatz} sequence is a special sequence of natural numbers. The element $c_{k+1}$ is obtained from the previous element $c_k$ as follows:
+\[
+c_{k+1} =
+\begin{cases}
+  \frac{c_k}{2} & \text{if $c_k$ even} \\
+  3 \cdot c_k + 1 & \text{if $c_k$ odd}
+\end{cases}
+\]
+The first element $c_0$ can be any natural number $n > 0$. The sequence ends when the number $1$ is reached. \par
+\textit{Example:} let $c_0 = 6$. The entire sequence then is $6,3,10,5,16,8,4,2,1$.
+\begin{enumerate}
+\item Define a function \verb|collatz :: Integer -> [Integer]| that given an initial value returns the Collatz sequence as a list.
+\item Implement the function \verb|unfold :: (a -> Maybe a) -> a -> [a]|. For a call \verb|unfold f a| the function $f$ should be repeatedly applied to $a$ and stop with a result of \verb|Nothing|. The return value is a list of all intermediate results, including the initial value of $a$. \par
+\textit{Example:} For $f a_0 =$ \verb|Just| $a_1$, $f a_1 =$ \verb|Just| $a_2$, $f a_n =$ \verb|Nothing| we have \verb|unfold| $f a_0 = [a_0, a_1, \dots, a_n]$.
+\item Find a function \verb|next| such that \verb|collatz n = unfold next n| for $n > 0$.
+\end{enumerate}
+\end{enumerate}
+
+\section{Homework}
+
+\printbibliography
+
+\end{document}

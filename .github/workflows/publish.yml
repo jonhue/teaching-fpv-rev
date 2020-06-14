@@ -14,14 +14,14 @@ jobs:
     - uses: actions/checkout@master
     - name: Prepare handout
       run: |
-        cp ./slides/slides.tex ./slides/presentation.tex
-        sed -i "1s/.*/\\\\documentclass\[handout\]\{beamer\}/" ./slides/slides.tex
+        cp ./slides/slides.tex ./slides/handout.tex
+        sed -i "1s/.*/\\\\documentclass\[handout\]\{beamer\}/" ./slides/handout.tex
     - name: Compile LaTeX sources
       uses: xu-cheng/latex-action@v2
       with:
         root_file: |
+          slides/handout.tex
           slides/organization.tex
-          slides/presentation.tex
           slides/slides.tex
     - name: Create output directory
       run: mkdir dist
@@ -37,3 +37,4 @@ jobs:
         publish_dir: ./dist
         allow_empty_commit: true
         force_orphan: true
+        enable_jekyll: true

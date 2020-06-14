@@ -14,3 +14,16 @@ that might arise from those problems can be discussed in a subsequent session.
 Make sure that you have a working installation of Haskell (GHC 8.4.4). If
 possible, participate with a microphone to make the sessions as lively and
 engaging as possible.
+
+## Materials
+
+* [**handout**](jonhue.github.io/teching-fpv-rev/handout.pdf)
+* [slides](jonhue.github.io/teching-fpv-rev/slides.pdf)
+
+### Problems
+
+* [problem set 1](jonhue.github.io/teching-fpv-rev/problem set 1.pdf)
+
+### Solutions
+
+n/a
