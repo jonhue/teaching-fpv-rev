@@ -1,3 +1,7 @@
+---
+title: Revision Course Functional Programming and Verification
+---
+
 # Revision Course Functional Programming and Verification
 
 The course is held in four sessions from June 24th to July 1st.
