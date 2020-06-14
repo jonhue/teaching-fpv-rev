@@ -20,6 +20,7 @@ jobs:
           slides/slides.tex
     - name: Create output directory
       run: mkdir dist
+    - run: echo ls -R
     - name: Move PDFs
       run: mv **/*.pdf ./dist
     - name: Move readme
