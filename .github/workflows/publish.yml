@@ -12,11 +12,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    - name: set environment variables
-        uses: allenevans/set-env@v1
-        with:
-          SOURCES: $(find . -type f -name "*.tex")
-    - name: Compile LaTeX
+    - name: Find LaTeX sources
+      uses: allenevans/set-env@v1
+      with:
+        SOURCES: $(find . -type f -name "*.tex")
+    - name: Compile LaTeX sources
       uses: xu-cheng/latex-action@v2
       with:
         root_file: $SOURCES
