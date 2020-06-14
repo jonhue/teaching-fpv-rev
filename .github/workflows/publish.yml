@@ -12,23 +12,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
+    - name: Prepare handout
+    - run: |
+        cp ./slides/slides.tex ./slides/presentation.tex
+        sed -i "1s/.*/\\\\documentclass\[handout\]\{beamer\}/" ./slides/slides.tex
     - name: Compile LaTeX sources
       uses: xu-cheng/latex-action@v2
       with:
         root_file: |
           slides/organization.tex
+          slides/presentation.tex
           slides/slides.tex
-    # - name: Create output directory
-    #   run: mkdir dist
-    # - name: Move PDFs
-    #   run: mv **/*.pdf ./dist
-    # - name: Move readme
-    #   run: mv ./README.md ./dist
+    - name: Create output directory
+      run: mkdir dist
+    - name: Move PDFs
+      run: mv ./*.pdf ./dist
+    - name: Move readme
+      run: mv ./README.md ./dist
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         publish_branch: master
-        publish_dir: ./
+        publish_dir: ./dist
         allow_empty_commit: true
         force_orphan: true
