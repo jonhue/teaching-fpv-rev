@@ -1,0 +1,30 @@
+name: Publish
+
+on:
+  push:
+    branches:
+    - sources
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Compile LaTeX
+      uses: xu-cheng/latex-action@v2
+      with:
+        root_file: '**/*.tex'
+    - name: Create output directory
+      run: mkdir dist
+    - name: Move PDFs
+      run: mv **/*.pdf ./dist
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        publish_branch: master
+        publish_dir: ./dist
+        allow_empty_commit: true
+        force_orphan: true
