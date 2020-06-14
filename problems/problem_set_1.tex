@@ -1,8 +1,11 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
+\usepackage{alltt}
 \usepackage{amsmath}
 \usepackage{csquotes}
+
+\def\code#1{\texttt{#1}}
 
 \usepackage{biblatex}
 \addbibresource{sources.bib}
@@ -42,16 +45,6 @@ What is your answer for \verb|threeDifferent 3 4 3|? Explain why you get the ans
 \begin{enumerate}
 \item Define a recursive function \verb|pow :: Integer -> Integer -> Integer| such that \verb|pow x n| $= x^n$.
 
-\item {[sheet 1]} Define a recursive function
-\begin{verbatim}
-    argMax :: (Integer -> Integer) -> Integer -> Integer
-\end{verbatim}
-such that \verb|argMax g n| maximizes \verb|g| in the domain $\{0,\dots,n\}$.
-
-\item \cite[p. 86]{thompson} Using the addition function over the natural numbers, give a recursive definition of multiplication of natural numbers.
-
-\item \cite[p. 86]{thompson} The integer square root of a positive integer $n$ is the largest integer whose square is less than or equal to $n$. For instance, the integer square roots of $15$ and $16$ are $3$ and $4$ respectively. Give a primitive recursive definition of this function.
-
 \item Define a recursive function
 \begin{verbatim}
     ascending :: Ord a => [a] -> bool
@@ -65,8 +58,6 @@ such that \verb|ascending xs = True| if \verb|xs| is in ascending order.
 that mirrors the behavior of the Prelude function \verb|zip|.
 
 \item Define a function \verb|insertionSort :: Ord a => [a] -> [a]| that sorts the input using the insertion sort algorithm.
-
-\item {[sheet 3]} Implement a Haskell function \verb|mergeSort :: [Integer] -> [Integer]| that sorts an integer list in ascending order by using Merge Sort.
 
 \item {[sheet 15]} Decide for each of the following functions whether they are tail recursive:
 \begin{enumerate}
@@ -87,14 +78,6 @@ that mirrors the behavior of the Prelude function \verb|zip|.
 \end{verbatim}
 \end{enumerate}
 
-\item {[sheet 15]} Consider the function \verb|concat :: [[a]] -> [a]| that concatenates a list of lists:
-\begin{verbatim}
-    concat [[1,2],[],[5,6],[7]] = [1,2,5,6,7]
-\end{verbatim}
-Give a tail recursive implementation of \verb|concat|.
-
-\item {[endterm 2014]} Give a \textit{tail recursive} implementation of the function \verb|sum :: [Integer] -> Integer| that calculates the sum of the element of the given list. With the exception of primitive arithmetic operations you may not use any other predefined function.
-
 \item {[emdterm 2013]} Give a \textit{tail recursive} implementation of the following function:
 \begin{verbatim}
     fac :: Int -> Int
@@ -107,18 +90,141 @@ Define the function
 \begin{verbatim}
     regions :: Integer -> Integer
 \end{verbatim}
-such that using $n$ straight lines \verb|regions n| returns the maximum number of regions a two dimensional space can be divided into. \par
-\textit{Hint:} try to think find a base case and a recursive case.
+such that using $n$ straight lines \verb|regions n| returns the maximum number of regions a two dimensional space can be divided into.
+
+\item {[retake 2013]} Implement the function \code{remdups :: Eq a => [a] -> [a]} that removes all duplicates from a list. The first occurrence of every element should be should remain. For example, \code{remdups [1,5,3,1,0,3] == [1,5,3,0]}. \par
+The functions \code{nub} and \code{nubBy} from the Prelude may not be used.
+\end{enumerate}
+
+\subsection{List comprehensions}
+\begin{enumerate}
+\item Define the function \verb|concat' :: [[a]] -> [a]| using list comprehensions that given a list of lists, joins each element of the outer list and returns a new list.
+
+\item Define a function \verb|primes :: Int -> [Int]| using list comprehensions that returns all primes up to $n$. \par
+\textit{Hint:} think about what auxiliary functions you could define that might help.
+
+\item \textit{(ranger)} Define a function
+\begin{verbatim}
+    enumFromThenTo :: Integer -> Integer -> Integer -> [Integer]
+\end{verbatim}
+using list comprehensions such that \verb|enumFromThenTo a b c = [a,b..c]|. \par
+How would you have to change the definition to obtain a function
+\begin{verbatim}
+    enumFromThen :: Integer -> Integer -> [Integer]
+\end{verbatim}
+such that \verb|enumFromThen a b = [a,b..]|.
+\end{enumerate}
+
+\subsection{QuickCheck}
+\begin{enumerate}
+\item Write QuickCheck tests to check your implementation of \verb|zip'|, and \verb|concat'| against the Prelude functions \verb|zip|, and \verb|concat| respectively.
+
+\item {[endterm 2015]} Write for the given function \verb|occs| one or more QuickCheck tests that form a \textit{complete} test suite. A test suite is complete if every test succeeds for any correct implementation and if for any incorrect implementation at least one test fails for appropriate test parameters. \par
+The function \verb|occs :: Eq a => [a] -> [(a, Int)]| counts how often each element occurs in a list. The returned list must be sorted in decreasing order by the number of occurrences and may not contain any duplicates. Elements with the same number of occurrences may be returned in any order. Elements that do not occur in the input are not allowed to be present in the output. \par
+\textit{Examples for correct behavior:}
+\begin{verbatim}
+    occs "mississippi" ==
+      [(’i’, 4), (’s’, 4), (’p’, 2), (’m’, 1)]
+    occs "mississippi" ==
+      [(’s’,4), (’i’, 4), (’p’, 2), (’m’, 1)]
+\end{verbatim}
+\textit{Examples for incorrect behavior:}
+\begin{verbatim}
+    occs "mississippi" ==
+      [(’s’, 4), (’i’, 4), (’m’, 1), (’p’, 2)]
+    occs "mississippi" ==
+      [(’s’, 4), (’i’, 4), (’m’, 1), (’p’, 2), (’x’, 0)]
+    occs "mississippi" ==
+      [(’s’, 4), (’s’, 4), (’i’, 4), (’p’, 2), (’m’, 1)]
+\end{verbatim}
+\textit{Important:} It is not required to implement the function \verb|occs|.
+\end{enumerate}
+
+\subsection{Higher-order functions}
+\begin{enumerate}
+\item Define the function \verb|takeWhile' :: (a -> Bool) -> [a] -> [a]| similar to the Prelude function \verb|takeWhile| that takes a function $f$ and a list $[x_1, \dots, x_n]$ and returns $[x_1, \dots, x_{k-1}]$ where $f(x_k)$ is the first element that is false.
+
+\item {[sheet 6]} Write a function \verb|iter :: Int -> (a -> a) -> a -> a| that takes a number $n$, a function $f$, and a value $x$ and applies $f$ $n$-times with initial value $x$, that is \verb|iter n f x| computes $f^n(x)$. A negative input for $n$ should have the same effect as passing $n = 0$. For example, \verb|iter 3 sq 2 = 256|, where \verb|sq x = x * x|.
+
+\item {[sheet 6]} Use \verb|iter| to implement the following functions \textit{without} recursion:
+\begin{enumerate}
+\item Exponentiation: \verb|pow :: Int -> Int -> Int| such that \verb|pow n k| $= n^k$ for all $k \geq 0$.
+\item The function \verb|drop' :: Int -> [a] -> [a]| similar to the Prelude function \verb|drop| that takes a number $k$ and a list $[x_1, \dots, x_n]$ and returns $[x_{k+1}, \dots, x_n]$. You can assume that $k \leq n$.
+\item The function \verb|replicate' :: Int -> a -> [a]| similar to the Prelude function \verb|replicate| that takes a number $n \geq 0$ and a value $x$ and returns the list containing the element $x$ $n$-times.
+\end{enumerate}
+
+\item Implement the left-associative fold \verb|foldl' :: (a -> b -> a) -> a -> [b] -> a| similar to the Prelude function \verb|foldl|. Then sketch the evaluation of
+\begin{verbatim}
+    foldl (+) 0 [1,2,3]
+\end{verbatim}
+
+\item Using \verb|foldr|, implement the following functions:
+\begin{enumerate}
+\item \verb|map' :: (a -> b) -> [a] -> [b]| similar to the Prelude function \verb|map| such that \\ $\text{map'}(f, [x_1, \dots, x_n]) = [f(x_1), \dots, f(x_n)]$.
+\item \verb|filter' :: (a -> Bool) -> [a] -> [a]| similar to the Prelude function \verb|filter| such that $\text{filter'}(f, [x_1, \dots, x_n]) = [x_i \mid f(x_i)]$.
+\end{enumerate}
+\end{enumerate}
+
+\subsection{Lambda abstractions}
+\begin{enumerate}
+\item {[endterm 2013]} Which of the following function definitions define the same function, and which do not? Justify briefly.
+\begin{verbatim}
+    f1 xs x = filter (> x) xs
+    f2 xs = \x -> filter (> x)
+    f3 = \xs x -> filter (> x) xs
+    f4 x = filter (> x)
+\end{verbatim}
+
+\item {[endterm 2015]} For both expressions, give a $\lambda$-expression with the same semantics that does not contain a section:
+\begin{enumerate}
+\item \verb|(++ [1])|
+\item \verb|(++) [1]|
+\end{enumerate}
+\end{enumerate}
+
+\subsection{Review}
+\begin{enumerate}
+\item {[endterm 2020]} Write a function \verb|halfEven :: [Int] -> [Int] -> [Int]| that takes two lists $xs$ and $ys$ as input. The function should compute the pairwise sums of the elements of $xs$ and $ys$, i.e. for $xs = [x_0. x_1. \dots]$ and $ys = [y_0, y_1, \dots]$ it computes $[x_0 + y_0, x_1 + y_1, \dots]$. Then, if $x_i + y_i$ is even, the sum is halved. Otherwise, the sum is removed from the list. An invocation of \verb|halfEven| could look as follows:
+\begin{verbatim}
+    halfEven [1,2,3,4] [5,3,1] = [3,2]
+    halfEven [1] [1,2,3] = [1]
+\end{verbatim}
+Implement the function in three different ways:
+\begin{enumerate}
+\item As a list comprehension without using any higher-order functions or recursion.
+\item As a recursive function with the help of pattern matching. You are not allowed to use list comprehensions or higher-order functions.
+\item Use higher-order functions (e.g. map, filter, etc.) but no recursion or list comprehensions.
+\end{enumerate}
+\end{enumerate}
+
+\section{Homework}
+
+\subsection{Recursion, pattern matching}
+\begin{enumerate}
+\item \cite[p. 86]{thompson} Using the addition function over the natural numbers, give a recursive definition of multiplication of natural numbers.
+
+\item \cite[p. 86]{thompson} The integer square root of a positive integer $n$ is the largest integer whose square is less than or equal to $n$. For instance, the integer square roots of $15$ and $16$ are $3$ and $4$ respectively. Give a primitive recursive definition of this function.
+
+\item {[sheet 1]} Define a recursive function
+\begin{verbatim}
+    argMax :: (Integer -> Integer) -> Integer -> Integer
+\end{verbatim}
+such that \verb|argMax g n| maximizes \verb|g| in the domain $\{0,\dots,n\}$.
+
+\item {[sheet 3]} Implement a Haskell function \verb|mergeSort :: [Integer] -> [Integer]| that sorts an integer list in ascending order by using Merge Sort.
+
+\item {[sheet 15]} Consider the function \verb|concat :: [[a]] -> [a]| that concatenates a list of lists:
+\begin{verbatim}
+    concat [[1,2],[],[5,6],[7]] = [1,2,5,6,7]
+\end{verbatim}
+Give a tail recursive implementation of \verb|concat|.
+
+\item {[endterm 2014]} Give a \textit{tail recursive} implementation of the function \verb|sum :: [Integer] -> Integer| that calculates the sum of the element of the given list. With the exception of primitive arithmetic operations you may not use any other predefined function.
 \end{enumerate}
 
 \subsection{List comprehensions}
 \begin{enumerate}
 \item {[sheet 2]} Define a function \verb|toSet :: [Integer] -> [Integer]| using list comprehensions such that \verb|toSet xs| removes all duplicates of \verb|xs|.
-
-\item Define a function \verb|primes :: Int -> [Int]| using list comprehensions that returns all primes up to $n$. \par
-\textit{Hint:} think about what auxiliary functions you could define that might help.
-
-\item Define the function \verb|concat' :: [[a]] -> [a]| using list comprehensions that given a list of lists, joins each element of the outer list and returns a new list.
 
 \item Define a function \verb|quicksort :: Ord a => [a] -> [a]| that sorts the input using the Quicksort algorithm.
 
@@ -146,22 +252,11 @@ which is \verb|True| if the \verb|Integer| is an element of the list, and \verb|
     duplicate :: String -> Integer -> String
 \end{verbatim}
 which takes a string and an integer, $n$. The result is $n$ copies of the string joined together. If $n$ is less than or equal to $0$, the result should be the empty string, \verb|""|, and if n is $1$, the result will be the string itself. Use list comprehensions.
-
-\item \textit{(ranger)} Define a function
-\begin{verbatim}
-    enumFromThenTo :: Integer -> Integer -> Integer -> [Integer]
-\end{verbatim}
-using list comprehensions such that \verb|enumFromThenTo a b c = [a,b..c]|. \par
-How would you have to change the definition to obtain a function
-\begin{verbatim}
-    enumFromThen :: Integer -> Integer -> [Integer]
-\end{verbatim}
-such that \verb|enumFromThen a b = [a,b..]|.
 \end{enumerate}
 
 \subsection{QuickCheck}
 \begin{enumerate}
-\item Write QuickCheck tests to check your implementation of \verb|zip'|, \verb|concat'|, and \verb|elem'| against the Prelude functions \verb|zip|, \verb|concat|, and \verb|elem| respectively.
+\item Write QuickCheck tests to check your implementation of \verb|elem'| against the Prelude function \verb|elem|.
 
 \item {[sheet 2]} Define a function \verb|isSet :: [Integer] -> Bool| such that \verb|isSet xs| holds iff \verb|xs| is a set. Then check that \verb|isSet $ toSet xs| holds using QuickCheck.
 
@@ -205,58 +300,35 @@ Give a \textit{complete} test suite consisting of two of the following QuickChec
 \end{verbatim}
 Justify your answer briefly. For the function \verb|replicate :: Nat -> a -> [a] replicate| $m x = [\underbrace{x, \dots, x}_{m\text{-times}}]$ holds.
 
-\item {[endterm 2015]} Write for the given function \verb|occs| one or more QuickCheck tests that form a \textit{complete} test suite. A test suite is complete if every test succeeds for any correct implementation and if for any incorrect implementation at least one test fails for appropriate test parameters. \par
-The function \verb|occs :: Eq a => [a] -> [(a, Int)]| counts how often each element occurs in a list. The returned list must be sorted in decreasing order by the number of occurrences and may not contain any duplicates. Elements with the same number of occurrences may be returned in any order. Elements that do not occur in the input are not allowed to be present in the output. \par
-\textit{Examples for correct behavior:}
-\begin{verbatim}
-    occs "mississippi" ==
-      [(’i’, 4), (’s’, 4), (’p’, 2), (’m’, 1)]
-    occs "mississippi" ==
-      [(’s’,4), (’i’, 4), (’p’, 2), (’m’, 1)]
-\end{verbatim}
-\textit{Examples for incorrect behavior:}
-\begin{verbatim}
-    occs "mississippi" ==
-      [(’s’, 4), (’i’, 4), (’m’, 1), (’p’, 2)]
-    occs "mississippi" ==
-      [(’s’, 4), (’i’, 4), (’m’, 1), (’p’, 2), (’x’, 0)]
-    occs "mississippi" ==
-      [(’s’, 4), (’s’, 4), (’i’, 4), (’p’, 2), (’m’, 1)]
-\end{verbatim}
-\textit{Important:} It is not required to implement the function \verb|occs|.
+\item {[endterm 2014]} In this task sets are represented by lists. As usual, duplicates and ordering do not have any effect on the represented set. For example, the lists \code{[1, 2]}, \code{[1, 2, 1]}, and \code{[2, 2, 1]} all represent the mathematical set $\{1, 2\}$. \par
+Consider the function \code{takeAny :: [a] -> (a, [a])}. The input $xs$ is interpreted as set $A$. The function chooses a random element $a$ of $A$ and returns a pair $(a, ys)$. $ys$ is a list representing the set $A \setminus \{a\}$. \par
+Is the set $A$ empty, the function may behave in any way (e.g. not terminate). \par
+\textit{Examples:}
+\begin{alltt}
+    takeAny []                      \textit{-- not defined, random}
+    takeAny [1] = (1 ,[])
+    takeAny [1 ,1 ,1] = (1 ,[])
+    takeAny [1 ,2] = (1 ,[2]) \textit{or} (2 ,[1]) \textit{or} (1 ,[2 ,2]) \textit{or ...}
+    takeAny [1 ,2 ,2] = (1 ,[2]) \textit{or} (2 ,[1]) \textit{or} (1 ,[2 ,2]) \textit{or ...}
+    takeAny [1 ,2 ,3] = (1 ,[2 ,3]) \textit{or} (3 ,[2 ,1 ,2]) \textit{or ...}
+\end{alltt}
+As the examples show, the function is allowed to create duplicates or change the ordering. \par
+Give a \textit{correct} and \textit{complete} QuickCheck test suite for this function. Justify your answer briefly.
+
+\item {[retake 2013]} Given a function \code{g :: [Float] -> [Float]} that maps a list $[x_1, \dots, x_n]$ of numbers to the list $[\frac{1}{x_1}, \dots, \frac{1}{x_n}]$. The behavior of the function for inputs that contain the number $0$ is not specified. \par
+\textit{Example:} \code{g [2.0, 4.0, 0.5] == [0.5, 0.25, 2.0]}. \par
+Give a \textit{complete} test suite of at most two QuickCheck tests describing the behavior of \code{g}.
 \end{enumerate}
 
 \subsection{Higher-order functions}
 \begin{enumerate}
-\item Define the function \verb|takeWhile' :: (a -> Bool) -> [a] -> [a]| similar to the Prelude function \verb|takeWhile| that takes a function $f$ and a list $[x_1, \dots, x_n]$ and returns $[x_1, \dots, x_{k-1}]$ where $f(x_k)$ is the first element that is false.
-
 \item Define the function \verb|dropWhile' :: (a -> Bool) -> [a] -> [a]| similar to the Prelude function \verb|dropWhile| that takes a function $f$ and a list $[x_1, \dots, x_n]$ and returns $[x_k, \dots, x_n]$ where $f(x_k)$ is the first element that is false.
-
-\item {[sheet 6]} Write a function \verb|iter :: Int -> (a -> a) -> a -> a| that takes a number $n$, a function $f$, and a value $x$ and applies $f$ $n$-times with initial value $x$, that is \verb|iter n f x| computes $f^n(x)$. A negative input for $n$ should have the same effect as passing $n = 0$. For example, \verb|iter 3 sq 2 = 256|, where \verb|sq x = x * x|.
-
-\item {[sheet 6]} Use \verb|iter| to implement the following functions \textit{without} recursion:
-\begin{enumerate}
-\item Exponentiation: \verb|pow :: Int -> Int -> Int| such that \verb|pow n k| $= n^k$ for all $k \geq 0$.
-\item The function \verb|drop' :: Int -> [a] -> [a]| similar to the Prelude function \verb|drop| that takes a number $k$ and a list $[x_1, \dots, x_n]$ and returns $[x_{k+1}, \dots, x_n]$. You can assume that $k \leq n$.
-\item The function \verb|replicate' :: Int -> a -> [a]| similar to the Prelude function \verb|replicate| that takes a number $n \geq 0$ and a value $x$ and returns the list containing the element $x$ $n$-times.
-\end{enumerate}
 
 \item {[sheet 7]} Write a function \verb|iterWhile :: (a -> a -> Bool) -> (a -> a) -> a -> a| such that \\ \verb|iterWhile test f x| iterates \verb|f| until \verb|test x (f x)| is false, and then returns \verb|x|.
 
 \item {[sheet 7]} Use \verb|iterWhile| to implement a function \verb|fixpoint :: Eq a => (a -> a) -> a -> a| that iterates a function \verb|f| until it finds a value \verb|x| such that \verb|f x = x| and then returns this value.
 
 \item {[sheet 7]} Use \verb|iterWhile| to implement a function \verb|findSup :: Ord a => (a -> a) -> a -> a -> a| such that \verb|findSup f m x| finds the larges value $f^nx$ that is at most $m$ assuming that $f$ is strictly monotonically increasing.
-
-\item Implement the left-associative fold \verb|foldl' :: (a -> b -> a) -> a -> [b] -> a| similar to the Prelude function \verb|foldl|. Then sketch the evaluation of
-\begin{verbatim}
-    foldl (+) 0 [1,2,3]
-\end{verbatim}
-
-\item Using \verb|foldr|, implement the following functions:
-\begin{enumerate}
-\item \verb|map' :: (a -> b) -> [a] -> [b]| similar to the Prelude function \verb|map| such that \\ $\text{map'}(f, [x_1, \dots, x_n]) = [f(x_1), \dots, f(x_n)]$.
-\item \verb|filter' :: (a -> Bool) -> [a] -> [a]| similar to the Prelude function \verb|filter| such that $\text{filter'}(f, [x_1, \dots, x_n]) = [x_i \mid f(x_i)]$.
-\end{enumerate}
 
 \item {[sheet 7]} Using \verb|foldr|, implement the following functions:
 \begin{enumerate}
@@ -283,20 +355,6 @@ which takes a function $f$ as argument, and returns (an approximation to) the tw
 
 \subsection{Lambda abstractions}
 \begin{enumerate}
-\item {[endterm 2013]} Which of the following function definitions define the same function, and which do not? Justify briefly.
-\begin{verbatim}
-    f1 xs x = filter (> x) xs
-    f2 xs = \x -> filter (> x)
-    f3 = \xs x -> filter (> x) xs
-    f4 x = filter (> x)
-\end{verbatim}
-
-\item {[endterm 2015]} For both expressions, give a $\lambda$-expression with the same semantics that does not contain a section:
-\begin{enumerate}
-\item \verb|(++ [1])|
-\item \verb|(++) [1]|
-\end{enumerate}
-
 \item {[endterm 2015]} Give an expression describing the same function as
 \begin{verbatim}
     \xs ys -> reverse xs ++ ys
@@ -306,19 +364,16 @@ You may not use $\lambda$-expressions or define auxiliary functions. The use of 
 
 \subsection{Review}
 \begin{enumerate}
-\item Implement the functions \verb|zip' :: [a] -> [b] -> [(a,b)]| and \verb|unzip' :: [(a,b)] -> ([a], [b])| similar to the Prelude functions \verb|zip| and \verb|unzip| in three different ways:
-\begin{enumerate}
-\item As a list comprehension without using any higher-order functions or recursion.
-\item As a recursive function with the help of pattern matching. You are not allowed to use list comprehensions or higher-order functions.
-\item Use higher-order functions (e.g. map, filter, etc.) but no recursion or list comprehensions.
-\end{enumerate}
+\item {[retake 2014]} Define a function \code{lups :: Ord a => [a] -> [a]} that returns the longest, strictly monotonously increasing (uninterrupted) partial list of the input. \par
+\textit{Examples:}
+\begin{alltt}
+    lups [] = []
+    lups [2 ,2 ,1] = [2] \textit{or} [1]
+    lups [2 ,5 ,3 ,6 ,8] = [3 ,6 ,8]
+    lups [3 ,7 ,2 ,8] = [3 ,7] \textit{or} [2 ,8]
+\end{alltt}
 
-\item {[endterm 2020]} Write a function \verb|halfEven :: [Int] -> [Int] -> [Int]| that takes two lists $xs$ and $ys$ as input. The function should compute the pairwise sums of the elements of $xs$ and $ys$, i.e. for $xs = [x_0. x_1. \dots]$ and $ys = [y_0, y_1, \dots]$ it computes $[x_0 + y_0, x_1 + y_1, \dots]$. Then, if $x_i + y_i$ is even, the sum is halved. Otherwise, the sum is removed from the list. An invocation of \verb|halfEven| could look as follows:
-\begin{verbatim}
-    halfEven [1,2,3,4] [5,3,1] = [3,2]
-    halfEven [1] [1,2,3] = [1]
-\end{verbatim}
-Implement the function in three different ways:
+\item Implement the functions \verb|zip' :: [a] -> [b] -> [(a,b)]| and \verb|unzip' :: [(a,b)] -> ([a], [b])| similar to the Prelude functions \verb|zip| and \verb|unzip| in three different ways:
 \begin{enumerate}
 \item As a list comprehension without using any higher-order functions or recursion.
 \item As a recursive function with the help of pattern matching. You are not allowed to use list comprehensions or higher-order functions.
@@ -334,8 +389,6 @@ Implement $f$ in three different ways:
 \item With the help of \verb|map| and \verb|filter|; without the use of list comprehensions or recursion.
 \end{enumerate}
 \end{enumerate}
-
-\section{Homework}
 
 \printbibliography
 
