@@ -17,12 +17,12 @@ engaging as possible.
 
 ## Materials
 
-* [**handout**](jonhue.github.io/teching-fpv-rev/handout.pdf)
-* [slides](jonhue.github.io/teching-fpv-rev/slides.pdf)
+* [**handout**](https://jonhue.github.io/teching-fpv-rev/handout.pdf)
+* [slides](https://jonhue.github.io/teching-fpv-rev/slides.pdf) (with animations)
 
 ### Problems
 
-* [problem set 1](jonhue.github.io/teching-fpv-rev/problem set 1.pdf)
+* [problem set 1](https://jonhue.github.io/teching-fpv-rev/problem_set_1.pdf)
 
 ### Solutions
 

@@ -20,6 +20,8 @@ jobs:
       uses: xu-cheng/latex-action@v2
       with:
         root_file: |
+          problems/problem_set_1.tex
+          problems/problem_set_1.tex
           slides/handout.tex
           slides/organization.tex
           slides/slides.tex
