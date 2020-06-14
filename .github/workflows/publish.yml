@@ -28,7 +28,7 @@ jobs:
     - name: Move PDFs
       run: mv ./*.pdf ./dist
     - name: Move readme
-      run: mv ./README.md ./dist
+      run: cp ./README.md ./dist/index.md
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
