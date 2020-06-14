@@ -1,4 +1,5 @@
 ---
+layout: primer_without_heading
 title: Revision Course Functional Programming and Verification
 ---
 
