@@ -17,6 +17,8 @@ jobs:
       with:
         SOURCES: $(find . -type f -name "*.tex")
     - run: echo ${{ env.SOURCES }}
+    - run: echo ::set-env name=SOURCES::$(find . -type f -name "*.tex")
+    - run: echo ${{ env.SOURCES }}
     - name: Compile LaTeX sources
       uses: xu-cheng/latex-action@v2
       with:
