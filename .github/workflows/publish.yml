@@ -12,21 +12,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    - name: Find LaTeX sources
-      uses: allenevans/set-env@v1.0.0
-      with:
-        SOURCES: $(find . -type f -name "*.tex")
-    - run: echo ${{ env.SOURCES }}
-    - run: echo ::set-env name=SOURCES::$(find . -type f -name "*.tex")
-    - run: echo ${{ env.SOURCES }}
     - name: Compile LaTeX sources
       uses: xu-cheng/latex-action@v2
       with:
-        root_file: ${{ env.SOURCES }}
+        root_file: |
+          slides/organization.tex
+          slides/slides.tex
     - name: Create output directory
       run: mkdir dist
     - name: Move PDFs
       run: mv **/*.pdf ./dist
+    - name: Move readme
+      run: mv ./README.md ./dist
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
