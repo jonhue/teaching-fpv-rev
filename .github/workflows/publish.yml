@@ -16,10 +16,11 @@ jobs:
       uses: allenevans/set-env@v1.0.0
       with:
         SOURCES: $(find . -type f -name "*.tex")
+    - run: echo ${{ env.SOURCES }}
     - name: Compile LaTeX sources
       uses: xu-cheng/latex-action@v2
       with:
-        root_file: $SOURCES
+        root_file: ${{ env.SOURCES }}
     - name: Create output directory
       run: mkdir dist
     - name: Move PDFs
