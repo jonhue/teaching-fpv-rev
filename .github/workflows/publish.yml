@@ -18,18 +18,17 @@ jobs:
         root_file: |
           slides/organization.tex
           slides/slides.tex
-    - name: Create output directory
-      run: mkdir dist
-    - run: ls -R
-    - name: Move PDFs
-      run: mv **/*.pdf ./dist
-    - name: Move readme
-      run: mv ./README.md ./dist
+    # - name: Create output directory
+    #   run: mkdir dist
+    # - name: Move PDFs
+    #   run: mv **/*.pdf ./dist
+    # - name: Move readme
+    #   run: mv ./README.md ./dist
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         publish_branch: master
-        publish_dir: ./dist
+        publish_dir: ./
         allow_empty_commit: true
         force_orphan: true
