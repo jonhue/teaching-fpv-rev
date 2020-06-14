@@ -19,13 +19,15 @@ jobs:
     - name: Compile LaTeX sources
       uses: xu-cheng/latex-action@v2
       with:
-        pre_compile: tlmgr update --self && tlmgr update --all && tlmgr install biblatex && tlmgr install Biber
+        pre_compile: tlmgr update --self && tlmgr update --all
         root_file: |
           problems/problem_set_1.tex
           problems/problem_set_2.tex
           slides/handout.tex
           slides/organization.tex
           slides/slides.tex
+    - name: Build log
+      run: cat build.log
     - name: Move PDFs
       run: mv ./*.pdf ./dist
     - name: Move readme
