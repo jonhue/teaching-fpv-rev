@@ -7,7 +7,7 @@ title: Revision Course Functional Programming and Verification
 
 The course is held in four sessions from June 24th to July 1st.
 
-The sessions will include a comprehensive course overview.Some problems will be
+The sessions will include a comprehensive course overview. Some problems will be
 solved together, for others you will get some time to start solving them on your
 own. The material will include problems to work on between sessions. Questions
 that might arise from those problems can be discussed in a subsequent session.
@@ -20,6 +20,7 @@ engaging as possible.
 
 * [**handout**](https://jonhue.github.io/teaching-fpv-rev/handout.pdf)
 * [slides](https://jonhue.github.io/teaching-fpv-rev/slides.pdf) (with animations)
+* [organization](https://jonhue.github.io/teaching-fpv-rev/organization.pdf)
 
 ### Problems
 
