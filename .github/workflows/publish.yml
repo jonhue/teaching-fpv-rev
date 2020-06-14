@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Prepare handout
-    - run: |
+      run: |
         cp ./slides/slides.tex ./slides/presentation.tex
         sed -i "1s/.*/\\\\documentclass\[handout\]\{beamer\}/" ./slides/slides.tex
     - name: Compile LaTeX sources
