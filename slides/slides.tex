@@ -34,14 +34,14 @@
 \end{frame}
 
 % Uncomment these lines for an automatically generated outline.
-% \begin{frame}{Outline}
-%  \tableofcontents
-% \end{frame}
+\begin{frame}{Outline}
+ \tableofcontents[subsectionstyle=hide, subsubsectionstyle=hide]
+\end{frame}
 \AtBeginSection[]
   {
      \begin{frame}<beamer>
      \frametitle{Plan}
-     \tableofcontents[currentsection]
+     \tableofcontents[currentsection, hideothersubsections]
      \end{frame}
   }
 
@@ -50,6 +50,7 @@
 \subsection{Basic Haskell}
 
 \begin{frame}{Basic Haskell}
+
 \begingroup
 \setlength{\tabcolsep}{10pt}
 \renewcommand{\arraystretch}{1.5}
@@ -439,8 +440,8 @@ where \code{a} is a \textcolor{blue}{type variable}.
 \begin{frame}{Subtype vs parametric polymorphism}
 
 \begin{itemize}
-    \item \textcolor{blue}{parametric polymorphism} - types may contain universally quantified type variables that are then replaced by actual types.
-    \item \textcolor{blue}{subtype polymorphism} - any object of type \code{T'} where \code{T'} is a subtype of \code{T} can be used in place of objects of type \code{T}.
+    \item \textcolor{blue}{parametric polymorphism} \\ types may contain universally quantified type variables that are then replaced by actual types.
+    \item \textcolor{blue}{subtype polymorphism} \\ any object of type \code{T'} where \code{T'} is a subtype of \code{T} can be used in place of objects of type \code{T}.
 \end{itemize}
 
 \pause
@@ -1014,6 +1015,332 @@ Step 4 (cont.)\pause
 
 \end{frame}
 
+\section{Automated Theorem Proving}
+
+\subsection{Structural induction}
+
+\begin{frame}{Structural induction}
+
+\begin{block}{\centering Induction on the structural definition of a datatype}
+\end{block}
+
+\pause
+
+To prove property \textcolor{blue}{\code{P(x)}} for all finite values \code{x} of type $T$, \par
+prove \textcolor{blue}{\code{P(C)}} for each constructor $C$ of $T$.
+
+\pause
+
+\vspace{0.5cm}
+\begin{itemize}
+    \item \textcolor{blue}{base cases} are represented by proofs for non-recursive constructors\pause
+    \item \textcolor{blue}{inductive cases} are represented by proofs for recursive constructors
+\end{itemize}
+
+\pause
+
+\vspace{0.5cm}
+\textcolor{red}{Each recursive type parameter has a separate induction hypothesis. (Why?)}
+
+\end{frame}
+
+\begin{frame}[fragile]{Structural induction on trees}
+
+\begin{exampleblock}{Example}
+\begin{alltt}
+data Tree a = Leaf | Node (Tree a) a (Tree a)\pause
+
+mirror Leaf = Leaf
+mirror (Node l v r) = Node (mirror r) v (mirror l)
+
+id x = x
+
+(f . g) x = f (g x)
+\end{alltt}
+
+\pause
+
+Prove \textcolor{blue}{\code{(mirror . mirror) t .=. id t}}.
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Structural induction on trees}
+
+\begin{exampleblock}{Example (cont.)}
+\small\begin{alltt}
+\textcolor{blue}{Lemma: (mirror . mirror) t .=. id t}\pause
+Proof by induction on Tree t\pause
+\textcolor{blue}{Case Leaf}\pause
+  To show: (mirror . mirror) Leaf .=. id Leaf
+  Proof
+                        (mirror . mirror) Leaf\pause
+    (by def .)      .=. \underline{mirror (mirror Leaf)}\pause
+    (by def mirror) .=. \underline{mirror Leaf}\pause
+    (by def mirror) .=. \underline{Leaf}\pause
+    (by def id)     .=. \underline{id Leaf}
+  QED
+\end{alltt}\normalsize
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Structural induction on trees}
+
+\begin{exampleblock}{Example (cont.)}
+\small\begin{alltt}
+\textcolor{blue}{Case Node l v r}\pause
+  To show: (mirror . mirror) (Node l v r)
+           .=. id (Node l v r)\pause
+  \textcolor{blue}{IH1}:     (mirror . mirror) l .=. id l
+  \textcolor{blue}{IH2}:     (mirror . mirror) r .=. id r
+  Proof
+                        (mirror . mirror) (Node l v r)\pause
+    (by def .)      .=. \underline{mirror (mirror (Node l v r))}\pause
+    (by def mirror)
+    .=. mirror (\underline{Node (mirror r) v (mirror l)})\pause
+    (by def mirror)
+    .=. \underline{Node (mirror (mirror l)) v (mirror (mirror r))}\pause
+    (by def .)
+    .=. Node (\underline{{(mirror . mirror) l}}) v (mirror (mirror r))\pause
+    (by def .)
+    .=. Node ((mirror . mirror) l) v (\underline{(mirror . mirror) r})
+\end{alltt}\normalsize
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Structural induction on trees}
+
+\begin{exampleblock}{Example (cont.)}
+\small\begin{alltt}
+  To show: (mirror . mirror) (Node l v r)
+           .=. id (Node l v r)
+  \textcolor{blue}{IH1}:     (mirror . mirror) l .=. id l
+  \textcolor{blue}{IH2}:     (mirror . mirror) r .=. id r
+  Proof
+    \vdots
+    (by def .)
+    .=. Node ((mirror . mirror) l) v ((mirror . mirror) r)\pause
+    (by IH1)    .=. Node \underline{(id l)} v ((mirror . mirror) r)
+    (by IH2)    .=. Node (id l) v \underline{(id r)}\pause
+    (by def id) .=. Node \underline{l} v (id r)\pause
+    (by def id) .=. Node l v \underline{r}\pause
+    (by def id) .=. \underline{id (Node l v r)}
+  QED
+QED
+\end{alltt}\normalsize
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{Structural induction on lists}
+
+Definition of a list:\pause
+\begin{alltt}
+data [a] = [] | a : [a]
+\end{alltt}
+
+\pause
+
+To prove property \textcolor{blue}{\code{P(xs)}} for all finite lists \code{xs} \par
+\begin{itemize}
+    \item \textcolor{blue}{Base case:} Prove \textcolor{blue}{\code{P([])}} \par
+    \item \textcolor{blue}{Inductive case:} Prove \textcolor{blue}{\code{P(xs)} $\implies$ \code{P(x:xs)}}
+\end{itemize}
+
+\pause
+
+\vspace{1cm}
+\begin{block}{\centering Structural induction on lists \\ are inductions on the length of a list}
+\end{block}
+
+\end{frame}
+
+\subsection{Case analysis}
+
+\begin{frame}[fragile]{Case analysis}
+
+For conditionals consider separate proofs for the cases \code{True} and \code{False}.
+
+\pause
+
+\begin{exampleblock}{Example}
+\small\begin{alltt}
+To show: if x < y then \(A\) else \(B\) .=. f x y\pause
+\textcolor{blue}{Proof by case analysis on Bool x < y}
+\textcolor{blue}{Case True}
+  Assumption: x < y .=. True
+  Proof
+                        if x < y then \(A\) else \(B\)\pause
+    (by Assumption) .=. if True then \(A\) else \(B\)\pause
+    (by ifTrue)     .=. \(A\)
+    ...
+  QED\pause
+\textcolor{blue}{Case False}
+  ...
+QED
+\end{alltt}\normalsize
+\end{exampleblock}
+
+\end{frame}
+
+\subsection{Generalization}
+
+\begin{frame}{Generalization}
+
+\begin{center}
+    \textcolor{blue}{When using the IH, variables may be replaced by arbitrary expressions, only} \textcolor{red}{the induction variable must stay fixed}.
+\end{center}
+
+\pause
+
+\vspace{0.5cm}
+\begin{exampleblock}{Example}
+Consider a structural induction on \code{xs} \\
+with the IH \code{f xs ys .=. g xs ys}. \par\pause
+Then,
+
+\begin{center}
+    \code{f xs ys .=. g xs ys} $\implies$ \code{f xs [] .=. g xs []}.
+\end{center}
+\end{exampleblock}
+
+\end{frame}
+
+\subsection{Extensionality}
+
+\begin{frame}[fragile]{Extensionality}
+
+\begin{center}
+    \textcolor{blue}{Two functions are equal \\ if for all arguments they yield the same result}.
+\end{center}
+
+\pause
+
+\vspace{0.5cm}
+\begin{exampleblock}{Example}
+\begin{alltt}
+Lemma: f .=. g
+\textcolor{blue}{Proof by extensionality with xs}
+  To show: f xs .=. g xs
+  Proof by induction on List xs
+    ...
+  QED
+QED
+\end{alltt}
+\end{exampleblock}
+
+\end{frame}
+
+\subsection{Computation induction}
+
+\begin{frame}{Computation induction}
+
+To prove property \textcolor{blue}{\code{P($x_1, \dots, x_k$)}} for all $x_1$, \dots, $x_k$, \par
+for every defining equation
+
+\begin{center}
+\textcolor{blue}{\code{f $p_1, \dots, p_k$ = ... f $e_{11}, \dots, e_{1k}$ ... f $e_{n1}, \dots, e_{nk}$ ...}}
+\end{center}
+
+prove \textcolor{blue}{\code{P($e_{11}, \dots, e_{1k}$)}, \dots, \code{P($e_{n1}, \dots, e_{nk}$)} $\implies$ \code{P($p_1, \dots, p_k$)}}.
+
+\pause
+
+\vspace{1cm}
+\begin{block}{\centering Induction on the length of a computation}
+\end{block}
+
+\pause
+
+Also referred to as an \textcolor{blue}{induction on the computation} of a function \code{f} or \textcolor{blue}{\code{f}-induction}.
+
+\end{frame}
+
+\begin{frame}[fragile]{Computation induction}
+
+\begin{exampleblock}{Example}
+\begin{alltt}
+splice [] ys = ys
+spice (x:xs) ys = x : splice ys xs
+\end{alltt}
+
+\pause
+
+\code{splice}-induction: To prove \code{P(xs, ys)} for all \code{xs} and \code{ys}, prove\pause
+\begin{enumerate}
+    \item \code{P([], ys)}\pause
+    \item \code{P(ys, xs)} $\implies$ \code{P(x:xs, ys)}
+\end{enumerate}
+
+\pause
+
+\vspace{0.5cm}
+Prove \textcolor{blue}{\code{length (splice xs ys) .=. length xs + length ys}}.
+
+\pause
+
+\vspace{0.25cm}
+\textcolor{red}{Structural induction does not work (why?)}
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Computation induction}
+
+\begin{exampleblock}{Example (cont.)}
+\small\begin{alltt}
+\textcolor{blue}{Lemma: length (splice xs ys) .=. length xs + length ys}\pause
+Proof by splice-induction on xs and ys\pause
+\textcolor{blue}{Case 1}\pause
+  To show: length (splice [] ys) .=. length [] + length ys
+  Proof
+                        length (splice [] ys)\pause
+    (by def splice) .=. length \underline{ys}
+
+                        length [] + length ys\pause
+    (by def length) .=. \underline{0} + length ys\pause
+    (by def 0)      .=. \underline{length ys}
+  QED
+\end{alltt}\normalsize
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Computation induction}
+
+\begin{exampleblock}{Example (cont.)}
+\small\begin{alltt}
+\textcolor{blue}{Case 2}\pause
+  To show: length (splice (x:xs) ys)
+           .=. length (x:xs) + length ys\pause
+  IH:      length (splice ys xs)
+           .=. length ys + length xs
+  Proof
+                        length (splice (x:xs) ys)\pause
+    (by def splice) .=. length \underline{(x : splice ys xs)}\pause
+    (by def length) .=. \underline{1 + length (splice ys xs)}\pause
+    (by IH)         .=. 1 + \underline{(length ys + length xs)}\pause
+    (by comm_sum)   .=. 1 + \underline{(length xs + length ys)}\pause
+    (by assoc_sum)  .=. \underline{(1 + length xs) + length ys}\pause
+    (by def length) .=. \underline{length (x:xs)} + length ys
+  QED
+QED
+\end{alltt}\normalsize
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{Structural vs computation induction}
+
+\begin{itemize}
+    \item \textcolor{blue}{structural induction} \\ inductive proof over the structural definition of a datatype.
+    \item \textcolor{blue}{computation induction} \\ inductive proof over the structural definition of a function.
+\end{itemize}
+
+\end{frame}
+
 \section{Correctness}
 
 \begin{frame}{Correctness}
@@ -1114,6 +1441,8 @@ Programming languages that have referential transparency are called \textcolor{b
 
 \end{frame}
 
+\subsection{I/O in Haskell}
+
 \begin{frame}{I/O in Haskell}
 
 Haskell distinguishes expressions without side effects (\textcolor{blue}{pure expressions}) from expressions with side effects (\textcolor{blue}{actions}) by their type:
@@ -1157,6 +1486,38 @@ is the type of (I/O) actions that return a value of type \code{a}.
 
 \end{frame}
 
+\begin{frame}[fragile]{Read/Show}
+
+\begin{itemize}
+    \item \code{Read}: parsing \code{String}
+\begin{alltt}
+\textcolor{blue}{class Read a where}
+  \textcolor{blue}{read :: String -> a}
+\end{alltt}\pause
+    \item \code{Show}: converting to \code{String}
+\begin{alltt}
+\textcolor{blue}{class Show a where}
+  \textcolor{blue}{show :: a -> String}
+\end{alltt}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Important actions}
+
+\begin{itemize}
+    \item \textcolor{blue}{\code{putStr :: String -> IO ()}} \\
+        Prints a string to standard output\pause
+    \item \textcolor{blue}{\code{putStrLn :: String -> IO ()}} \\
+        Prints a string followed by a newline to standard output\pause
+    \item \textcolor{blue}{\code{getLine :: IO String}} \\
+        Reads everything up until a newline from standard input
+\end{itemize}
+
+\end{frame}
+
+\subsection{Sequencing}
+
 \begin{frame}[fragile]{Sequencing}
 
 A sequence of actions can be combined into a single action with the keyword \textcolor{blue}{\code{do}}.
@@ -1197,6 +1558,8 @@ where each $a_i$ can be one of
 \end{itemize}
 
 \end{frame}
+
+\subsection{Interlude: Monads}
 
 \begin{frame}[fragile]{Interlude: Monads}
 
@@ -1260,35 +1623,6 @@ sum2 = do
 \end{alltt}
 
 \end{exampleblock}
-
-\end{frame}
-
-\begin{frame}[fragile]{Read/Show}
-
-\begin{itemize}
-    \item \code{Read}: parsing \code{String}
-\begin{alltt}
-\textcolor{blue}{class Read a where}
-  \textcolor{blue}{read :: String -> a}
-\end{alltt}\pause
-    \item \code{Show}: converting to \code{String}
-\begin{alltt}
-\textcolor{blue}{class Show a where}
-  \textcolor{blue}{show :: a -> String}
-\end{alltt}
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Important actions}
-
-\begin{tabularx}{\textwidth}{ll}
-    \code{putStr :: String -> IO ()} & print string to standard output \\
-    \code{putStrLn :: String -> IO ()} & print string followed by \\
-    & newline to standard output \\
-    \code{getLine :: IO String} & read everything up until \\
-    & newline from standard input \\
-\end{tabularx}
 
 \end{frame}
 
