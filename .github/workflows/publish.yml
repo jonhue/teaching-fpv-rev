@@ -26,8 +26,6 @@ jobs:
           slides/handout.tex
           slides/organization.tex
           slides/slides.tex
-    - name: Build log
-      run: cat build.log
     - name: Move PDFs
       run: mv ./*.pdf ./dist
     - name: Move readme
