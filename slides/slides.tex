@@ -485,13 +485,13 @@ f :: Bool -> a -> a -> a
 f x y = [(x,y), (y,x)]\pause
 f :: a -> a -> [(a,a)]
 
-f x = [ length u + v | (u,v) <- x ]\pause
+f x = [length u + v | (u,v) <- x ]\pause
 f :: [([a],Int)] -> [Int]
 
-f x y = [ u ++ x | u <- y, length u < x ]\pause
+f x y = [u ++ x | u <- y, length u < x ]\pause
 \textcolor{red}{invalid}
 
-f x y = [[ (u,v) | u <- w, u, v <- x] | w <- y]\pause
+f x y = [[(u,v) | u <- w, u, v <- x] | w <- y]\pause
 f :: [a] -> [[Bool]] -> [[(Bool, a)]]
 \end{alltt}
 
