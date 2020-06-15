@@ -24,7 +24,7 @@ engaging as possible.
 
 ### Problems
 
-* [problem set 1](https://jonhue.github.io/teaching-fpv-rev/problem_set_1.pdf)
+* [problem set 1](https://jonhue.github.io/teaching-fpv-rev/problem_set_1.pdf), [template](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/templates/problem_set_1.hs)
 
 ### Solutions
 
