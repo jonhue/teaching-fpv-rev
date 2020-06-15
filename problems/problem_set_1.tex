@@ -163,6 +163,12 @@ The function \verb|occs :: Eq a => [a] -> [(a, Int)]| counts how often each elem
 \item \verb|map' :: (a -> b) -> [a] -> [b]| similar to the Prelude function \verb|map| such that \\ $\text{map'}(f, [x_1, \dots, x_n]) = [f(x_1), \dots, f(x_n)]$.
 \item \verb|filter' :: (a -> Bool) -> [a] -> [a]| similar to the Prelude function \verb|filter| such that $\text{filter'}(f, [x_1, \dots, x_n]) = [x_i \mid f(x_i)]$.
 \end{enumerate}
+
+\item {[sheet 7]} Using \verb|foldr|, implement the following functions:
+\begin{enumerate}
+\item \verb|compose :: [(a -> a)] -> a -> a| such that $\text{compose}([f_1, \dots, f_n], x) = f_1(\dots(f_n(x))\dots)$.
+\item \verb|fib :: Integer -> Integer| computing the Fibonacci numbers.
+\end{enumerate}
 \end{enumerate}
 
 \subsection{Lambda abstractions}
@@ -196,6 +202,8 @@ Implement the function in three different ways:
 \item Use higher-order functions (e.g. map, filter, etc.) but no recursion or list comprehensions.
 \end{enumerate}
 \end{enumerate}
+
+\newpage
 
 \section{Homework}
 
@@ -332,8 +340,6 @@ Give a \textit{complete} test suite of at most two QuickCheck tests describing t
 
 \item {[sheet 7]} Using \verb|foldr|, implement the following functions:
 \begin{enumerate}
-\item \verb|compose :: [(a -> a)] -> a -> a| such that $\text{compose}([f_1, \dots, f_n], x) = f_1(\dots(f_n(x))\dots)$.
-\item \verb|fib :: Integer -> Integer| computing the Fibonacci numbers.
 \item \verb|length' :: [a] -> Integer| computing the length of a list.
 \item \verb|reverse' :: [a] -> [a]| reversing a list.
 \item \verb|map' :: (a -> b) -> [a] -> [b]| mapping a function over a list.
