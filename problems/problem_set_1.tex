@@ -92,7 +92,7 @@ Define the function
 \end{verbatim}
 such that using $n$ straight lines \verb|regions n| returns the maximum number of regions a two dimensional space can be divided into.
 
-\item {[retake 2013]} Implement the function \code{remdups :: Eq a => [a] -> [a]} that removes all duplicates from a list. The first occurrence of every element should be should remain. For example, \code{remdups [1,5,3,1,0,3] == [1,5,3,0]}. \par
+\item {[retake 2013]} Implement the function \code{remdups :: Eq a => [a] -> [a]} that removes all duplicates from a list. The first occurrence of every element should remain. For example, \code{remdups [1,5,3,1,0,3] == [1,5,3,0]}. \par
 The functions \code{nub} and \code{nubBy} from the Prelude may not be used.
 \end{enumerate}
 
@@ -148,7 +148,7 @@ The function \verb|occs :: Eq a => [a] -> [(a, Int)]| counts how often each elem
 
 \item {[sheet 6]} Use \verb|iter| to implement the following functions \textit{without} recursion:
 \begin{enumerate}
-\item Exponentiation: \verb|pow :: Int -> Int -> Int| such that \verb|pow n k| $= n^k$ for all $k \geq 0$.
+\item Exponentiation: \verb|pow' :: Int -> Int -> Int| such that \verb|pow' n k| $= n^k$ for all $k \geq 0$.
 \item The function \verb|drop' :: Int -> [a] -> [a]| similar to the Prelude function \verb|drop| that takes a number $k$ and a list $[x_1, \dots, x_n]$ and returns $[x_{k+1}, \dots, x_n]$. You can assume that $k \leq n$.
 \item The function \verb|replicate' :: Int -> a -> [a]| similar to the Prelude function \verb|replicate| that takes a number $n \geq 0$ and a value $x$ and returns the list containing the element $x$ $n$-times.
 \end{enumerate}
@@ -276,7 +276,7 @@ which takes a string and an integer, $n$. The result is $n$ copies of the string
 Examine \verb|g| to determine when \verb|argMax g n| $\neq$ \verb|n|. Use your observations to write a function \\ \verb|argMaxG :: Integer -> Integer| that does not use \verb|g| and satisfies the property \\ \verb|argMax g n = argMaxG n|. Write a QuickCheck test to check the equivalence.
 
 \item {[sheet 15]} Write one or more QuickCheck tests for the function \verb|sortP| as defined below. The tests should be complete, i.e. every correct implementation of \verb|sortP| passes every test and for every incorrect implementation there is at least one test that fails for suitable test parameters. \par
-The function \verb|sortP :: (Ord a, Eq b) => [(a,b)] -> [(a.b)]| sorts a list of tuples with regard to the first element of the tuple in ascending order. Tuples with the same first element may occur in any order. \par
+The function \verb|sortP :: (Ord a, Eq b) => [(a,b)] -> [(a,b)]| sorts a list of tuples with regard to the first element of the tuple in ascending order. Tuples with the same first element may occur in any order. \par
 \textit{Examples for correct behavior:}
 \begin{verbatim}
     sortP [(3, 'a'), (1, 'b'), (2, 'c')] = [(1, 'b'), (2, 'c'), (3, 'a')]
@@ -306,7 +306,7 @@ Give a \textit{complete} test suite consisting of two of the following QuickChec
     prop_stutt_reverse ns = reverse (stutt ns) == stutt (reverse ns)
     prop_stutt_distr ms ns = stutt ms ++ stutt ns == stutt (ms ++ ns)
 \end{verbatim}
-Justify your answer briefly. For the function \verb|replicate :: Nat -> a -> [a] replicate| $m x = [\underbrace{x, \dots, x}_{m\text{-times}}]$ holds.
+Justify your answer briefly. For the function \verb|replicate :: Nat -> a -> [a] replicate| $m\ x = [\underbrace{x, \dots, x}_{m\text{-times}}]$ holds.
 
 \item {[endterm 2014]} In this task sets are represented by lists. As usual, duplicates and ordering do not have any effect on the represented set. For example, the lists \code{[1, 2]}, \code{[1, 2, 1]}, and \code{[2, 2, 1]} all represent the mathematical set $\{1, 2\}$. \par
 Consider the function \code{takeAny :: [a] -> (a, [a])}. The input $xs$ is interpreted as set $A$. The function chooses a random element $a$ of $A$ and returns a pair $(a, ys)$. $ys$ is a list representing the set $A \setminus \{a\}$. \par
@@ -323,9 +323,9 @@ Is the set $A$ empty, the function may behave in any way (e.g. not terminate). \
 As the examples show, the function is allowed to create duplicates or change the ordering. \par
 Give a \textit{correct} and \textit{complete} QuickCheck test suite for this function. Justify your answer briefly.
 
-\item {[retake 2013]} Given a function \code{g :: [Float] -> [Float]} that maps a list $[x_1, \dots, x_n]$ of numbers to the list $[\frac{1}{x_1}, \dots, \frac{1}{x_n}]$. The behavior of the function for inputs that contain the number $0$ is not specified. \par
-\textit{Example:} \code{g [2.0, 4.0, 0.5] == [0.5, 0.25, 2.0]}. \par
-Give a \textit{complete} test suite of at most two QuickCheck tests describing the behavior of \code{g}.
+\item {[retake 2013]} Given a function \code{h :: [Float] -> [Float]} that maps a list $[x_1, \dots, x_n]$ of numbers to the list $[\frac{1}{x_1}, \dots, \frac{1}{x_n}]$. The behavior of the function for inputs that contain the number $0$ is not specified. \par
+\textit{Example:} \code{h [2.0, 4.0, 0.5] == [0.5, 0.25, 2.0]}. \par
+Give a \textit{complete} test suite of at most two QuickCheck tests describing the behavior of \code{h}.
 \end{enumerate}
 
 \subsection{Higher-order functions}
