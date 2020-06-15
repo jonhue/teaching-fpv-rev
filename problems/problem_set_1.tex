@@ -47,7 +47,7 @@ What is your answer for \verb|threeDifferent 3 4 3|? Explain why you get the ans
 
 \item Define a recursive function
 \begin{verbatim}
-    ascending :: Ord a => [a] -> bool
+    ascending :: Ord a => [a] -> Bool
 \end{verbatim}
 such that \verb|ascending xs = True| if \verb|xs| is in ascending order.
 
@@ -103,16 +103,24 @@ The functions \code{nub} and \code{nubBy} from the Prelude may not be used.
 \item Define a function \verb|primes :: Int -> [Int]| using list comprehensions that returns all primes up to $n$. \par
 \textit{Hint:} think about what auxiliary functions you could define that might help.
 
-\item \textit{(ranger)} Define a function
+\item \cite[p. 115]{thompson} Define the function
 \begin{verbatim}
-    enumFromThenTo :: Integer -> Integer -> Integer -> [Integer]
+    matches :: Integer -> [Integer] -> [Integer]
 \end{verbatim}
-using list comprehensions such that \verb|enumFromThenTo a b c = [a,b..c]|. \par
-How would you have to change the definition to obtain a function
+which picks out all occurrences of an integer $n$ in a list using list comprehensions. For instance,
 \begin{verbatim}
-    enumFromThen :: Integer -> Integer -> [Integer]
+    matches 1 [1,2,1,4,5,1] = [1,1,1]
+    matches 1 [2,3,4,6]     = []
 \end{verbatim}
-such that \verb|enumFromThen a b = [a,b..]|.
+Using \verb|matches| or otherwise, define a function
+\begin{verbatim}
+    elem' :: Integer -> [Integer] -> Bool
+\end{verbatim}
+which is \verb|True| if the \verb|Integer| is an element of the list, and \verb|False| otherwise. For the examples above, we have
+\begin{verbatim}
+    elem' 1 [1,2,1,4,5,1] = True
+    elem' 1 [2,3,4,6]     = False
+\end{verbatim}
 \end{enumerate}
 
 \subsection{QuickCheck}
@@ -235,25 +243,6 @@ Give a tail recursive implementation of \verb|concat|.
 \item {[sheet 2]} Define a function \verb|toSet :: [Integer] -> [Integer]| using list comprehensions such that \verb|toSet xs| removes all duplicates of \verb|xs|.
 
 \item Define a function \verb|quicksort :: Ord a => [a] -> [a]| that sorts the input using the Quicksort algorithm.
-
-\item \cite[p. 115]{thompson} Define the function
-\begin{verbatim}
-    matches :: Integer -> [Integer] -> [Integer]
-\end{verbatim}
-which picks out all occurrences of an integer $n$ in a list using list comprehensions. For instance,
-\begin{verbatim}
-    matches 1 [1,2,1,4,5,1] = [1,1,1]
-    matches 1 [2,3,4,6]     = []
-\end{verbatim}
-Using \verb|matches| or otherwise, define a function
-\begin{verbatim}
-    elem' :: Integer -> [Integer] -> Bool
-\end{verbatim}
-which is \verb|True| if the \verb|Integer| is an element of the list, and \verb|False| otherwise. For the examples above, we have
-\begin{verbatim}
-    elem' 1 [1,2,1,4,5,1] = True
-    elem' 1 [2,3,4,6]     = False
-\end{verbatim}
 
 \item \cite[p. 115]{thompson} Give a function
 \begin{verbatim}
