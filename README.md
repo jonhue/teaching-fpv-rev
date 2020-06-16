@@ -28,4 +28,4 @@ engaging as possible.
 
 ### Solutions
 
-n/a
+* [problem set 1](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/solutions/problem_set_1.hs)
