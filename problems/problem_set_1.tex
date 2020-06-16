@@ -227,6 +227,8 @@ Implement the function in three different ways:
 \end{verbatim}
 such that \verb|argMax g n| maximizes \verb|g| in the domain $\{0,\dots,n\}$.
 
+\item {[sheet 2]} Define a function \verb|toSet :: [Integer] -> [Integer]| using list comprehensions such that \verb|toSet xs| removes all duplicates of \verb|xs|.
+
 \item {[sheet 3]} Implement a Haskell function \verb|mergeSort :: [Integer] -> [Integer]| that sorts an integer list in ascending order by using Merge Sort.
 
 \item {[sheet 15]} Consider the function \verb|concat :: [[a]] -> [a]| that concatenates a list of lists:
@@ -240,8 +242,6 @@ Give a tail recursive implementation of \verb|concat|.
 
 \subsection{List comprehensions}
 \begin{enumerate}
-\item {[sheet 2]} Define a function \verb|toSet :: [Integer] -> [Integer]| using list comprehensions such that \verb|toSet xs| removes all duplicates of \verb|xs|.
-
 \item Define a function \verb|quicksort :: Ord a => [a] -> [a]| that sorts the input using the Quicksort algorithm.
 
 \item \cite[p. 115]{thompson} Give a function
@@ -297,7 +297,7 @@ Give a \textit{complete} test suite consisting of two of the following QuickChec
 \end{verbatim}
 Justify your answer briefly. For the function \verb|replicate :: Nat -> a -> [a] replicate| $m\ x = [\underbrace{x, \dots, x}_{m\text{-times}}]$ holds.
 
-\item {[endterm 2014]} In this task sets are represented by lists. As usual, duplicates and ordering do not have any effect on the represented set. For example, the lists \code{[1, 2]}, \code{[1, 2, 1]}, and \code{[2, 2, 1]} all represent the mathematical set $\{1, 2\}$. \par
+\item {[retake 2014]} In this task sets are represented by lists. As usual, duplicates and ordering do not have any effect on the represented set. For example, the lists \code{[1, 2]}, \code{[1, 2, 1]}, and \code{[2, 2, 1]} all represent the mathematical set $\{1, 2\}$. \par
 Consider the function \code{takeAny :: [a] -> (a, [a])}. The input $xs$ is interpreted as set $A$. The function chooses a random element $a$ of $A$ and returns a pair $(a, ys)$. $ys$ is a list representing the set $A \setminus \{a\}$. \par
 Is the set $A$ empty, the function may behave in any way (e.g. not terminate). \par
 \textit{Examples:}
@@ -331,7 +331,6 @@ Give a \textit{complete} test suite of at most two QuickCheck tests describing t
 \begin{enumerate}
 \item \verb|length' :: [a] -> Integer| computing the length of a list.
 \item \verb|reverse' :: [a] -> [a]| reversing a list.
-\item \verb|map' :: (a -> b) -> [a] -> [b]| mapping a function over a list.
 \item \verb|inits' :: [a] -> [[a]]| computing the prefixes of a list.
 \end{enumerate}
 
@@ -370,8 +369,8 @@ You may not use $\lambda$-expressions or define auxiliary functions. The use of 
 
 \item Implement the functions \verb|zip' :: [a] -> [b] -> [(a,b)]| and \verb|unzip' :: [(a,b)] -> ([a], [b])| similar to the Prelude functions \verb|zip| and \verb|unzip| in three different ways:
 \begin{enumerate}
-\item As a list comprehension without using any higher-order functions or recursion.
 \item As a recursive function with the help of pattern matching. You are not allowed to use list comprehensions or higher-order functions.
+\item As a list comprehension without using any higher-order functions or recursion.
 \item Use higher-order functions (e.g. map, filter, etc.) but no recursion or list comprehensions.
 \end{enumerate}
 

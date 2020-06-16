@@ -1,6 +1,6 @@
 module ProblemSet_1 where
 
-import Data.List (nub,sort,sortBy)
+import Data.List (delete,nub,sort,sortBy)
 import Test.QuickCheck
 
 
@@ -147,39 +147,39 @@ mult :: Integer -> Integer -> Integer
 mult = undefined
 
 {-2.1.2-}
-sqrt :: Integer -> Integer
-sqrt = undefined
+sqrt' :: Integer -> Integer
+sqrt' = undefined
 
 {-2.1.3-}
 argMax :: (Integer -> Integer) -> Integer -> Integer
 argMax = undefined
 
 {-2.1.4-}
+toSet :: [Integer] -> [Integer]
+toSet = undefined
+
+{-2.1.5-}
 mergeSort :: [Integer] -> [Integer]
 mergeSort = undefined
 
-{-2.1.5-}
+{-2.1.6-}
 concat'' :: [[a]] -> [a]
 concat'' = undefined
 
-{-2.1.6-}
+{-2.1.7-}
 sum' :: [Integer] -> Integer
 sum' = undefined
 
 {-2.2.1-}
-toSet :: [Integer] -> [Integer]
-toSet = undefined
-
-{-2.2.2-}
 quicksort :: Ord a => [a] -> [a]
 quicksort = undefined
 
-{-2.2.3-}
+{-2.2.2-}
 duplicate :: String -> Integer -> String
 duplicate = undefined
 
 {-2.3.1-}
-prop_elem' :: Int -> [Int] -> Bool
+prop_elem' :: Integer -> [Integer] -> Bool
 prop_elem' = undefined
 
 {-2.3.2-}
@@ -196,7 +196,7 @@ g n = if n < 10 then n*n else n
 argMaxG :: Integer -> Integer
 argMaxG = undefined
 
-prop_argMax :: Integer -> Bool
+prop_argMax :: Integer -> Property
 prop_argMax = undefined
 
 {-2.3.4-}
@@ -217,8 +217,10 @@ stutt :: [Int] -> [Int]
 stutt xs = concat [concat $ replicate x [x] | x <- xs]
 
 {-2.3.6-}
-takeAny :: [a] -> (a,[a])
-takeAny (x:xs) = (x,xs)
+takeAny :: Eq a => [a] -> (a,[a])
+takeAny xs =
+  let (y:ys) = nub xs
+  in (y,ys)
 
 {-2.3.7-}
 h :: [Float] -> [Float]
@@ -250,10 +252,6 @@ reverse' :: [a] -> [a]
 reverse' = undefined
 
 {-2.4.5c-}
-map'' :: (a -> b) -> [a] -> [b]
-map'' = undefined
-
-{-2.4.5d-}
 inits' :: [a] -> [[a]]
 inits' = undefined
 
@@ -274,15 +272,15 @@ lups ::  Ord a => [a] -> [a]
 lups = undefined
 
 {-2.6.2a-}
+-- see 1.2.3 for zip'
+unzip' :: [(a,b)] -> ([a],[b])
+unzip' = undefined
+
+{-2.6.2b-}
 zip'' :: [a] -> [b] -> [(a,b)]
 zip'' = undefined
 unzip'' :: [(a,b)] -> ([a],[b])
 unzip'' = undefined
-
-{-2.6.2b-}
--- see 1.2.3 for zip'
-unzip' :: [(a,b)] -> ([a],[b])
-unzip' = undefined
 
 {-2.6.2c-}
 zip''' :: [a] -> [b] -> [(a,b)]
