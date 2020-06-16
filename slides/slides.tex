@@ -147,6 +147,7 @@ Intuitively: \code{(:) :: a -> [a] -> [a]}.
     \code{or ::[Bool] -> Bool} & disjunction over all elements \\
     \code{sum ::[Int] -> Int} & sum over all elements \\
     \code{product ::[Int] -> Int} & product over all elements \\
+    \code{(!!) ::[a] -> Int -> a} & get element at index \\
 \end{tabularx}
 
 \pause
@@ -297,13 +298,13 @@ What is the difference between \code{True} and \code{Bool}?
 \pause
 
 \vspace{1cm}
-Constructor or type?
+Constructor?
 \begin{alltt}
 False\pause    \textcolor{green}{yes}
 (:)\pause      \textcolor{green}{yes}
 Maybe\pause    \textcolor{red}{no}
 Just\pause     \textcolor{green}{yes}
-Nothing  \textcolor{green}{yes}
+Nothing\pause  \textcolor{green}{yes}
 \end{alltt}
 
 \end{frame}
@@ -331,7 +332,7 @@ singleOrEmpty xs = case xs of []  -> True
 where $expr$ is an expression and each $E_i$ is a generator or a test.
 
 \begin{itemize}
-    \item a \textcolor{blue}{generator} is of the form \code{$pattern$ <- $list expression$}
+    \item a \textcolor{blue}{generator} is of the form \code{$pattern$ <- $list\ expression$}
     \item a \textcolor{blue}{test} is a Boolean expression
 \end{itemize}
 
@@ -562,7 +563,7 @@ A function is \textcolor{blue}{partially applied} when some arguments have alrea
 Partially applied?
 \begin{alltt}
 elem 5\pause             \textcolor{green}{yes}
-(`elem` [1..5]) 0  \textcolor{red}{no}
+(`elem` [1..5]) 0\pause  \textcolor{red}{no}
 \end{alltt}
 
 \pause
