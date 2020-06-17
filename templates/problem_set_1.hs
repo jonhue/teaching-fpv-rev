@@ -73,7 +73,7 @@ occs :: Eq a => [a] -> [(a, Int)]
 occs xs = sortBy (\(_,a) (_,b) -> compare b a) $ map aux $ nub xs
   where
     aux x = (x, count x xs)
-    count x xs = length ( filter (== x ) xs )
+    count x xs = length (filter (== x) xs)
 
 {-1.5.1-}
 takeWhile' :: (a -> Bool) -> [a] -> [a]

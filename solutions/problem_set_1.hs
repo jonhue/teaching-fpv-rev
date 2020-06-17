@@ -25,7 +25,7 @@ ascending (x:y:xs) = x <= y && ascending (y:xs)
 
 {-1.2.3-}
 zip' :: [a] -> [b] -> [(a,b)]
-zip' (x:xs) (y:ys) = (x,y) : zip xs ys
+zip' (x:xs) (y:ys) = (x,y) : zip' xs ys
 zip' _ _ = []
 
 {-1.2.4-}
@@ -104,14 +104,14 @@ occs :: Eq a => [a] -> [(a, Int)]
 occs xs = sortBy (\(_,a) (_,b) -> compare b a) $ map aux $ nub xs
   where
     aux x = (x, count x xs)
-    count x xs = length (filter (== x) xs)
+    count x xs = length (filter (==x) xs)
 
 -- number of recurrences are correct
 prop_occs1 :: [Int] -> Bool
 prop_occs1 xs = all (\(x,n) -> n > 0 && count x xs == n) ys
   where
     ys = occs xs
-    count x xs = length (filter (== x) xs)
+    count x xs = length (filter (==x) xs)
 
 -- every element appears only once
 prop_occs2 :: [Int] -> Bool

@@ -137,7 +137,8 @@ Intuitively: \code{(:) :: a -> [a] -> [a]}.
     \code{replicate :: Int -> a -> [a]} & build list from repeated \\
     & element\pause \\
     \code{take :: Int -> [a] -> [a]} & prefix of list with given length\pause \\
-    \code{drop :: Int -> [a] -> [a]} & suffix of list with given length\pause \\
+    \code{drop :: Int -> [a] -> [a]} & list without prefix with given \\
+    & length\pause \\
     \code{and ::[Bool] -> Bool} & conjunction over all elements\pause \\
     \code{or ::[Bool] -> Bool} & disjunction over all elements\pause \\
     \code{sum ::[Int] -> Int} & sum over all elements\pause \\
@@ -227,12 +228,12 @@ Alternatively, \code{factorial} could be defined as
 
 \begin{alltt}
 factorial :: Integer -> Integer\pause
-factorial n = aux n 0
+factorial n = aux n 1
   where
     aux :: Integer -> Integer -> Integer
     aux n acc\pause
       | n == 0 = acc
-      | n > 0  = factorial (n - 1) (n * acc)
+      | n > 0  = aux (n - 1) (n * acc)
 \end{alltt}
 
 \pause
@@ -406,13 +407,13 @@ It can be used to \textit{test} the equivalence of two functions.
 import Test.QuickCheck
 
 prop_max2 x y =\pause
-  max2 x y = max x y
+  max2 x y == max x y
 
 prop_max2_assoc x y z =\pause
-  max2 x (max2 y z) = max2 (max2 x y) z
+  max2 x (max2 y z) == max2 (max2 x y) z
 
 prop_factorial n =\pause
-  n > 2 ==> n < factorial n
+  n >= 0 ==> n < factorial n
 \end{alltt}
 \end{exampleblock}
 
@@ -513,7 +514,7 @@ A function is \textcolor{blue}{curried} when it takes its arguments one at a tim
     \code{f x y = x + y} & \code{f x = \textbackslash y -> x + y}\pause \\
     & \\
     \code{f a b} & \code{(f a) b}\pause \\
-    \code{= a + b}\pause & \code{= (\textbackslash y -> a + y) b} \\
+    \code{= a + b}\pause & \code{= (\textbackslash y -> a + y) b}\pause \\
     & \code{= a + b}
 \end{tabular}
 \end{exampleblock}
