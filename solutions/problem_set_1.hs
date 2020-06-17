@@ -10,7 +10,7 @@ import Test.QuickCheck
 
 {-1.1.2-}
 threeDifferent :: Integer -> Integer -> Integer -> Bool
-threeDifferent m n p = m /= n && m/= p && n /= p
+threeDifferent m n p = m /= n && m /= p && n /= p
 
 {-1.2.1-}
 pow :: Integer -> Integer -> Integer
