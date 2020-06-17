@@ -20,7 +20,6 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{alltt}
-\usepackage{tabularx}
 
 \def\code#1{\texttt{\frenchspacing#1}}
 
@@ -51,36 +50,28 @@
 
 \begin{frame}{Basic Haskell}
 
-\begingroup
-\setlength{\tabcolsep}{10pt}
-\renewcommand{\arraystretch}{1.5}
-\begin{tabularx}{\textwidth}{ll}
-    function types & \code{f :: a -> b -> c} \\
-    function definitions & \code{f a b = a + b} \\
-    function application & \code{f 1 2} \\
-    function composition & \code{f . g} means $f(g(x))$ \\
-    conditional & \code{if True then a else b} \\
-    prefix/infix precedence & \code{f a `g` b} means \code{(f a) `g` b} \\
+\begin{tabular}{ll}
+    function types & \code{f :: a -> b -> c}\pause \\
+    function definitions & \code{f x y = \textit{...}}\pause \\
+    function application & \code{f 1 2}\pause \\
+    & \\
+    conditional & \code{if True then a else b}\pause \\
+    prefix/infix precedence & \code{f a `g` b} means \code{(f a) `g` b}\pause \\
     \code{\$} sign & \code{f \$ a `g` b} means \code{f (a `g` b)} \\
-\end{tabularx}
-\endgroup
+\end{tabular}
 
 \end{frame}
 
 \begin{frame}{Types}
 
-\begingroup
-\setlength{\tabcolsep}{10pt}
-\renewcommand{\arraystretch}{1.5}
-\begin{tabularx}{\textwidth}{ll}
-    \code{Bool} & \code{True} or \code{False} \\
-    \code{Int} & fixed-width integers \\
-    \code{Integer} & unbounded integers \\
-    \code{Char} & \code{'a'} \\
-    \code{String} & \code{"hello"} (type \code{[Char]}) \\
+\begin{tabular}{ll}
+    \code{Bool} & \code{True} or \code{False}\pause \\
+    \code{Int} & fixed-width integers\pause \\
+    \code{Integer} & unbounded integers\pause \\
+    \code{Char} & \code{'a'}\pause \\
+    \code{String} & \code{"hello" :: [Char]}\pause \\
     \code{(a,b)} (Tuple) & \code{("hello",1) :: (String,Int)}
-\end{tabularx}
-\endgroup
+\end{tabular}
 
 \end{frame}
 
@@ -100,10 +91,14 @@ Prelude functions: \code{fst}, \code{snd}
 
 Two ways of constructing a list:
 
-\begin{verbatim}
-a = [1,2,3]
-b = 1 : 2 : 3 : []
-\end{verbatim}
+\pause
+
+\begin{alltt}
+a = [1,2,3]          :: [Int]\pause
+b = 1 : 2 : 3 : []   :: [Int]
+\end{alltt}
+
+\pause
 
 Cons \code{(:)} and \code{[]} are \textcolor{blue}{constructors} of lists, that is a function that \textcolor{blue}{uniquely constructs} a value of the list type.
 
@@ -116,39 +111,39 @@ Intuitively: \code{(:) :: a -> [a] -> [a]}.
 
 \begin{frame}{Prelude functions}
 
-\begin{tabularx}{\textwidth}{ll}
-    \code{head :: [a] -> a} & first element \\
-    \code{last :: [a] -> a} & last element \\
+\begin{tabular}{ll}
+    \code{head :: [a] -> a} & first element\pause \\
+    \code{last :: [a] -> a} & last element\pause \\
     \code{init :: [a] -> [a]} & every element but last \\
-    & element \\
+    & element\pause \\
     \code{tail :: [a] -> [a]} & every element but first \\
-    & element \\
-    \code{elem :: a -> [a] -> Bool} & element in list? \\
-    \code{(++) :: [a] -> [a] -> [a]} & append lists \\
-    \code{reverse :: [a] -> [a]} & reverse list \\
-    \code{length :: [a] -> Int} & length of list \\
-    \code{null :: [a] -> Bool} & empty? \\
-    \code{concat :: [[a]] -> [a]} & flatten list \\
-    \code{zip :: [a] -> [b] -> [(a,b)]} & combine lists element-wise \\
+    & element\pause \\
+    \code{elem :: a -> [a] -> Bool} & element in list?\pause \\
+    \code{(++) :: [a] -> [a] -> [a]} & append lists\pause \\
+    \code{reverse :: [a] -> [a]} & reverse list\pause \\
+    \code{length :: [a] -> Int} & length of list\pause \\
+    \code{null :: [a] -> Bool} & empty?\pause \\
+    \code{concat :: [[a]] -> [a]} & flatten list\pause \\
+    \code{zip :: [a] -> [b] -> [(a,b)]} & combine lists element-wise\pause \\
     \code{unzip :: [(a,b)] -> ([a],[b])} & separate list of tuples into \\
     & list of components \\
-\end{tabularx}
+\end{tabular}
 
 \end{frame}
 
 \begin{frame}{Prelude functions (2)}
 
-\begin{tabularx}{\textwidth}{ll}
+\begin{tabular}{ll}
     \code{replicate :: Int -> a -> [a]} & build list from repeated \\
-    & element \\
-    \code{take :: Int -> [a] -> [a]} & prefix of list with given length \\
-    \code{drop :: Int -> [a] -> [a]} & suffix of list with given length \\
-    \code{and ::[Bool] -> Bool} & conjunction over all elements \\
-    \code{or ::[Bool] -> Bool} & disjunction over all elements \\
-    \code{sum ::[Int] -> Int} & sum over all elements \\
-    \code{product ::[Int] -> Int} & product over all elements \\
+    & element\pause \\
+    \code{take :: Int -> [a] -> [a]} & prefix of list with given length\pause \\
+    \code{drop :: Int -> [a] -> [a]} & suffix of list with given length\pause \\
+    \code{and ::[Bool] -> Bool} & conjunction over all elements\pause \\
+    \code{or ::[Bool] -> Bool} & disjunction over all elements\pause \\
+    \code{sum ::[Int] -> Int} & sum over all elements\pause \\
+    \code{product ::[Int] -> Int} & product over all elements\pause \\
     \code{(!!) ::[a] -> Int -> a} & get element at index \\
-\end{tabularx}
+\end{tabular}
 
 \pause
 
@@ -197,13 +192,14 @@ also defines \code{x} locally in $e_2$ where $e_2$ has to be a function definiti
 \begin{frame}[fragile]{Recursion, guards, pattern matching}
 
 \begin{block}{Guards}
+\pause
 \begin{exampleblock}{Example: maximum of two integers.}
-\begin{verbatim}
+\begin{alltt}
 max2 :: Integer -> Integer -> Integer
-max2 x y
+max2 x y\pause
   | x >= y    = x
   | otherwise = y
-\end{verbatim}
+\end{alltt}
 \end{exampleblock}
 \end{block}
 
@@ -211,7 +207,7 @@ max2 x y
 
 \begin{frame}[fragile]{Recursion}
 
-\begin{block}{\centering Reduce problem into a solving a series of smaller problems of a similar kind.}
+\begin{block}{\centering Reduce problem into a solving a series of smaller problems \\ of a similar kind.}
 \end{block}
 
 \begin{exampleblock}{Example}
@@ -285,7 +281,7 @@ null (_ : _) = False
 
 \end{frame}
 
-\begin{frame}[fragile]{Constructors vs Types}
+\begin{frame}{Constructors vs Types}
 
 What is the difference between \code{True} and \code{Bool}?
 
@@ -298,14 +294,15 @@ What is the difference between \code{True} and \code{Bool}?
 \pause
 
 \vspace{1cm}
-Constructor?
-\begin{alltt}
-False\pause    \textcolor{green}{yes}
-(:)\pause      \textcolor{green}{yes}
-Maybe\pause    \textcolor{red}{no}
-Just\pause     \textcolor{green}{yes}
-Nothing\pause  \textcolor{green}{yes}
-\end{alltt}
+\begin{exampleblock}{Constructor?}
+\begin{itemize}
+    \item \makebox[2cm][l]{\code{False}}\pause \textcolor{green}{yes}
+    \item \makebox[2cm][l]{\code{(:)}}\pause \textcolor{green}{yes}
+    \item \makebox[2cm][l]{\code{Maybe}}\pause \textcolor{red}{no}
+    \item \makebox[2cm][l]{\code{Just}}\pause \textcolor{green}{yes}
+    \item \makebox[2cm][l]{\code{Nothing}}\pause \textcolor{green}{yes}
+\end{itemize}
+\end{exampleblock}
 
 \end{frame}
 
@@ -331,8 +328,10 @@ singleOrEmpty xs = case xs of []  -> True
 
 where $expr$ is an expression and each $E_i$ is a generator or a test.
 
+\pause
+
 \begin{itemize}
-    \item a \textcolor{blue}{generator} is of the form \code{$pattern$ <- $list\ expression$}
+    \item a \textcolor{blue}{generator} is of the form \code{$pattern$ <- $list expression$}\pause
     \item a \textcolor{blue}{test} is a Boolean expression
 \end{itemize}
 
@@ -397,7 +396,7 @@ A generator or test can depend on any generator to its left.
 
 \begin{frame}[fragile]{QuickCheck}
 
-QuickCheck tests check if a proposition holds true for a large number of random arguments.
+QuickCheck tests check if a proposition holds true for a large number of random arguments. \par\pause
 It can be used to \textit{test} the equivalence of two functions.
 
 \pause
@@ -406,13 +405,13 @@ It can be used to \textit{test} the equivalence of two functions.
 \begin{alltt}
 import Test.QuickCheck
 
-prop_max2 x y =
-  max2 x y = max x y\pause
+prop_max2 x y =\pause
+  max2 x y = max x y
 
-prop_max2_assoc x y z =
-  max2 x (max2 y z) = max2 (max2 x y) z\pause
+prop_max2_assoc x y z =\pause
+  max2 x (max2 y z) = max2 (max2 x y) z
 
-prop_factorial n =
+prop_factorial n =\pause
   n > 2 ==> n < factorial n
 \end{alltt}
 \end{exampleblock}
@@ -465,15 +464,16 @@ Function \code{(+)} has type \code{a -> a -> a} for any type \code{a} of the \te
 \pause
 
 \vspace{1cm}
-Some type classes:
-\begin{enumerate}
-    \item \code{Num}
-    \item \code{Integral}
-    \item \code{Fractional}
-    \item \code{Ord}
-    \item \code{Eq}
+\begin{exampleblock}{Some type classes:}\pause
+\begin{itemize}
+    \item \code{Num}\pause
+    \item \code{Integral}\pause
+    \item \code{Fractional}\pause
+    \item \code{Ord}\pause
+    \item \code{Eq}\pause
     \item \code{Show}
-\end{enumerate}
+\end{itemize}
+\end{exampleblock}
 
 \end{frame}
 
@@ -507,26 +507,29 @@ A function is \textcolor{blue}{curried} when it takes its arguments one at a tim
 \pause
 
 \begin{exampleblock}{Example}
-\begin{tabularx}{\textwidth}{ll}
+\vspace{0.25cm}
+\begin{tabular}{ll}
     \code{f :: Int -> Int -> Int} & \code{f :: Int -> (Int -> Int)} \\
-    \code{f x y = x + y} & \code{f x = \textbackslash y -> x + y} \\
+    \code{f x y = x + y} & \code{f x = \textbackslash y -> x + y}\pause \\
     & \\
-    \code{f a b} & \code{(f a) b} \\
-    \code{= a + b} & \code{= (\textbackslash y -> a + y) b} \\
+    \code{f a b} & \code{(f a) b}\pause \\
+    \code{= a + b}\pause & \code{= (\textbackslash y -> a + y) b} \\
     & \code{= a + b}
-\end{tabularx}
+\end{tabular}
 \end{exampleblock}
 
 \pause
 
-\begin{block}{\centering Any function of two arguments can be viewed as a function of the first argument that returns a function of the second argument.}
+\begin{block}{\centering Any function of two arguments can be viewed as \\ a function of the first argument that returns \\ a function of the second argument.}
 \end{block}
 
 \end{frame}
 
 \begin{frame}[fragile]{Anonymous functions (lambdas)}
 
-An \textcolor{blue}{anonymous function} (or lambda abstraction\textcolor{blue}{anonymous function}) is a function without a name.
+An \textcolor{blue}{anonymous function} (or \textcolor{blue}{lambda abstraction}) is a function without a name.
+
+\pause
 
 \begin{exampleblock}{Examples}
 \begin{alltt}
@@ -547,27 +550,31 @@ What is the type of \code{\textbackslash n -> iter n succ} where \\
 \pause
 
 \vspace{0.25cm}
-\code{Integer -> (Integer -> Integer)}
+\textcolor{red}{\code{Integer -> (Integer -> Integer)}}
 
 \end{frame}
 
-\begin{frame}[fragile]{Partial application}
+\begin{frame}{Partial application}
 
 Every function of $n$ parameters can be applied to less than $n$ arguments.
 
-A function is \textcolor{blue}{partially applied} when some arguments have already been applied to a function (that is some parameters are already \textit{fixed}), but some parameters are missing.
+\pause
+
+A function is \textcolor{blue}{partially applied} when some arguments have already been applied to a function (some parameters are already \textit{fixed}), but some parameters are missing.
 
 \pause
 
 \vspace{1cm}
-Partially applied?
-\begin{alltt}
-elem 5\pause             \textcolor{green}{yes}
-(`elem` [1..5]) 0\pause  \textcolor{red}{no}
-\end{alltt}
+\begin{exampleblock}{Partially applied?}
+\begin{itemize}
+    \item \makebox[5cm][l]{\code{elem 5}}\pause \textcolor{green}{yes}
+    \item \makebox[5cm][l]{\code{(`elem` [1..5]) 0}}\pause \textcolor{red}{no}
+\end{itemize}
+\end{exampleblock}
 
 \pause
 
+\vspace{0.25cm}
 Expressions of the form \code{($infixop$ $expr$)} or \code{($expr$ $infixop$)} are called \textcolor{blue}{sections}.
 
 \end{frame}
@@ -579,24 +586,23 @@ A \textcolor{blue}{higher-order function} is a function that takes another funct
 \pause
 
 \begin{exampleblock}{Examples}
-\begin{alltt}
-filter :: (a -> Bool) -> [a] -> [a]\pause
-
-map :: (a -> b) -> [a] -> [b]\pause
-
-all, any :: (a -> Bool) -> [a] -> Bool\pause
-
-takeWhile, dropWhile :: (a -> Bool) -> [a] -> [a]\pause
-
-(.) :: (b -> c) -> (a -> b) -> (a -> c)
-\end{alltt}
+\begin{itemize}
+    \item \code{(.) :: (b -> c) -> (a -> b) -> (a -> c)}\pause
+    \item \code{const :: a -> (b -> a)}\pause
+    \item \code{curry :: ((a,b) -> c) -> (a -> b -> c)}\pause
+    \item \code{uncurry :: (a -> b -> c) -> ((a.b) -> c)}\pause
+    \item \code{filter :: (a -> Bool) -> [a] -> [a]}\pause
+    \item \code{map :: (a -> b) -> [a] -> [b]}\pause
+    \item \code{all, any :: (a -> Bool) -> [a] -> Bool}\pause
+    \item \code{takeWhile, dropWhile :: (a -> Bool) -> [a] -> [a]}
+\end{itemize}
 \end{exampleblock}
 
 \end{frame}
 
 \begin{frame}[fragile]{Fold}
 
-\begin{block}{\centering Folding is the most elementary way of combining elements of a list.}
+\begin{block}{\centering Folding is the most elementary way \\ of combining elements of a list.}
 \end{block}
 
 Right-associative (\code{foldr}):
