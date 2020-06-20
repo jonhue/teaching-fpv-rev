@@ -23,6 +23,8 @@ jobs:
         root_file: |
           problems/problem_set_1.tex
           problems/problem_set_2.tex
+          problems/problem_set_3.tex
+          problems/problem_set_4.tex
           slides/handout.tex
           slides/organization.tex
           slides/slides.tex

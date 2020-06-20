@@ -1,0 +1,262 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{alltt}
+\usepackage{amsmath}
+\usepackage{csquotes}
+
+\def\code#1{\texttt{#1}}
+
+\usepackage{biblatex}
+\addbibresource{sources.bib}
+
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+
+\title{Proofs}
+\author{Jonas Hübotter}
+
+\begin{document}
+
+\maketitle
+
+\section{Exercises}
+
+\subsection{Structural induction}
+\begin{enumerate}
+    \item {[sheet 6]} We define functions \code{sum :: Num a => [a] -> a} and \code{(++) :: [a] -> [a] -> [a]} as follows:
+        \begin{verbatim}
+    sum xs = sum_aux xs 0
+    sum_aux [] acc = acc
+    sum_aux (x:xs) acc = sum_aux xs (acc + x)
+
+    [] ++ ys = ys
+    (x:xs) ++ ys = x : (xs ++ ys)
+        \end{verbatim}
+        Use structural induction to show that
+        \begin{verbatim}
+    sum (xs ++ ys) = sum xs + sum ys
+        \end{verbatim}
+
+    \item {[sheet 5]} We define \code{snoc :: [a] -> a -> [a]} and \code{reverse :: [a] -> [a]} as follows:
+        \begin{verbatim}
+    snoc [] y = [y]
+    snoc (x:xs) y = x : snoc xs y
+
+    reverse [] = []
+    reverse (x:xs) = snoc ( reverse xs ) x
+        \end{verbatim}
+        \begin{enumerate}
+            \item Use structural induction to prove the following equation
+                \begin{verbatim}
+    reverse (snox xs x) = x : reverse xs
+                \end{verbatim}
+            \item Use structural induction to prove the following equation
+                \begin{verbatim}
+    reverse (reverse xs) = xs
+                \end{verbatim}
+        \end{enumerate}
+
+    \item {[sheet 15]} Prove that
+        \begin{verbatim}
+    map f (concat xss) = concat (map (map f) xss)
+        \end{verbatim}
+        where
+        \begin{verbatim}
+    map f [] = []
+    map f (x:xs) = f x : map f xs
+
+    concat [] = []
+    concat (xs:xss) = xs ++ concat xss
+        \end{verbatim}
+        You may use the lemma \code{map\_append}: \par
+        \code{map f (xs ++ ys) = map f xs ++ map f ys}
+
+    \item {[endterm 2020]} Given the type of natural numbers
+        \begin{verbatim}
+    data Nat = Z | Suc Nat
+        \end{verbatim}
+        and the following definition of addition on these numbers
+        \begin{verbatim}
+    add Z m = m
+    add (Suc n) m = Suc (add n m)
+        \end{verbatim}
+        show that addition is associative by proving the following equation using structural induction:
+        \begin{verbatim}
+    add (add x y) z = add x (add y z)
+        \end{verbatim}
+
+    \item {[sheet 9]} Show that the \code{sumTree} function from problem set 1 indeed works as expected, i.e. prove the equivalence
+        \begin{verbatim}
+    sum (inorder t) = sumTree t
+        \end{verbatim}
+        using structural induction on trees.
+\end{enumerate}
+
+\subsection{Case analysis}
+\begin{enumerate}
+    \item {[sheet 13} In this exercise, we consider the datatype \code{AExp} which models addition and multiplication on integers:
+        \begin{verbatim}
+    data AExp = Val Integer | Add AExp AExp | Mul AExp AExp
+      deriving Eq
+        \end{verbatim}
+        We define a function \code{eval} to evaluate an expression to an integer, and a function \code{simp} that simplifies expressions of the form \code{0 + e} to \code{e}:
+        \begin{verbatim}
+    eval (Val i) = i
+    eval (Add a b) = (eval a) + (eval b)
+    eval (Mul a b) = (eval a) * (eval b)
+
+    simp (Val i) = Val i
+    simp (Mul a b) = Mul (simp a) (simp b)
+    simp (Add a b) = if a == Val 0 then simp b else Add (simp a) (simp b)
+        \end{verbatim}
+        Your task is to prove that this simplification preserves the value of an expression, i.e. that the following equation holds:
+        \begin{verbatim}
+    eval (simp e) = eval e
+        \end{verbatim}
+        You may use these familiar axioms, no further rules for arithmetic should be required:
+        \begin{verbatim}
+    axiom addZero: x + 0 = x
+    axiom zeroAdd: 0 + x = x
+        \end{verbatim}
+\end{enumerate}
+
+\subsection{Generalization}
+\begin{enumerate}
+    \item Given the following definitions:
+        \begin{verbatim}
+    reverse [] = []
+    reverse (x:xs) = reverse xs ++ [x]
+
+    itrev :: [a] -> [a] -> [a]
+    itrev [] xs = xs
+    itrev (x:xs) ys = itrev xs (x:ys)
+        \end{verbatim}
+        Prove the following statement using structural induction:
+        \begin{verbatim}
+    itrev xs [] = reverse xs
+        \end{verbatim}
+        You may use the following lemma about \code{++} in the proof:
+        \begin{verbatim}
+    Lemma ++_assoc : (xs ++ ys) ++ zs = xs ++ (ys ++ zs)
+        \end{verbatim}
+
+    \item {[endterm 2020]} You are given the following definitions:
+        \begin{verbatim}
+    data Tree a = L | N (Tree a) a (Tree a)
+
+    flat :: Tree a -> [a]
+    flat L = []
+    flat (N l x r) = flat l ++ (x : flat r)
+
+    app :: Tree a -> [a] -> [a]
+    app L xs = xs
+    app (N l x r) xs = app l (x : app r xs)
+
+    (++) :: [a] -> [a] -> [a]
+    [] ++ ys = ys
+    (x : xs) ++ ys = x : (xs ++ ys)
+        \end{verbatim}
+        Prove the following statement using structural induction:
+        \begin{verbatim}
+    app t [] = flat t
+        \end{verbatim}
+        You may use the following lemmas about \code{++} in the proof:
+        \begin{verbatim}
+    Lemma ++_assoc : (xs ++ ys) ++ zs = xs ++ (ys ++ zs)
+    Lemma ++_nil : xs ++ [] = xs
+    Lemma nil_ ++: [] ++ xs = xs
+        \end{verbatim}
+\end{enumerate}
+
+\subsection{Extensionality}
+\begin{enumerate}
+    \item {[sheet 7]} This exercise is all about the two different fold functions \code{foldl} and \code{foldr}, which are defined as follows:
+        \begin{verbatim}
+    foldl :: (a -> b -> a) -> a -> [b] -> a
+    foldl f a [] = a
+    foldl f a (x:xs) = foldl f (f a x) xs
+
+    foldr :: (b -> a -> a) -> a -> [b] -> a
+    foldr f a [] = a
+    foldr f a (x:xs) = f x (foldr f a xs)
+        \end{verbatim}
+        The function signatures are similar; however, there is a key difference in their functionality: As the names suggest, \code{foldl} performs a left-associative and \code{foldr} a right-associative fold, respectively. More concretely, we have that
+        \begin{verbatim}
+    foldl f z [x1, x2, ..., xn] = (...((z `f` x1) `f` x2) `f` ...) `f` xn
+
+    foldr f z [x1, x2, ..., xn] = x1 `f` (x2 `f` ... (xn `f` z)...)
+        \end{verbatim}
+        Let \code{f} be a binary operator that is commutative with respect to \code{a}, i.e. \code{f x a = f a x} for all \code{x}, and associative. Prove the statement: \code{Lemma: foldl f a .=. foldr f a}.
+
+    \item {[sheet 7]} Prove the proposition
+        \begin{verbatim}
+    filter p . filter p = filter p
+        \end{verbatim}
+        where \code{filter :: (a -> Bool) -> [a] -> [a]} and \code{(.) :: (b -> c) -> (a -> b) -> (a -> c)} are defined as
+        \begin{verbatim}
+    filter f [] = []
+    filter f (x:xs) = if f x then x : filter f xs else filter f xs
+
+    (f . g) x = f (g x)
+        \end{verbatim}
+        You may also use the following axioms about if-expressions:
+        \begin{verbatim}
+    axiom if_True: (if True then x else y) .=. x
+    axiom if_False: (if False then x else y) .=. y
+        \end{verbatim}
+\end{enumerate}
+
+\subsection{Computation induction}
+\begin{enumerate}
+    \item Given the following definition of \code{drop2}:
+        \begin{verbatim}
+    drop2 [] = []
+    drop2 [x] = [x]
+    drop2 (x:y:xs) = x : drop2 xs
+        \end{verbatim}
+        Prove the following statement using \code{drop2}-induction:
+        \begin{verbatim}
+    length(drop2 xs) = (length xs + 1) ‘div‘ 2
+        \end{verbatim}
+
+    \item {[sheet 6]} We define the functions \code{sum :: Num a => [a] -> a} and \code{sum2 :: Num a => [a] -> [a] -> a}:
+        \begin{verbatim}
+    sum [] = 0
+    sum (x:xs) = x + sum xs
+    sum2 [] [] = 0
+    sum2 [] (y:ys) = y + sum2 ys []
+    sum2 (x:xs) ys = x + sum2 xs ys
+        \end{verbatim}
+        Use computation induction to show that \code{sum2 xs ys = sum xs + sum ys}.
+
+    \item {[sheet 6]} We define:
+        \begin{verbatim}
+    length [] = 0
+    length (x:xs) = 1 + length xs
+
+    countGt [] ys = 0
+    countGt (x:xs) [] = length (x:xs)
+    countGt (x:xs) (y:ys) = if x > y then 1 + countGt (x:xs) ys
+      else countGt (y:ys) xs
+        \end{verbatim}
+        Show that \code{countGt xs ys <= length xs + length ys} using computation induction. \par
+        \textit{Note:} Given a rule \code{P x ==> y <= z} with name \code{myRule} and a proof \code{p} of \code{P x}, you can use \code{(by myRule OF p} to apply the inequality between \code{y} and \code{z}. For example:
+        \begin{verbatim}
+    axiom leAddMono : y <= z ==> x + y <= x + z
+    axiom zeroLeOne : 0 <= 1
+    Lemma : 0 + 0 <= 0 + 1
+    Proof
+                                     0 + 0
+      (by leAddMono OF zeroLeOne) <= 0 + 1
+    QED
+        \end{verbatim}
+\end{enumerate}
+
+\section{Homework}
+
+\printbibliography
+
+\end{document}

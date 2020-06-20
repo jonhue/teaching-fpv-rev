@@ -24,25 +24,370 @@
 
 \section{Exercises}
 
-\subsection{Review}
+\subsection{Type Classes}
 \begin{enumerate}
-\item {[endterm 2015, 3]}
-\item {[endterm 2014]} A \textit{Collatz} sequence is a special sequence of natural numbers. The element $c_{k+1}$ is obtained from the previous element $c_k$ as follows:
-\[
-c_{k+1} =
-\begin{cases}
-  \frac{c_k}{2} & \text{if $c_k$ even} \\
-  3 \cdot c_k + 1 & \text{if $c_k$ odd}
-\end{cases}
-\]
-The first element $c_0$ can be any natural number $n > 0$. The sequence ends when the number $1$ is reached. \par
-\textit{Example:} let $c_0 = 6$. The entire sequence then is $6,3,10,5,16,8,4,2,1$.
-\begin{enumerate}
-\item Define a function \verb|collatz :: Integer -> [Integer]| that given an initial value returns the Collatz sequence as a list.
-\item Implement the function \verb|unfold :: (a -> Maybe a) -> a -> [a]|. For a call \verb|unfold f a| the function $f$ should be repeatedly applied to $a$ and stop with a result of \verb|Nothing|. The return value is a list of all intermediate results, including the initial value of $a$. \par
-\textit{Example:} For $f a_0 =$ \verb|Just| $a_1$, $f a_1 =$ \verb|Just| $a_2$, $f a_n =$ \verb|Nothing| we have \verb|unfold| $f a_0 = [a_0, a_1, \dots, a_n]$.
-\item Find a function \verb|next| such that \verb|collatz n = unfold next n| for $n > 0$.
+    \item {[sheet 15]} Consider the classes \code{Smeigroup} and \code{Monoid}:
+        \begin{verbatim}
+    class Semigroup a where
+      (<>) :: a -> a -> a
+
+    class Semigroup m => Monoid m where
+      mempty :: m
+        \end{verbatim}
+        We define the type of pairs as follows:
+        \begin{verbatim}
+    data Pair a = Pair a a
+        \end{verbatim}
+        Your task is to write instances of \code{Semigroup} and \code{Monoid} for \code{Pair}. For \code{Semigroup}, you have to implement the operation \code{<>} which should combine two pairs by applying \code{<>} componentwise. Make sure the operation is associative:
+        \begin{verbatim}
+    Pair a b <> (Pair c d <> Pair e f) =
+    (Pair a b <> Pair c d) <> Pair e f
+        \end{verbatim}
+        \code{Monoid} requires you to give a neutral element \code{mempty} with respect to \code{<>}, i.e:
+        \begin{verbatim}
+    Pair a b <> mempty = mempty <> Pair a b = Pair a b
+        \end{verbatim}
+
+    \item {[endterm 2020]} We define a typeclass of integer containers as follows:
+        \begin{verbatim}
+    class IntContainer c where
+      -- the empty container
+      empty :: c
+      -- insert an integer into a container
+      insert :: Integer -> c -> c
+        \end{verbatim}
+        Moreover, we define an extension of integer containers called \code{IntCollection} as follows:
+        \begin{verbatim}
+    class IntContainer c => IntCollection c where
+      -- the number of integers in the collection
+      size :: c -> Integer
+      -- True if and only if the integer is a member of the collection
+      member :: Integer -> c -> Bool
+      -- extracts the smallest number in the collection
+      -- if such a number exists.
+      extractMin :: c -> Maybe Integer
+      -- "update f c" applies f to every element e of c.
+      -- If "f c" returns Nothing, the element is deleted;
+      -- otherwise, the new value is stored in place of e.
+      update :: (Integer -> Maybe Integer) -> c -> c
+      -- "partition p c" creates two collections (c1 , c2) such that
+      -- c1 contains exactly those elements of c satisfying p and
+      -- c2 contains exactly those elements of c not satisfying p.
+      partition :: (Integer -> Bool) -> c -> (c,c)
+        \end{verbatim}
+        Assume there is a type \code{data C} with a corresponding \code{IntContainer} instance. Moreover, assume you are given the following function:
+        \begin{verbatim}
+    -- "fold f acc c" folds the function f along c (in no particular order)
+    -- using the start accumulator acc.
+    fold :: (Integer -> b -> b) -> b -> C -> b
+        \end{verbatim}
+        Define an instance \code{IntCollection C}.
 \end{enumerate}
+
+\subsection{Algebraic Data Types}
+\begin{enumerate}
+    \item {[sheet 12]} We consider a simple programming language, namely $\lambda$-calculus. It is the basis for most functional programming languages including Haskell. A program in $\lambda$-calculus is built up from terms, which are either
+        \begin{itemize}
+            \item just a variable, e.g. $x$,
+            \item an anonymous function defintion $(\lambda x.\ T)$, which binds a variable $x$ in term $T$, or
+            \item a function application $T\ U$ where both $T$ and $U$ are terms themselves.
+        \end{itemize}
+        Not that bound variable names are interchangeable whereas this is not the case for free variables. For example, the terms $(\lambda x.\ x\ y)$ and $(\lambda z.\ z\ y)$ are equal while the terms $(\lambda x.\ x\ y)$ and $(\lambda x.\ x\ z)$ are not equal. Start by defining a datatype \code{Term} in Haskell that models the $\lambda$-calculus using strings for variables names. On this datatype, implement the following functions:
+        \begin{enumerate}
+            \item Instantiate \code{Show} for \code{Term} by representing variables as just their name, $\lambda$-abstractions as \code{(\textbackslash x -> T)} like in Haskell and use spaces for function application.
+            \item Define \code{freeVars :: Term -> [String]} which collects all free variables in a term, i.e. variables that are not bound by an enclosing $\lambda$-abstraction.
+            \item Implement a function \code{subsVar :: String -> Term -> Term -> Term} which, when called with \code{substVar x r t}, replaces all free occurences of \code{x} in \code{t} by the term \code{r}. \textit{Important:} the function \code{substVar} makes a key assumption about the terms \code{t} and \code{r}. To find out what the assumption is, think about what happens when substituting $x$ with the variable $y$ in the equivalent terms $(\lambda y.\ x\ y)$ and $(\lambda z.\ x\ z)$.
+        \end{enumerate}
+
+    \item \cite[p. 314]{thompson} In this exercise we have a closer look at parametric polymorphism in Haskell. With \textit{type expressions} we refer to composite types. For example, \code{(a, [Char])} is a type expression. \par
+        Remember that type variables are universally quantified. An \textit{instance} of a type is given by replacing a type variable or variables by type expressions. All instances of a type form a set describing all possible interpretations of that type. \par
+        A type expression is a \textit{common} instance of two type expressions if it is an instance of each expression. The most general common instance of two expressions is a common instance $mgci$ with the property that every other most common instance is an instance of $mgci$. \par
+        The intersection of the sets given by two type expressions is called \textit{unification} of the two, which is the most general common instance of the two type expressions. \par
+        We define the datatype
+        \begin{verbatim}
+    data Type = Var Char | Type String [Type]
+        \end{verbatim}
+        representing type expressions being either a type variable or a type literal that can have type arguments. For example, the type \code{Tuple (a) (List (Char))} is represented as \code{Type "Tuple" [Var 'a', Type "List" [Type "Char" []]]}.
+        \begin{enumerate}
+            \item Define an instance of \code{Show} for \code{Type} using the same format as in the given example. \textit{Bonus:} print the types \code{Tuple} and \code{List} in a more Haskell-like format.
+            \item Define a function \code{unify :: Type -> Type -> Either String Type} that decides whether two type expressions are unifiable. If they are, \code{unify} should return a most general unifying substitution; if not, it should give some explanation of why the unification fails.
+        \end{enumerate}
+
+    \item {[sheet 8]} Trees.
+        \begin{enumerate}
+            \item In a binary tree, we can only descend to the left or to the right. Define a data type \code{Tree} with constructors \code{Leag} and \code{Node} for binary trees.
+            \item Implement a function \code{sumTree :: Num a => Tree a -> a} that returns the sum of all values in a tree.
+            \item Implement a function \code{cut :: Tree a -> Integer -> Tree a} that cuts off a tree after a given height.
+            \item Implement a function \code{foldTree :: (a -> b -> b) -> b -> Tree a -> b} that folds a function over a tree. The fold should process the right children of a node first, then the node itself, and lastly the left children.
+            \item Use \code{foldTree} to implement a function \code{inorder :: Tree a -> [a]} that returns all elements of a tree in left to right order.
+            \item Use \code{foldTree} to implement a function \code{findAll :: (a -> Bool) -> Tree a -> [a]} that returns all elements of a tree that satisfy a given predicate.
+        \end{enumerate}
+
+    \item {[endterm 2015]}
+        \begin{enumerate}
+            \item Define the functions \code{safeHead :: [a] -> Maybe a} and \code{safeLast :: [a] -> Maybe a} that, if possible, return the first and last element of a list respectively (otherwise \code{Nothing}). Do not use any predefined functions.
+            \item Define \code{safeHead} and \code{safeLast} again. Use \code{foldr}, but none of the following techniques: list comprehensions, recursion, pattern matching on lists and predefined functions (except \code{foldr}). \par
+            \textit{Note:} \code{foldr} is defined as follows:
+            \begin{verbatim}
+        foldr :: (a -> b -> b) -> b -> [a] -> b
+        foldr f a [] = a
+        foldr f a (x:xs) = f x (foldr f a xs)
+            \end{verbatim}
+            \item Define the function \code{select :: Eq a => a -> [(a,b)] -> [b]} that given a value $x$ and a list of pairs $(y,z)$ returns all values $z$ such that $y = x$. Use \code{map} and \code{filter}, but none of the following techniques: list comprehensions, recursion and pattern matching on lists. \par
+            \textit{Examples:}
+            \begin{verbatim}
+        select ’ a ’ [(’b’, 1), (’a’, 3), (’c’, 4), (’a’, 2)] == [3, 2]
+        select ’ d ’ [(’b’, 1), (’a’, 3), (’c’, 4), (’a’, 2)] == []
+            \end{verbatim}
+        \end{enumerate}
+
+    \item {[endterm 2014]} A \textit{Collatz} sequence is a special sequence of natural numbers. The element $c_{k+1}$ is obtained from the previous element $c_k$ as follows:
+    \[
+    c_{k+1} =
+    \begin{cases}
+      \frac{c_k}{2} & \text{if $c_k$ even} \\
+      3 \cdot c_k + 1 & \text{if $c_k$ odd}
+    \end{cases}
+    \]
+    The first element $c_0$ can be any natural number $n > 0$. The sequence ends when the number $1$ is reached. \par
+    \textit{Example:} let $c_0 = 6$. The entire sequence then is $6,3,10,5,16,8,4,2,1$.
+    \begin{enumerate}
+    \item Define a function \verb|collatz :: Integer -> [Integer]| that given an initial value returns the Collatz sequence as a list.
+    \item Implement the function \verb|unfold :: (a -> Maybe a) -> a -> [a]|. For a call \verb|unfold f a| the function $f$ should be repeatedly applied to $a$ and stop with a result of \verb|Nothing|. The return value is a list of all intermediate results, including the initial value of $a$. \par
+    \textit{Example:} For $f a_0 =$ \verb|Just| $a_1$, $f a_1 =$ \verb|Just| $a_2$, $f a_n =$ \verb|Nothing| we have \verb|unfold| $f a_0 = [a_0, a_1, \dots, a_n]$.
+    \item Find a function \verb|next| such that \verb|collatz n = unfold next n| for $n > 0$.
+    \end{enumerate}
+
+    \item {[endterm 2020]} We define the following types:
+        \begin{itemize}
+            \item An \textit{atom} is either \code{F} (falsity), \code{T} (truth), or a variable:
+                \begin{verbatim}
+    type Name = String
+    data Atom = F | T | V Name deriving (Eq , Show)
+                \end{verbatim}
+            \item A \textit{conjunction} is an atom or the conjunction of two conjunctions:
+                \begin{verbatim}
+    data Conj = A Atom | Conj :&: Conj deriving (Eq , Show)
+                \end{verbatim}
+        \end{itemize}
+        \begin{enumerate}
+            \item Write a function \code{contains :: Conj -> Atom -> Bool} such that \code{contains c a} returns \code{True} if and only if \code{a} occurs in \code{c}.
+            \item Write a function \code{implConj :: Conj -> Conj -> Bool} such that \code{implConj c1 c2} returns \code{True} if and only if conjunction \code{c1} logically implies conjunction \code{c2}. For example:
+                \begin{verbatim}
+    A F `implConj` c = True -- for any conjunction c
+    c `implConj` A T = True -- for any conjunction c
+    A (V "v") `implConj` A (V "v") = True
+    A (V "v") `implConj` A (V "v") :&: A (V "w") = False
+    A (V "w") :&: A (V "v") `implConj` A (V "v") :&: A (V "w") = True
+                \end{verbatim}
+        \end{enumerate}
+
+    \item {[sheet 11]} In this exercise we will work with the datatype \code{Either} from the Prelude, which is defined as follows:
+        \begin{verbatim}
+    data Either a b = Left a | Right b
+        \end{verbatim}
+        As its name suggests, this type is useful when you have a value which can either be of type \code{a} or type \code{b}. You might for instance use \code{Either} for a function that parses integers: The function could have the type \code{String -> Either String Integer} where a successful parse returns an integer as a \code{Right} value, whereas an input that cannot be parsed returns an error message as a \code{Left} value. \par
+        Now to the task at hand: It can sometimes be interesting to determine an implementation for a given type signature. For example, the signature \code{Either a b -> Either b a} has the following implementation:
+        \begin{verbatim}
+    f :: Either a b -> Either b a
+    f (Left x) = Right x
+    f (Right x) = Left x
+        \end{verbatim}
+        Your task is to write total functions that implement the following signatures:
+        \begin{verbatim}
+    g :: (a -> a') -> (b -> b') -> Either a b -> Either a' b'
+    h :: (a -> Either a b) -> a -> b
+        \end{verbatim}
+        Your functions may not throw exceptions or be \code{undefined} and they should terminate on all inputs.
+
+    \item {[sheet 9]} An \textit{atom} is either a variable labelled by a string or the value \code{T} representing truth. A \textit{literal} is a positive or negative atom. Finally, a \textit{formula} is either a literal, a conjunction of formulas, or a disjunction of formulas.
+        \begin{enumerate}
+            \item Define data types for atoms, literals, and formulas. Make your definitions derive instances for \code{Eq} and \code{Show}.
+            \item Define values \code{top :: Literal} and \code{bottom :: Literal} representing truth and falsity, respectively.
+            \item A \textit{clause} is a disjunction of literals. A formula is in \textit{conjunctive normal form} (CNF) if it is a conjunction of clauses. We define the corresponding types
+                \begin{verbatim}
+    type Clause = [Literal]
+    type ConjForm = [Clause]
+                \end{verbatim}
+                By convention, an empty clause corresponds to falsity since it is the neutral element of the disjunction operator. Similarly, \code{[] :: ConjForm} corresponds to truth - as it is the neutral element of the conjunction operator. \par
+                Define a function \code{conjToForm :: ConjForm -> Form} that transforms a formula given as a list of clauses to a formula as encoded in subtask (a). Examples:
+                \begin{verbatim}
+    conjToForm [] = L top
+    conjToForm [[]] = L bottom
+    conjToForm [[] , []] = L bottom :&: L bottom
+    conjToForm [[Pos $ Var "v1", Neg $ Var "v2"], [Neg $ Var "v1", top]]
+      = (L (Pos (Var "v1")) :|: L (Neg (Var "v2"))) :&:
+        (L (Neg (Var "v1")) :|: L top)
+                \end{verbatim}
+                \textit{Hint:} It might be useful to first define a function of type \code{Clause -> Form}.
+            \item Given the type of \textit{valuations} \code{type Valuation = [(Name,Bool)]} write a function \code{substConj :: Valuation -> ConjForm -> ConjForm} that replaces the variables of a formula by the values as specified in the passed valuation. Examples:
+                \begin{verbatim}
+    substConj [("v", True)] [[Neg $ Var "v"], [Pos $ Var "w"]]
+      = [[bottom], [Pos (Var "w")]]
+    substConj [("v", False)] [[Neg $ Var "v"], [Pos $ Var "w"]]
+      = [[top], [Pos (Var "w")]]
+    substConj [("v", True), ("w", False)]
+      [[Neg $ Var "v"], [Pos $ Var "w", Neg $ Var "w"]]
+      = [[bottom], [bottom, top]]
+                \end{verbatim}
+            \item Write a function \code{simpConj :: ConjForm -> ConjForm} that simplifies a formula $F$ in CNF in the following way:
+                \begin{enumerate}
+                    \item For every clause $C$ in $F$ containing \code{top}, simplify $C$ to \code{[]top]}.
+                    \item For every clause $C$ in $F$, remove every occurence of \code{bottom}.
+                    \item Remove every clause $C$ in $F$ that has been simplified to \code{[top]}.
+                    \item If $F$ contains a clause $C$ that has been simplified to the empty clause, simplify $F$ to \code{[[]]}.
+                \end{enumerate}
+                Examples:
+                \begin{verbatim}
+simpConj [[top], [top, Pos $ Var "v"]] = []
+simpConj [[bottom], [Neg $ Var "v"]] = [[]]
+simpConj [[Neg $ Var "v"], [bottom, Neg $ Var "v"]]
+  = [[Neg (Var "v")], [Neg (Var "v")]]
+simpConj [[Pos $ Var "v", bottom], [Pos $ Var "v", top]]
+  = [[Pos (Var "v")]]
+simpConj [[Neg $ Var "v"], [Neg $ Var "v"],
+          [Pos $ Var "w", Neg $ Var "w"]]
+  = [[Neg (Var "v")], [Neg (Var "v")], [Pos (Var "w"), Neg (Var "w")]]
+                \end{verbatim}
+            \item Write a function \code{cnf :: Form -> ConjForm} that transforms a formula into CNF. Note that if $\phi = \phi_1 \land \dots \land \phi_n$ and $\psi = \psi_1 \land \dots \land \psi_m$ are in CNF, then the CNF of $\psi \lor \phi$ can be obtained by computing
+                \begin{align*}
+                          & (\phi_1 \lor \psi_1) \land \dots \land (\phi_1 \lor \psi_m) \\
+                    \land & (\phi_2 \lor \psi_1) \land \dots \land (\phi_2 \lor \psi_m) \\
+                          & \vdots \\
+                    \land & (\phi_n \lor \psi_1) \land \dots \land (\phi_n \lor \psi_m)
+                \end{align*}
+                Make sure that, for every \code{cf :: ConjForm}, your functions satisfy the following property: \code{simpConj cf == simpConj \$ cnf \$ conjToForm cf}. Example:
+                \begin{verbatim}
+let (a, b, c, d) = (Pos (Var "a"), Pos (Var "b"),
+  Pos (Var "c"), Pos (Var "d"))
+cnf $ (L a :&: L b) :|: (L c :&: L d)
+  = [[a, c], [a, d], [b, c], [b, d]]
+                \end{verbatim}
+        \end{enumerate}
+
+    \item {[endterm 2014]} \code{Node} is a datatype representing nodes in a file system:
+        \begin{verbatim}
+    data Node = File String | Dir String [Node]
+        \end{verbatim}
+        A node is either a \textit{normal file} (\code{File}) or a \textit{directory} (\code{Dir}). Nodes have a name (of type \code{String}). Additionally, directories contain a list of nodes. An entire file system can be represented by a list of nodes:
+        \begin{verbatim}
+    type FileSys = [Node]
+        \end{verbatim}
+        Example:
+        \begin{verbatim}
+    myFileSys =
+      [Dir "Applications"
+         [Dir "Aquamacs.app" [File "Info.plist"],
+          Dir "Scribus.app" [File "Info.plist"]],
+       Dir "Library"
+         [Dir "Automator" [],
+          Dir "Logs" []],
+       Dir "Users"
+         [Dir "smith"
+            [Dir "bugs" [File "Scratch.hs"],
+             File "Scratch.hs"]]]
+        \end{verbatim}
+        Implement a function \code{removeFiles :: String -> FileSys -> FileSys} that deletes all normal files with the given name.
+\end{enumerate}
+
+\subsection{Abstract Data Types}
+\begin{enumerate}
+    \item {[sheet 12]} Association lists \code{Eq k => [(k,v)]} are a way of representing maps with keys $k$ and values $v$. In order to prevent users from creating invalid association lists (e.g. containing muliple values for some key), we want to hide the implementation in a module.
+        \begin{enumerate}
+            \item Define a module \code{AssocList} that only exports a type \code{Map k v} and the following functions:
+                \begin{verbatim}
+    newtype Map k v = ...
+    empty :: Map k v
+    insert :: Eq k = > k -> v -> Map k v -> Map k v
+    lookup :: Eq k = > k -> Map k v -> Maybe v
+    delete :: Eq k = > k -> Map k v -> Map k v
+    keys :: Map k v -> [k]
+                \end{verbatim}
+                Calling \code{insert} with an existing key should replace the associated value. Internally, the maps should be represented using association lists. \par
+                \textit{Note:} Prelude also exports a function \code{lookup}. To prevent naming conflicts, you can hide this import using \code{import Prelude hiding (lookup)}.
+            \item Define a function \code{invar :: Eq k => Map k v -> Bool} in \code{AssocList} that checks whether the map does not contain duplicate keys. Then define QuickCheck properties in a separate module that check whether \code{invar} is invariant under all functions returning a map.
+            \item We next check if our implementation (imported as \code{AL.Map}) behaves correctly when compared to the \code{Map} datatype provided by \code{Data.Map} from the package \code{containers} (imported as \code{DM.Map}). Define a function \code{hom :: Ord k => AL.Map k v -> DM.Map k v} that transforms our maps to the one provided by the containers library. Then check whether \code{AL.Map} simulates \code{DM.Map} by defining QuickCheck properties for every function in \code{AssocList}.
+        \end{enumerate}
+
+    \item {[sheet 12]} In this exercise you will model \textit{vectors}, which are essentially resizable arrays. By convention, we will index the cells of our vectors beginning with $0$. \par
+        Define a module \code{Vector} that only exports a type \code{Vector a} and the following functions:
+        \begin{verbatim}
+    newtype Vector a = ...
+    newVector :: Int -> Vector a
+    size :: Vector a -> Int
+    capacity :: Vector a -> Int
+    resize :: Vector a -> Int -> Vector a
+    set :: Vector a -> a -> Int -> Maybe (Vector a)
+    get :: Vector a -> Int -> Maybe a
+        \end{verbatim}
+        \code{newVector n} should return an empty vector of size $n$. \code{size} returns the size of the vector, whereas \code{capacity} returns the number of empty cells in the vector. \par
+        \code{resize} changes the size of the vector by either adding new empty cells or by truncating the cells with the highest indices. \par
+        \code{set v x i} should set the cell at index \code{i} to \code{x}. If \code{i} is not a valid index, the function should return \code{Nothing}. \par
+        \code{get v i} returns the element in cell \code{i}. If that cell is empty or if \code{i} is not a valid index, it should return \code{Nothing}.\
+
+    \item \cite[p. 409]{thompson} A problem occurring in many different application areas, including networks and compilers, is to find the \textit{strongly connected component} of a graph. Every graph can have its nodes split into sets or components with the property that every node in a component is connected by a path to all other nodes in the same component. \par
+    A directed graph can be represented as a \textit{relation} which we define as \code{data Relation a = Data.Set (a,a)}.
+    \begin{enumerate}
+        \item Implement the function \code{dfs :: Relation a -> a -> [a]} that performs depth-first search in the given graph and returns nodes in the order they were visited.
+        \item Implement the function \code{dag :: Relation a -> Bool} that determines whether a directed graph is acyclic.
+        \item Implement the function \code{topology :: Relation a -> Maybe [a]} that returns a topological ordering for a graph. If the graph does not have a topological sorting return \code{Nothing}. Which is the class of graphs that do not have topological orderings?
+        \item Implement the function \code{connect :: Relation a -> Data.Set (Relation a)} that decomposes the given graph $G$ into $n$ subgraphs $H_1, \dots H_n$ where $\forall i,j.\ i \neq j \implies H_i \cap H_j = \emptyset$ such that each subgraph represents one strongly connected component in $G$.
+        \item Implement the function \code{classes :: Relation a -> Data.Set (Data.Set a)} that finds the equivalence classes generated by the given graph $G$. An equivalence class of $G$ is a class of nodes forming one strongly connected component in $G$.
+    \end{enumerate}
+\end{enumerate}
+
+\subsection{Type inference}
+\begin{enumerate}
+    \item {[endterm 2014]} Why is it often better to write \code{null $xs$} instead of \code{$xs$ == []}?
+
+    \item {[endterm 2013]} Determine the most general type of these expressions:
+        \begin{enumerate}
+            \item \code{filter not}
+            \item \code{[] : []}
+            \item \code{\textbackslash f x y -> f (x,y)}
+            \item \code{map (map fst)}
+        \end{enumerate}
+
+    \item {[sheet 11]} Use the algorithm from the lecture to determine the most general types of the following definitions:
+        \begin{enumerate}
+            \item \code{f u v = min (head u) (last (concat v))}
+            \item \code{ffoldl = foldl . foldl} (where \code{foldl :: (a -> b -> a) -> a -> [b] -> a})
+            \item \code{f x y = y : map (++x) y}
+        \end{enumerate}
+
+    \item {[endterm 2013]} Give a brief justification why the following expression does not type- check.
+        \begin{verbatim}
+    map head [True, False]
+        \end{verbatim}
+
+    \item \cite[p. 319]{thompson} What are the types of
+        \begin{enumerate}
+            \item \code{curry id}
+            \item \code{uncurry id}
+            \item \code{curry (curry id)}
+            \item \code{uncurry (uncurry id)}
+            \item \code{uncurry curry}
+        \end{enumerate}
+
+    \item \cite[p. 319]{thompson} Explain why the following expressions do not type-check:
+        \begin{enumerate}
+            \item \code{curry uncurry}
+            \item \code{curry curry}
+        \end{enumerate}
+
+    \item {[endterm 2020]} Determine the most general type of these expressions:
+        \begin{enumerate}
+            \item \code{foldr (\textbackslash x y -> y ++ x) []} (where \code{foldr :: (a -> b -> b) -> b -> [a] -> b})
+            \item \code{(\textbackslash f g x -> g \$ f \$ x)}
+            \item \code{(:[1,2])}
+            \item \code{map head . map (\textbackslash f -> f "hello")}
+        \end{enumerate}
+
+    \item {[endterm 2020]} Give a brief justification why these expressions do not type check.
+        \begin{enumerate}
+            \item \code{if f x then x else "error"} (where \code{f :: (a -> Bool)} and \code{x :: Int})
+            \item \code{1 : 2 : f x} (where \code{f :: (a -> String)} and \code{x :: Int})
+        \end{enumerate}
 \end{enumerate}
 
 \section{Homework}
