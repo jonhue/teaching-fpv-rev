@@ -1,6 +1,6 @@
 module ProblemSet_1 where
 
-import Data.List (delete,nub,sort,sortBy)
+import Data.List ((\\),delete,nub,sort,sortBy)
 import Test.QuickCheck
 
 
@@ -283,6 +283,11 @@ quicksort (x:xs) =
 {-2.2.2-}
 duplicate :: String -> Integer -> String
 duplicate xs n = concat [xs | i <- [1..n]]
+
+{-2.2.3-}
+perms :: Eq a => [a] -> [[a]]
+perms [] = [[]]
+perms xs = [x:ps | x <- xs, ps <- perms (xs \\ [x])]
 
 {-2.3.1-}
 prop_elem' :: Integer -> [Integer] -> Bool

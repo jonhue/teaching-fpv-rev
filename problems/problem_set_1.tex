@@ -249,6 +249,13 @@ Give a tail recursive implementation of \verb|concat|.
     duplicate :: String -> Integer -> String
 \end{verbatim}
 which takes a string and an integer, $n$. The result is $n$ copies of the string joined together. If $n$ is less than or equal to $0$, the result should be the empty string, \verb|""|, and if n is $1$, the result will be the string itself. Use list comprehensions.
+
+\item \cite[p. 424]{thompson} Give a function
+\begin{verbatim}
+    perms :: Eq a => [a] -> [[a]]
+\end{verbatim}
+which returns a list of all permutations of a given list. \par
+\textit{Hint:} you may use the  list difference operator \code{(\textbackslash \textbackslash) :: Eq a -> [a] -> [a] -> [a]} where \code{$xs$ \textbackslash \textbackslash\ $ys$} removes each element of $ys$ from $xs$.
 \end{enumerate}
 
 \subsection{QuickCheck}

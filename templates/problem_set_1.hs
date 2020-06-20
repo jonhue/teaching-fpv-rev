@@ -1,6 +1,6 @@
 module ProblemSet_1 where
 
-import Data.List (delete,nub,sort,sortBy)
+import Data.List ((\\),delete,nub,sort,sortBy)
 import Test.QuickCheck
 
 
@@ -177,6 +177,10 @@ quicksort = undefined
 {-2.2.2-}
 duplicate :: String -> Integer -> String
 duplicate = undefined
+
+{-2.2.3-}
+perms :: Eq a => [a] -> [[a]]
+perms = undefined
 
 {-2.3.1-}
 prop_elem' :: Integer -> [Integer] -> Bool
