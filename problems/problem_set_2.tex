@@ -254,29 +254,6 @@
         \end{verbatim}
         Implement a function \code{removeFiles :: String -> FileSys -> FileSys} that deletes all normal files with the given name.
 
-    \item A directed graph can be represented as a \textit{relation} which we define as \code{data Relation a = Relation (Set (a,a))} using the \code{Set} datatype from \code{Data.Set}.
-        Given is the following function that folds over a graph in a depth-first-like fashion.
-        \begin{verbatim}
-    foldGraph :: Ord a => (a -> b -> b -> [a] -> [a] -> b) -> b -> Relation a -> a -> b
-    foldGraph f z (Relation edges) u = aux [u] []
-      where
-        aux [] explored = z
-        aux (u:frontier) explored =
-          let newExplored = explored ++ [u]
-              neighbors = sort $ map snd $ filter ((==u) . fst) $ Set.toList edges
-              l = aux (neighbors \\ newExplored) newExplored
-              r = aux frontier newExplored
-          in f u l r explored neighbors
-        \end{verbatim}
-        Unlike depth-first search \code{foldGraph} splits the search tree at every explored node between neighbors of the explored node and nodes that are already in the frontier.
-        \begin{enumerate}
-            \item Using \code{foldGraph} implement the function \code{dfs :: Ord a => Relation a -> a -> [a]} that performs depth-first search in the given graph and returns nodes in the order they were visited.
-            \item Define a function \code{isAcyclic :: Eq a => [a] -> [a] -> Bool} that takes a list of already explored nodes and a list of neighbors of the currently explored nodes and returns \code{False} when the currently explored node completes a cycle in the current search tree. \par
-            Then, using \code{foldGraph} and \code{isAcyclic}, implement the function \code{dag :: Ord a => Relation a -> Bool} that determines whether a directed graph is acyclic. \par
-            \textit{Hint:} do not forget to consider the case of the empty relation.
-            \item Using \code{foldGraph} implement the function \code{topology :: Ord a => Relation a -> a -> Maybe [a]} that returns a topological ordering for a graph starting at the given node. If the graph does not have a topological ordering return \code{Nothing}. Which is the class of graphs that do not have topological orderings?
-        \end{enumerate}
-
     \item {[sheet 9]} An \textit{atom} is either a variable labelled by a string or the value \code{T} representing truth. A \textit{literal} is a positive or negative atom. Finally, a \textit{formula} is either a literal, a conjunction of formulas, or a disjunction of formulas.
         \begin{enumerate}
             \item Define data types for atoms, literals, and formulas. Make your definitions derive instances for \code{Eq} and \code{Show}.

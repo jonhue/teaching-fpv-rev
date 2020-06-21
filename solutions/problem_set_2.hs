@@ -286,46 +286,7 @@ removeFiles name (File name' : fs) =
 removeFiles name (Dir name' fs' : fs) =
   Dir name' (removeFiles name fs') : removeFiles name fs
 
-{-2.2.3-}
-data Relation a = Relation (Set.Set (a,a))
-
-{-2.2.3-}
-foldGraph :: Ord a => (a -> b -> b -> [a] -> [a] -> b) -> b -> Relation a -> a -> b
-foldGraph f z (Relation edges) u = aux [u] []
-  where
-    aux [] explored = z
-    aux (u:frontier) explored =
-      let newExplored = explored ++ [u]
-          neighbors = sort $ map snd $ filter ((==u) . fst) $ Set.toList edges
-          l = aux (neighbors \\ newExplored) newExplored
-          r = aux frontier newExplored
-      in f u l r explored neighbors
-
 {-2.2.3a-}
-dfs :: Ord a => Relation a -> a -> [a]
-dfs = foldGraph (\u xs ys _ _ -> [u] ++ (nub (xs ++ ys))) []
-
-{-2.2.3b-}
-isAcyclic :: Eq a => [a] -> [a] -> Bool
-isAcyclic explored neighbors = null (intersect explored neighbors)
-
-dag :: Ord a => Relation a -> Bool
-dag r@(Relation edges)
-  | Set.null edges = True
-  | otherwise      =
-    let u = fst $ head $ Set.toList edges
-    in foldGraph (\_ b1 b2 explored neighbors -> b1 && b2 && isAcyclic explored neighbors) True r u
-
--- {-2.2.3c-}
-topology :: Ord a => Relation a -> a -> Maybe [a]
-topology r u = foldGraph aux (Just []) r u
-  where
-    aux u (Just xs) (Just ys) explored neighbors =
-      let acyclic = isAcyclic explored neighbors
-      in if acyclic then Just (xs ++ [u] ++ ys) else Nothing
-    aux _ _ _ _ _ = Nothing
-
-{-2.2.4a-}
 data Atom' = T' | V' Name
   deriving (Eq, Show)
 data Literal = Pos Atom' | Neg Atom'
@@ -333,14 +294,14 @@ data Literal = Pos Atom' | Neg Atom'
 data Formula = L Literal | Formula :&&: Formula | Formula :||: Formula
   deriving (Eq, Show)
 
-{-2.2.4b-}
+{-2.2.3b-}
 top :: Literal
 top = Pos T'
 
 bottom :: Literal
 bottom = Neg T'
 
-{-2.2.4c-}
+{-2.2.3c-}
 type Clause = [Literal]
 type CNF = [Clause]
 
@@ -352,7 +313,7 @@ conjToForm :: CNF -> Formula
 conjToForm [] = L top
 conjToForm ds = foldr ((:&&:) . clauseToForm) (clauseToForm $ last ds) (init ds)
 
-{-2.2.4d-}
+{-2.2.3d-}
 type Valuation = [(Name,Bool)]
 
 substLiteral :: Valuation -> Literal -> Literal
@@ -370,7 +331,7 @@ substClause = map . substLiteral
 substConj :: Valuation -> CNF -> CNF
 substConj = map . substClause
 
-{-2.2.4e-}
+{-2.2.3e-}
 simpClause :: Clause -> Clause
 simpClause = foldr collect []
   where
@@ -387,17 +348,17 @@ simpConj = foldr collect [] . map simpClause
     collect [l] acc | l == top = acc
     collect a   acc            = a:acc
 
-{-2.2.4f-}
+{-2.2.3f-}
 cnf :: Formula -> CNF
 cnf (L l) = [[l]]
 cnf (f1 :&&: f2) = cnf f1 ++ cnf f2
 cnf (f1 :||: f2) = [c1 ++ c2 | c1 <- cnf f1, c2 <- cnf f2]
 
-{-2.2.5-}
+{-2.2.4-}
 data Type = TypeVar Char | Type String [Type]
   deriving (Eq)
 
-{-2.2.5a-}
+{-2.2.4a-}
 instance Show Type where
   show (TypeVar x) = [x]
   show (Type x []) = x
@@ -408,7 +369,7 @@ instance Show Type where
       where
         args = map show xs
 
-{-2.2.5b-}
+{-2.2.4b-}
 unpackEither :: [Either a b] -> Either [a] [b]
 unpackEither xs = aux xs [] []
   where

@@ -161,78 +161,48 @@ type FileSys = [Node]
 removeFiles :: String -> FileSys -> FileSys
 removeFiles = undefined
 
-{-2.2.3-}
-data Relation a = Relation (Set.Set (a,a))
-
-{-2.2.3-}
-foldGraph :: Ord a => (a -> b -> b -> [a] -> [a] -> b) -> b -> Relation a -> a -> b
-foldGraph f z (Relation edges) u = aux [u] []
-  where
-    aux [] explored = z
-    aux (u:frontier) explored =
-      let newExplored = explored ++ [u]
-          neighbors = sort $ map snd $ filter ((==u) . fst) $ Set.toList edges
-          l = aux (neighbors \\ newExplored) newExplored
-          r = aux frontier newExplored
-      in f u l r explored neighbors
-
 {-2.2.3a-}
-dfs :: Ord a => Relation a -> a -> [a]
-dfs = undefined
-
-{-2.2.3b-}
-isAcyclic :: Eq a => [a] -> [a] -> Bool
-isAcyclic  = undefined
-
-dag :: Ord a => Relation a -> Bool
-dag = undefined
-
-{-2.2.3c-}
-topology :: Ord a => Relation a -> a -> Maybe [a]
-topology = undefined
-
-{-2.2.4a-}
 data Atom' = TODO3
 data Literal = TODO4
 data Formula = TODO5
 
-{-2.2.4b-}
+{-2.2.3b-}
 top :: Literal
 top = undefined
 
 bottom :: Literal
 bottom = undefined
 
-{-2.2.4c-}
+{-2.2.3c-}
 type Clause = [Literal]
 type CNF = [Clause]
 
 conjToForm :: CNF -> Formula
 conjToForm = undefined
 
-{-2.2.4d-}
+{-2.2.3d-}
 type Valuation = [(Name,Bool)]
 
 substConj :: Valuation -> CNF -> CNF
 substConj = undefined
 
-{-2.2.4e-}
+{-2.2.3e-}
 simpConj :: CNF -> CNF
 simpConj = undefined
 
-{-2.2.4f-}
+{-2.2.3f-}
 cnf :: Formula -> CNF
 cnf = undefined
 
-{-2.2.5-}
+{-2.2.4-}
 data Type = TypeVar Char | Type String [Type]
   deriving (Eq)
 
-{-2.2.5a-}
+{-2.2.4a-}
 instance Show Type where
   show = undefined
 
-{-2.2.5b-}
+{-2.2.4b-}
 unify :: Type -> Type -> Either String Type
 unify = undefined
 
