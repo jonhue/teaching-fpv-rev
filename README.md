@@ -25,7 +25,9 @@ engaging as possible.
 ### Problems
 
 * [problem set 1](https://jonhue.github.io/teaching-fpv-rev/problem_set_1.pdf), [template](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/templates/problem_set_1.hs)
+* [problem set 2](https://jonhue.github.io/teaching-fpv-rev/problem_set_2.pdf), [template](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/templates/problem_set_2.hs)
 
 ### Solutions
 
 * [problem set 1](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/solutions/problem_set_1.hs)
+* [problem set 2](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/solutions/problem_set_2.hs), [Vector.hs](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/solutions/Vector.hs), [AssocList.hs](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/solutions/AssocList.hs), [AssocListTests.hs](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/solutions/AssocListTests.hs)
