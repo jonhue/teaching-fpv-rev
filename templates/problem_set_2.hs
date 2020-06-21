@@ -1,7 +1,7 @@
 module ProblemSet_2 where
 
-import Data.List (nub)
-import Data.Set (Set)
+import Data.List ((\\),intercalate,intersect,nub,sort)
+import qualified Data.Set as Set
 import Data.Semigroup
 
 
@@ -126,9 +126,6 @@ h = undefined
 {-1.4.2b
 -}
 
-{-1.4.2c
--}
-
 {-1.4.3a
 -}
 
@@ -165,27 +162,34 @@ removeFiles :: String -> FileSys -> FileSys
 removeFiles = undefined
 
 {-2.2.3-}
-data Relation a = Relation (Set (a,a))
+data Relation a = Relation (Set.Set (a,a))
+
+{-2.2.3-}
+foldGraph :: Ord a => (a -> b -> b -> [a] -> [a] -> b) -> b -> Relation a -> a -> b
+foldGraph f z (Relation edges) u = aux [u] []
+  where
+    aux [] explored = z
+    aux (u:frontier) explored =
+      let newExplored = explored ++ [u]
+          neighbors = sort $ map snd $ filter ((==u) . fst) $ Set.toList edges
+          l = aux (neighbors \\ newExplored) newExplored
+          r = aux frontier newExplored
+      in f u l r explored neighbors
 
 {-2.2.3a-}
-dfs :: Relation a -> a -> [a]
+dfs :: Ord a => Relation a -> a -> [a]
 dfs = undefined
 
 {-2.2.3b-}
-dag :: Relation a -> Bool
+isAcyclic :: Eq a => [a] -> [a] -> Bool
+isAcyclic  = undefined
+
+dag :: Ord a => Relation a -> Bool
 dag = undefined
 
 {-2.2.3c-}
-topology :: Relation a -> Maybe [a]
+topology :: Ord a => Relation a -> a -> Maybe [a]
 topology = undefined
-
-{-2.2.3d-}
-connect :: Relation a -> Set (Relation a)
-connect = undefined
-
-{-2.2.3e-}
-classes :: Relation a -> Set (Set a)
-classes = undefined
 
 {-2.2.4a-}
 data Atom' = TODO3
@@ -221,7 +225,8 @@ cnf :: Formula -> CNF
 cnf = undefined
 
 {-2.2.5-}
-data Type = TypeVar Char | Type String [Type] deriving Eq
+data Type = TypeVar Char | Type String [Type]
+  deriving (Eq)
 
 {-2.2.5a-}
 instance Show Type where
@@ -233,17 +238,50 @@ unify = undefined
 
 {-2.3.1 this task should be done in separate files called AssocList.hs and AssocListTests.hs-}
 
-{-2.4.1
+{-2.4.1a
+-}
+
+{-2.4.1b
+-}
+
+{-2.4.1c
+-}
+
+{-2.4.1d
 -}
 
 {-2.4.2
 -}
 
-{-2.4.3
+{-2.4.3a
 -}
 
-{-2.4.4
+{-2.4.3b
 -}
 
-{-2.4.5
+{-2.4.3c
+-}
+
+{-2.4.3d
+-}
+
+{-2.4.3e
+-}
+
+{-2.4.4a
+-}
+
+{-2.4.4b
+-}
+
+{-2.4.5a
+-}
+
+{-2.4.5b
+-}
+
+{-2.4.5c
+-}
+
+{-2.4.5d
 -}
