@@ -338,7 +338,7 @@ cnf $ (L a :&: L b) :|: (L c :&: L d)
         \end{verbatim}
         \begin{enumerate}
             \item Define an instance of \code{Show} for \code{Type} using the same format as in the given example. \textit{Bonus:} print the types \code{Tuple} and \code{List} in a more Haskell-like format.
-            \item Define a function \code{unify :: Type -> Type -> Either String Type} that decides whether two type expressions are unifiable. If they are, \code{unify} should return a most general unifying substitution; if not, it should give some explanation of why the unification fails.
+            \item Define a function \code{unify :: Type -> Type -> Either String Type} that decides whether two type expressions are unifiable. If they are, \code{unify} should return a most general unifying substitution; if not, it should give some explanation of why the unification fails. You may disregard the case of unifying two type variables.
         \end{enumerate}
 \end{enumerate}
 
