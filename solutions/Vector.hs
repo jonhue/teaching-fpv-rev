@@ -6,7 +6,7 @@ newtype Vector a = Vector [Maybe a]
   deriving (Show, Eq)
 
 newVector :: Int -> Vector a
-newVector n = Vector (replicate n Nothing)
+newVector n = Vector $ replicate n Nothing
 
 size :: Vector a -> Int
 size (Vector v) = length v
@@ -15,10 +15,10 @@ capacity :: Vector a -> Int
 capacity (Vector v) = length $ filter isNothing v
 
 resize :: Vector a -> Int -> Vector a
-resize v@(Vector l) n =
-  if n > size v then Vector $ l ++ replicate (n - (size v)) Nothing
-  else if n < size v then Vector $ take n l
-  else v
+resize v@(Vector l) n
+  | n > size v = Vector $ l ++ replicate (n - (size v)) Nothing
+  | n < size v = Vector $ take n l
+  | otherwise  = v
 
 set :: Vector a -> a -> Int-> Maybe (Vector a)
 set v@(Vector l) x i =

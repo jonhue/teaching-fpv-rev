@@ -121,7 +121,7 @@
             \item an anonymous function defintion $(\lambda x.\ T)$, which binds a variable $x$ in term $T$, or
             \item a function application $T\ U$ where both $T$ and $U$ are terms themselves.
         \end{itemize}
-        Not that bound variable names are interchangeable whereas this is not the case for free variables. For example, the terms $(\lambda x.\ x\ y)$ and $(\lambda z.\ z\ y)$ are equal while the terms $(\lambda x.\ x\ y)$ and $(\lambda x.\ x\ z)$ are not equal. Start by defining a datatype \code{Term} in Haskell that models the $\lambda$-calculus using strings for variables names. On this datatype, implement the following functions:
+        Note that bound variable names are interchangeable whereas this is not the case for free variables. For example, the terms $(\lambda x.\ x\ y)$ and $(\lambda z.\ z\ y)$ are equal while the terms $(\lambda x.\ x\ y)$ and $(\lambda x.\ x\ z)$ are not equal. Start by defining a datatype \code{Term} in Haskell that models the $\lambda$-calculus using strings for variables names. On this datatype, implement the following functions:
         \begin{enumerate}
             \item Instantiate \code{Show} for \code{Term} by representing variables as just their name, $\lambda$-abstractions as \code{(\textbackslash x -> T)} like in Haskell and use spaces for function application.
             \item Define \code{freeVars :: Term -> [String]} which collects all free variables in a term, i.e. variables that are not bound by an enclosing $\lambda$-abstraction.
