@@ -640,6 +640,8 @@ foldr (+) 0 [1,2,3]\pause
 
 Allows the renaming of a more complex type expression.
 
+\pause
+
 \begin{exampleblock}{Examples}
 \begin{verbatim}
 type String = [Char]
@@ -656,14 +658,16 @@ type List a = [a]
 \begin{block}{\centering Type classes are collections of types that implement some fixed set of functions.}
 \end{block}
 
+\pause
+
 Similar concepts are commonly called \textit{interfaces}.
 
 \pause
 
 \vspace{1cm}
-Creating and using a type class:
+Creating and using a type class:\pause
 \begin{enumerate}
-    \item creating a type class $\sim$ creating an interface (define set of functions)
+    \item creating a type class $\sim$ creating an interface (define set of functions)\pause
     \item instantiating a type class $\sim$ implementing an interface (implement a set of functions for a member of a type class)
 \end{enumerate}
 
@@ -673,12 +677,12 @@ Creating and using a type class:
 
 \begin{exampleblock}{Examples}
 \begin{alltt}
-class Eq a where
+class Eq a where\pause
   (==) :: a -> a -> Bool\pause
 
-instance Eq Bool where
-  True  == True  = True
-  False == False = True
+instance Eq Bool where\pause
+  True  == True  = True\pause
+  False == False = True\pause
   _     == _     = False
 \end{alltt}
 \end{exampleblock}
@@ -688,6 +692,8 @@ instance Eq Bool where
 \begin{frame}[fragile]{Constrained instances}
 
 Instances of type classes can be constrained.
+
+\pause
 
 \begin{exampleblock}{Example}
 \begin{alltt}
@@ -705,7 +711,7 @@ instance (Eq a) => Eq [a] where\pause
 \begin{exampleblock}{Example}
 \begin{verbatim}
 class (Eq a) => Ord a where
-  (<=), (<) :: a -> a -> Bool
+  (<=), (<), (>=), (>) :: a -> a -> Bool
 \end{verbatim}
 
 Class \code{Ord} inherits all functions of class \code{Eq}.
@@ -719,8 +725,8 @@ Before instantiating a subclass with a type, the type must be an instance of all
 \pause
 
 \begin{alltt}
-instance Ord Bool where\pause
-  b1 <= b2 = not b1 || b2\pause
+instance Ord Bool where
+  b1 <= b2 = not b1 || b2
   b1 < b2 = b1 <= b2 && not(b1 == b2)
 \end{alltt}
 
@@ -730,15 +736,47 @@ instance Ord Bool where\pause
 
 \begin{frame}{Algebraic Data Types}
 
-\begin{itemize}
-    \item data types with a custom shape
-    \item defines a type along with constructors to build values of that type
-\end{itemize}
+A custom datatype with one or more constructors.
 
 \pause
 
-\begin{block}{\centering \code{data $type$ $a_1 \dots a_n$ = $constructor$ $a_1 \dots a_n$ | ...}}
+\begin{block}{\centering \code{data $type$ $a_1 \dots a_n$ = $constructor$ $a_1k \dots a_l$ | ...}}
 \end{block}
+
+\pause
+
+\vspace{1cm}
+Constructors are
+\begin{itemize}
+    \item a \textit{prefix operator} starting with a capital letter; or
+    \item an \textit{infix operator} starting with \code{:}.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Algebraic Data Types}
+
+Terminology:\pause
+\begin{itemize}
+    \item a \textcolor{blue}{$n$-ary constructor} is a function that unambiguously constructs values of a type encapsulating $n$ arguments.\pause
+    \item unary constructors are also called \textcolor{blue}{constants}.\pause
+    \item a type that expects a \textit{type argument} is called a \textit{parametrized type}.\pause
+    \item \textcolor{blue}{data constructors} are used at the \textit{term level}, \textcolor{blue}{type constructors} are used at the \textit{type level}.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Algebraic Data Types}
+
+A datatype can be thought of as the set of possible values of that type.
+
+\pause
+
+\begin{itemize}
+    \item the \textcolor{blue}{cardinality} of a datatype is the number of all its possible values.\pause
+    \item a \textcolor{blue}{sum type} is a type with more than one constructor (similar to a logical $\lor$).\pause
+    \item a \textcolor{blue}{product type} is a type whose data constructor takes more than one argument (similar to a logical $\land$).
+\end{itemize}
 
 \end{frame}
 
@@ -761,36 +799,6 @@ data Tree a = Empty | Node a (Tree a) (Tree a)
   deriving (Eq, Show)
 \end{alltt}
 \end{exampleblock}
-
-\end{frame}
-
-\begin{frame}{Constructors vs Types (again)}
-
-Repetition:
-\begin{itemize}
-    \item constructors can be used \textcolor{red}{in expressions} to build values of a type.
-    \item types can be used \textcolor{red}{in type signatures} to hint at the type of bindings.
-\end{itemize}
-
-\pause
-
-\begin{block}{\centering An algebraic data types is a custom type with one or more constructors.}
-\end{block}
-
-\end{frame}
-
-\begin{frame}{Constructors vs Types (again)}
-
-Constructors can have varying arity:\pause
-\begin{itemize}
-    \item a constructor with arity $0$ acts like a value of the algebraic data type\pause
-    \item a constructor with arity $k$ combines $k$ values of different types into a single value of the algebraic data type
-\end{itemize}
-
-\pause
-
-\begin{alertblock}{\centering Constructors are functions that unambiguously construct the value of a type.}
-\end{alertblock}
 
 \end{frame}
 
@@ -822,9 +830,8 @@ insert x (Node a l r)\pause
 
 \subsection{Modules, Abstract Data Types}
 
-\begin{frame}{Modules, Abstract Data Types}
+\begin{frame}{Modules}
 
-\begin{block}{Modules}
 Collection of type, function, class and other definitions.
 
 \pause
@@ -835,9 +842,8 @@ exports everything defined in \code{M}\pause
 
 \vspace{0.25cm}
 \code{module M (T, f, ...) where} \par
-exports everything defined in \code{T, f, ...}
+exports only \code{T, f, ...}
 \end{exampleblock}
-\end{block}
 
 \end{frame}
 
@@ -901,13 +907,7 @@ size (Set xs) = length xs
 \begin{itemize}
     \item \code{type} is used to create type aliases\pause
     \item \code{data} is used to create algebraic data types (types witha custom shape)\pause
-    \item \code{newtypre} is used to create a custom constructor for a single type\pause
-        \begin{itemize}
-            \item syntax "subset" of the syntax for \code{data}
-            \item may only have a \textit{single} constructor taking a \textit{single} argument
-            \item introduces no runtime overhead
-            \item creates \textit{strict} types while \code{data} creates \textit{lazy} types
-        \end{itemize}
+    \item \code{newtype} is used to create a custom constructor for a single type without adding any runtime overhead\pause
 \end{itemize}
 
 \end{frame}
@@ -916,7 +916,7 @@ size (Set xs) = length xs
 
 \begin{frame}{Type inference}
 
-\begin{block}{\centering How to infer/reconstruct the type of an expression.}
+\begin{block}{\centering Inferring/reconstructing the type of an expression.}
 \end{block}
 
 \pause
@@ -957,7 +957,7 @@ Step 2\pause
 
 \begin{frame}{Type inference}
 
-\begin{exampleblock}{Example}
+\begin{exampleblock}{Example (cont.)}
 Given \code{f u v = min (head u) (last (concat v))}
 
 \vspace{0.25cm}
@@ -974,9 +974,9 @@ Step 3\pause
 
 \begin{frame}{Type inference}
 
-\begin{exampleblock}{Example}
+\begin{exampleblock}{Example (cont.)}
 Given \code{f u v = min (head u) (last (concat v))} \par
-Goal \code{f :: a -> b -> f}
+Goal \code{f :: Ord f => a -> b -> f}
 
 \vspace{0.25cm}
 Step 4\pause
@@ -1006,9 +1006,9 @@ Step 4\pause
 
 \begin{frame}{Type inference}
 
-\begin{exampleblock}{Example}
+\begin{exampleblock}{Example (cont.)}
 Given \code{f u v = min (head u) (last (concat v))} \par
-Goal \code{f :: a -> b -> f}
+Goal \code{f :: Ord f => a -> b -> f}
 
 \vspace{0.25cm}
 Step 4 (cont.)\pause
@@ -1752,7 +1752,7 @@ Innermost reduction: \par
 
 \end{frame}
 
-\section{Complexity and optimization}
+\section{Time complexity analysis}
 
 \begin{frame}{Time complexity analysis}
 
@@ -1793,18 +1793,6 @@ $T_{\code{++}}(0, n) = O(1)$ \par\pause
 $T_{\code{++}}(m + 1, n) = T_{\code{++}}(m, n) + O(1)$ \par\pause
 $\implies$ \textcolor{blue}{$T_{\code{++}}(m, n) = O(m)$}
 \end{exampleblock}
-
-\end{frame}
-
-\begin{frame}{Optimization}
-
-\begin{itemize}
-    \item no duplication (use \code{where} or \code{let})\pause
-    \item use tail recursion\pause
-    \item avoid multiple traversals of the same data structure\pause
-    \item avoid intermediate data structures\pause
-    \item pre-compute expensive operations
-\end{itemize}
 
 \end{frame}
 
