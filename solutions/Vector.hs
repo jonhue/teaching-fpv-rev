@@ -1,7 +1,6 @@
 module Vector (Vector, newVector, size, capacity, resize, set, get) where
 
 import Data.Maybe
-import Test.QuickCheck hiding (resize)
 
 newtype Vector a = Vector [Maybe a]
   deriving (Show, Eq)
