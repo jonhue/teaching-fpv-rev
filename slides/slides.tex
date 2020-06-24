@@ -740,7 +740,7 @@ A custom datatype with one or more constructors.
 
 \pause
 
-\begin{block}{\centering \code{data $type$ $a_1 \dots a_n$ = $constructor$ $a_1k \dots a_l$ | ...}}
+\begin{block}{\centering \code{data $type$ $a_1 \dots a_n$ = $constructor$ $a_k \dots a_l$ | ...}}
 \end{block}
 
 \pause
@@ -750,32 +750,6 @@ Constructors are
 \begin{itemize}
     \item a \textit{prefix operator} starting with a capital letter; or
     \item an \textit{infix operator} starting with \code{:}.
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Algebraic Data Types}
-
-Terminology:\pause
-\begin{itemize}
-    \item a \textcolor{blue}{$n$-ary constructor} is a function that unambiguously constructs values of a type encapsulating $n$ arguments.\pause
-    \item unary constructors are also called \textcolor{blue}{constants}.\pause
-    \item a type that expects a \textit{type argument} is called a \textit{parametrized type}.\pause
-    \item \textcolor{blue}{data constructors} are used at the \textit{term level}, \textcolor{blue}{type constructors} are used at the \textit{type level}.
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Algebraic Data Types}
-
-A datatype can be thought of as the set of possible values of that type.
-
-\pause
-
-\begin{itemize}
-    \item the \textcolor{blue}{cardinality} of a datatype is the number of all its possible values.\pause
-    \item a \textcolor{blue}{sum type} is a type with more than one constructor (similar to a logical $\lor$).\pause
-    \item a \textcolor{blue}{product type} is a type whose data constructor takes more than one argument (similar to a logical $\land$).
 \end{itemize}
 
 \end{frame}
@@ -799,6 +773,32 @@ data Tree a = Empty | Node a (Tree a) (Tree a)
   deriving (Eq, Show)
 \end{alltt}
 \end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{Algebraic Data Types}
+
+Terminology:\pause
+\begin{itemize}
+    \item a \textcolor{blue}{$n$-ary constructor} is a function that unambiguously constructs values of a type encapsulating $n$ arguments.\pause
+    \item nullary constructors are also called \textcolor{blue}{constants}.\pause
+    \item a type that expects a \textit{type argument} is called a \textit{parametrized type}.\pause
+    \item \textcolor{blue}{data constructors} are used at the \textit{term level}, \textcolor{blue}{type constructors} are used at the \textit{type level}.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Algebraic Data Types}
+
+A datatype can be thought of as the set of possible values of that type.
+
+\pause
+
+\begin{itemize}
+    \item the \textcolor{blue}{cardinality} of a datatype is the number of all its possible values.\pause
+    \item a \textcolor{blue}{sum type} is a type with more than one constructor (similar to a logical $\lor$).\pause
+    \item a \textcolor{blue}{product type} is a type whose data constructor takes more than one argument (similar to a logical $\land$).
+\end{itemize}
 
 \end{frame}
 
@@ -907,7 +907,7 @@ size (Set xs) = length xs
 \begin{itemize}
     \item \code{type} is used to create type aliases\pause
     \item \code{data} is used to create algebraic data types (types witha custom shape)\pause
-    \item \code{newtype} is used to create a custom constructor for a single type without adding any runtime overhead\pause
+    \item \code{newtype} is used to create a custom constructor for a single type without adding any runtime overhead
 \end{itemize}
 
 \end{frame}
