@@ -88,20 +88,25 @@
 \begin{enumerate}
     \item Given the following definitions:
         \begin{verbatim}
+    data List a = [] | a : List a
+
     reverse [] = []
     reverse (x:xs) = reverse xs ++ [x]
 
-    itrev :: [a] -> [a] -> [a]
     itrev [] xs = xs
     itrev (x:xs) ys = itrev xs (x:ys)
+
+    [] ++ ys = ys
+    (x:xs) ++ ys = x : (xs ++ ys)
         \end{verbatim}
         Prove the following statement using structural induction:
         \begin{verbatim}
     itrev xs [] = reverse xs
         \end{verbatim}
-        You may use the following lemma about \code{++} in the proof:
+        You may use the following lemmas about \code{++} in the proof:
         \begin{verbatim}
-    Lemma ++_assoc: (xs ++ ys) ++ zs = xs ++ (ys ++ zs)
+    Lemma app_assoc: (xs ++ ys) ++ zs = xs ++ (ys ++ zs)
+    Lemma app_empty: xs ++ [] = xs
         \end{verbatim}
 \end{enumerate}
 
@@ -128,27 +133,15 @@
 
 \subsection{Computation induction}
 \begin{enumerate}
-    \item {[sheet 6]} We define:
+    \item {[sheet 6]} We define the functions \code{sum :: Num a => [a] -> a} and \code{sum2 :: Num a => [a] -> [a] -> a}:
         \begin{verbatim}
-    length [] = 0
-    length (x:xs) = 1 + length xs
-
-    countGt [] ys = 0
-    countGt (x:xs) [] = length (x:xs)
-    countGt (x:xs) (y:ys) = if x > y then 1 + countGt (x:xs) ys
-      else countGt (y:ys) xs
+    sum [] = 0
+    sum (x:xs) = x + sum xs
+    sum2 [] [] = 0
+    sum2 [] (y:ys) = y + sum2 ys []
+    sum2 (x:xs) ys = x + sum2 xs ys
         \end{verbatim}
-        Show that \code{countGt xs ys <= length xs + length ys} using computation induction. \par
-        \textit{Note:} Given a rule \code{P x ==> y <= z} with name \code{myRule} and a proof \code{p} of \code{P x}, you can use \code{(by myRule OF p} to apply the inequality between \code{y} and \code{z}. For example:
-        \begin{verbatim}
-    axiom leAddMono : y <= z ==> x + y <= x + z
-    axiom zeroLeOne : 0 <= 1
-    Lemma : 0 + 0 <= 0 + 1
-    Proof
-                                     0 + 0
-      (by leAddMono OF zeroLeOne) <= 0 + 1
-    QED
-        \end{verbatim}
+        Use computation induction to show that \code{sum2 xs ys = sum xs + sum ys}.
 \end{enumerate}
 
 \section{Homework}
@@ -201,15 +194,12 @@
         \begin{verbatim}
     data Tree a = L | N (Tree a) a (Tree a)
 
-    flat :: Tree a -> [a]
     flat L = []
     flat (N l x r) = flat l ++ (x : flat r)
 
-    app :: Tree a -> [a] -> [a]
     app L xs = xs
     app (N l x r) xs = app l (x : app r xs)
 
-    (++) :: [a] -> [a] -> [a]
     [] ++ ys = ys
     (x : xs) ++ ys = x : (xs ++ ys)
         \end{verbatim}
@@ -219,9 +209,9 @@
         \end{verbatim}
         You may use the following lemmas about \code{++} in the proof:
         \begin{verbatim}
-    Lemma ++_assoc: (xs ++ ys) ++ zs = xs ++ (ys ++ zs)
-    Lemma ++_nil: xs ++ [] = xs
-    Lemma nil_ ++: [] ++ xs = xs
+    axiom app_assoc: (xs ++ ys) ++ zs .=. xs ++ (ys ++ zs)
+    axiom app_nil: xs ++ [] .=. xs
+    axiom nil_app: [] ++ xs .=. xs
         \end{verbatim}
 \end{enumerate}
 
@@ -271,15 +261,27 @@
     length (drop2 xs) = (length xs + 1) ‘div‘ 2
         \end{verbatim}
 
-    \item {[sheet 6]} We define the functions \code{sum :: Num a => [a] -> a} and \code{sum2 :: Num a => [a] -> [a] -> a}:
+    \item {[sheet 6]} We define:
         \begin{verbatim}
-    sum [] = 0
-    sum (x:xs) = x + sum xs
-    sum2 [] [] = 0
-    sum2 [] (y:ys) = y + sum2 ys []
-    sum2 (x:xs) ys = x + sum2 xs ys
+    length [] = 0
+    length (x:xs) = 1 + length xs
+
+    countGt [] ys = 0
+    countGt (x:xs) [] = length (x:xs)
+    countGt (x:xs) (y:ys) = if x > y then 1 + countGt (x:xs) ys
+      else countGt (y:ys) xs
         \end{verbatim}
-        Use computation induction to show that \code{sum2 xs ys = sum xs + sum ys}.
+        Show that \code{countGt xs ys <= length xs + length ys} using computation induction. \par
+        \textit{Note:} Given a rule \code{P x ==> y <= z} with name \code{myRule} and a proof \code{p} of \code{P x}, you can use \code{(by myRule OF p} to apply the inequality between \code{y} and \code{z}. For example:
+        \begin{verbatim}
+    axiom leAddMono : y <= z ==> x + y <= x + z
+    axiom zeroLeOne : 0 <= 1
+    Lemma : 0 + 0 <= 0 + 1
+    Proof
+                                     0 + 0
+      (by leAddMono OF zeroLeOne) <= 0 + 1
+    QED
+        \end{verbatim}
 \end{enumerate}
 
 \printbibliography

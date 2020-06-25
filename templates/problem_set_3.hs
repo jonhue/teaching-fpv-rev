@@ -27,7 +27,6 @@ goal add (add x y) z .=. add x (add y z)
 
 {-1.2.1
 data AExp = Val Integer | Add AExp AExp | Mul AExp AExp
-  deriving Eq
 
 eval (Val i) = i
 eval (Add a b) = (eval a) + (eval b)
@@ -49,11 +48,10 @@ goal eval (simp e) .=. eval e
 reverse [] = []
 reverse (x:xs) = reverse xs ++ [x]
 
-itrev :: [a] -> [a] -> [a]
 itrev [] xs = xs
 itrev (x:xs) ys = itrev xs (x:ys)
 
-axiom ++_assoc: (xs ++ ys) ++ zs .=. xs ++ (ys ++ zs)
+axiom app_assoc: (xs ++ ys) ++ zs .=. xs ++ (ys ++ zs)
 
 goal itrev xs [] .=. reverse xs
 
@@ -69,9 +67,6 @@ foldl g b (x:xs) = foldl g (g b x) xs
 foldr g b [] = b
 foldr g b (x:xs) = g x (foldr g b xs)
 
-declare_sym f
-declare_sym a
-
 axiom f_assoc: f x (f y z) .=. f (f x y) z
 axiom f_comm_a: f x a .=. f a x
 
@@ -82,26 +77,20 @@ goal foldl f a .=. foldr f a
 
 {-1.5.1
 data List a = [] | a : List a
-data Bool = True | False
 
-length [] = 0
-length (x:xs) = 1 + length xs
+sum [] = 0
+sum (x:xs) = x + sum xs
 
-countGt [] ys = 0
-countGt (x:xs) [] = length (x:xs)
-countGt (x:xs) (y:ys) = if x > y then 1 + countGt (x:xs) ys else countGt (y:ys) xs
+sum2 [] [] = 0
+sum2 [] (y:ys) = y + sum2 ys []
+sum2 (x:xs) ys = x + sum2 xs ys
 
 axiom zeroAdd: 0 + b .=. b
 axiom addZero: b + 0 .=. b
 axiom addComm: a + b .=. b + a
 axiom addAssoc: a + (b + c) .=. (a + b) + c
-axiom ifTrue: (if True then a else b) .=. a
-axiom ifFalse: (if False then a else b) .=. b
-axiom lengthNonneg: 0 <= length xs
-axiom zeroLeOne: 0 <= 1
-axiom leAddMono: y <= z ==> x + y <= x + z
 
-goal countGt xs ys <= length xs + length ys
+goal sum2 xs ys .=. sum xs + sum ys
 
 ---
 -}
@@ -183,21 +172,18 @@ goal sum (inorder t) .=. sumTree t
 {-2.2.1
 data Tree a = L | N (Tree a) a (Tree a)
 
-flat :: Tree a -> [a]
 flat L = []
 flat (N l x r) = flat l ++ (x : flat r)
 
-app :: Tree a -> [a] -> [a]
 app L xs = xs
 app (N l x r) xs = app l (x : app r xs)
 
-(++) :: [a] -> [a] -> [a]
 [] ++ ys = ys
 (x : xs) ++ ys = x : (xs ++ ys)
 
-axiom ++_assoc: (xs ++ ys) ++ zs .=. xs ++ (ys ++ zs)
-axiom ++_nil: xs ++ [] .=. xs
-axiom nil_ ++: [] ++ xs .=. xs
+axiom app_assoc: (xs ++ ys) ++ zs .=. xs ++ (ys ++ zs)
+axiom app_nil: xs ++ [] .=. xs
+axiom nil_app: [] ++ xs .=. xs
 
 goal app t [] .=. flat t
 
@@ -246,20 +232,26 @@ goal length (drop2 xs) .=. (length xs + 1) `div 2
 
 {-2.4.2
 data List a = [] | a : List a
+data Bool = True | False
 
-sum [] = 0
-sum (x:xs) = x + sum xs
+length [] = 0
+length (x:xs) = 1 + length xs
 
-sum2 [] [] = 0
-sum2 [] (y:ys) = y + sum2 ys []
-sum2 (x:xs) ys = x + sum2 xs ys
+countGt [] ys = 0
+countGt (x:xs) [] = length (x:xs)
+countGt (x:xs) (y:ys) = if x > y then 1 + countGt (x:xs) ys else countGt (y:ys) xs
 
 axiom zeroAdd: 0 + b .=. b
 axiom addZero: b + 0 .=. b
 axiom addComm: a + b .=. b + a
 axiom addAssoc: a + (b + c) .=. (a + b) + c
+axiom ifTrue: (if True then a else b) .=. a
+axiom ifFalse: (if False then a else b) .=. b
+axiom lengthNonneg: 0 <= length xs
+axiom zeroLeOne: 0 <= 1
+axiom leAddMono: y <= z ==> x + y <= x + z
 
-goal sum2 xs ys .=. sum xs + sum ys
+goal countGt xs ys <= length xs + length ys
 
 ---
 -}
