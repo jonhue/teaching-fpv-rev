@@ -1218,6 +1218,16 @@ Then,
 
 \end{frame}
 
+\begin{frame}{Generalization}
+
+We have to prove\pause
+\begin{itemize}
+    \item a more generalized problem than the original problem; and\pause
+    \item that the specific instance of our problem follows from the generalized problem.
+\end{itemize}
+
+\end{frame}
+
 \subsection{Extensionality}
 
 \begin{frame}[fragile]{Extensionality}
@@ -1247,6 +1257,11 @@ QED
 
 \begin{frame}{Computation induction}
 
+\begin{block}{\centering Induction on the length of a computation}
+\end{block}
+
+\pause
+
 To prove property \textcolor{blue}{\code{P($x_1, \dots, x_k$)}} for all $x_1$, \dots, $x_k$, \par
 for every defining equation
 
@@ -1258,12 +1273,7 @@ prove \textcolor{blue}{\code{P($e_{11}, \dots, e_{1k}$)}, \dots, \code{P($e_{n1}
 
 \pause
 
-\vspace{1cm}
-\begin{block}{\centering Induction on the length of a computation}
-\end{block}
-
-\pause
-
+\vspace{0.5cm}
 Also referred to as an \textcolor{blue}{induction on the computation} of a function \code{f} or \textcolor{blue}{\code{f}-induction}.
 
 \end{frame}
@@ -1273,7 +1283,7 @@ Also referred to as an \textcolor{blue}{induction on the computation} of a funct
 \begin{exampleblock}{Example}
 \begin{alltt}
 splice [] ys = ys
-spice (x:xs) ys = x : splice ys xs
+splice (x:xs) ys = x : splice ys xs
 \end{alltt}
 
 \pause
