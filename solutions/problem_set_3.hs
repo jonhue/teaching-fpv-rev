@@ -60,9 +60,7 @@ Proof by induction on Nat x
 
 Case Z
   To show: add (add Z y) z .=. add Z (add y z)
-
   Proof
-
                        add (add Z y) z
       (by def add) .=. add y z
       (by def add) .=. add Z (add y z)
@@ -84,7 +82,6 @@ QED
 
 {-1.2.1
 data AExp = Val Integer | Add AExp AExp | Mul AExp AExp
-  deriving Eq
 
 eval (Val i) = i
 eval (Add a b) = (eval a) + (eval b)
@@ -154,8 +151,8 @@ Case (Mul a b)
                            eval (simp (Mul a b))
       (by def simp)    .=. eval (Mul (simp a) (simp b))
       (by def eval)    .=. (eval (simp a)) * (eval (simp b))
-      (by IHa)         .=. (eval a) * (eval (simp b))
-      (by IHb)         .=. (eval a) * (eval b)
+      (by IH1)         .=. (eval a) * (eval (simp b))
+      (by IH2)         .=. (eval a) * (eval b)
       (by def eval)    .=. eval (Mul a b)
   QED
 QED

@@ -45,13 +45,19 @@ goal eval (simp e) .=. eval e
 -}
 
 {-1.3.1
+data List a = [] | a : List a
+
 reverse [] = []
 reverse (x:xs) = reverse xs ++ [x]
 
 itrev [] xs = xs
 itrev (x:xs) ys = itrev xs (x:ys)
 
+[] ++ ys = ys
+(x:xs) ++ ys = x : (xs ++ ys)
+
 axiom app_assoc: (xs ++ ys) ++ zs .=. xs ++ (ys ++ zs)
+axiom app_empty: xs ++ [] .=. xs
 
 goal itrev xs [] .=. reverse xs
 
