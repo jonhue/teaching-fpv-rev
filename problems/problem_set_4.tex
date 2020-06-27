@@ -27,11 +27,7 @@
 
 \subsection{I/O}
 \begin{enumerate}
-    \item Derive the functions \code{putStr' :: String -> IO ()} and \code{putStrLn' :: String -> IO ()} from the Prelude function \code{putChar :: Char -> IO ()}.
-
-    \item Derive the function \code{getLine' :: IO String} from the Prelude function \code{getChar :: IO Char}.
-
-    \item Use the Prelude function \code{getLine} to define a function \code{getInt :: IO (Maybe Int)} that safely reads an integer from standard input.
+    \item Use the Prelude function \code{getLine} and the function \code{readMaybe} from \code{Text.Read} to define a function \code{getInt :: IO (Maybe Int)} that safely reads an integer from standard input.
 
     \item {[sheet 11]} In this exercise you will implement the following game: The program selects a random number in the range \code{[0..100]} and asks the user to guess the number. If the user's guess is incorrect, the program tells them whether the actual number is larger or smaller amd waits for another guess. If the user guesses correctly, the program prints the number of guesses made. \par
         \textit{Hints:}
@@ -39,6 +35,97 @@
             \item Use \code{getInt} from the previous exercise to read numbers from the user.
             \item Use \code{randomRIO} from \code{System.Random} to get a random number in a certain range.
         \end{itemize}
+
+    \item {[sheet 15]} We consider a game of matches for two players. In the beginning, there are 10 matches on the table. The players take turns in taking matches off the table (at least $1$ and at most $5$). The winner is the player who takes the last match. \par
+        Define an IO action \code{match :: IO ()} that implements the game of matches. Before any player's turn the program should print the number of the player and of the remaining matches. When a player wins the program should print the winner and exit afterwards. The program should ensure that the player only takes a valid number of matches. If not enough matches remain, the player takes all of them. \par
+        You can use the function \code{putStrLn :: String -> IO ()} to print a string to standard output and \code{readLn :: Read a => IO a} to read from standard input.
+        \begin{alltt}
+    Matches: 10. Player 1?
+    \textit{4}
+    Matches: 6. Player 2?
+    \textit{6}
+    The input must be between 1 and 5.
+    \textit{5}
+    Matches: 1. Player 1?
+    \textit{1}
+    Player 1 wins!
+        \end{alltt}
+\end{enumerate}
+
+\subsection{Evaluation}
+\begin{enumerate}
+    \item {[sheet 14]} Identify all redexes in the following \code{Integer}-expressions. Determine for each regex whether it is innermost, outermost, both, or neither.
+        \begin{enumerate}
+            \item \code{1 + (2 * 3)}
+            \item \code{(1 + 2) * (2 + 3)}
+            \item \code{fst (1 + 2, 2 + 3)}
+            \item \code{fst (snd (1, 2 + 3), 4)}
+            \item \code{(\textbackslash x -> 1 + x) (2 * 3)}
+        \end{enumerate}
+
+    \item {[sheet 14]} Evaluate the following expressions according to Haskell's evaluation strategy:
+        \begin{verbatim}
+    map (*2) (1 : threes) !! 1
+    (\f -> \x -> x + f 2) (\y -> y * 2) (3 + 1)
+    head (filter (/=3) threes)
+        \end{verbatim}
+        Which evaluations do not terminate? \par
+        The functions used in the expressions above are defined as follows:
+        \begin{verbatim}
+    map _ [] = []
+    map f (x:xs) = f x : map f xs
+
+    filter _ [] = []
+    filter f (x:xs) | f x = x : filter f xs
+                    | otherwise = filter f xs
+
+    (x:xs) !! n | n == 0 = x
+                | otherwise = xs !! (n - 1)
+
+    threes = 3 : threes
+        \end{verbatim}
+\end{enumerate}
+
+\subsection{Infinite data structures}
+\begin{enumerate}
+    \item \textit{(ranger)} Define a function
+        \begin{verbatim}
+    enumFromThen' :: Integer -> Integer -> [Integer]
+        \end{verbatim}
+        using list comprehensions such that \verb|enumFromThen' a b = [a,b..]|. \par
+        Use \code{enumFromThen'} to define a function
+        \begin{verbatim}
+    enumFromThenTo' :: Integer -> Integer -> Integer -> [Integer]
+        \end{verbatim}
+        such that \verb|enumFromThenTo' a b c = [a,b..c]|.
+
+    \item Using the Prelude function \code{zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]} that given a list $[x_1, \dots, x_n]$, a list $[y_1, \dots y_n]$ and a function $f$ returns the list $[f(x_1, y_1), \dots, f(x_n, y_n)]$ define the function \code{fib :: [Integer]} that computes the (infinite) list of Fibonacci numbers. \par
+    Explain which components of the implementation require lazy evaluation such that the function can be (partially) evaluated. Which functions can we use to evaluate the function partially?
+
+    \item {[sheet 14]} Consider an alternative implementation for \code{fib}.
+        \begin{verbatim}
+    fib' :: [Integer]
+    fib' = map f [0..]
+      where
+        f 0 = 0
+        f 1 = 1
+        f n = fib' !! (n - 1) + fib' !! (n - 2)
+        \end{verbatim}
+        Compare the alternative implementation with the original one. Which function performs better and how could the slower function be improved? \par
+        Since normal Fibonacci numbers are boring, we want to generalise them to $n$-onacci numbers. We can construct the $n$-onacci numbers by letting $f_0 = 0, f_1 = 0, \dots, f_{n-2} = 0, f_{n-1} = 1$ and $f_a = f_{a-n} + f_{a-n+1} + \dots + f_{a-1}$. Implement the function \code{nonacci :: Int -> [Integer]} in two ways:
+        \begin{enumerate}
+            \item Come up with a function \code{zipWithN :: ([a] -> b) -> [[a]] -> [b]} and define \code{nonacci} analogously to \code{fib}.
+            \item Use \code{fib'} as a template to define \code{nonacci}.
+        \end{enumerate}
+\end{enumerate}
+
+\section{Homework}
+
+\subsection{I/O}
+\begin{enumerate}
+    \item Derive the functions \code{putStr' :: String -> IO ()} and \code{putStrLn' :: String -> IO ()} from the Prelude function \code{putChar :: Char -> IO ()}.
+
+    \item Derive the function \code{getLine' :: IO String} from the Prelude function \code{getChar :: IO Char}.
 
     \item \cite[p. 461]{thompson} Give a definition of the function
         \begin{verbatim}
@@ -48,11 +135,11 @@
 
     \item \cite[p. 461]{thompson} Define the function
         \begin{verbatim}
-    repeat :: IO Bool -> IO () -> IO ()
+    repeat' :: IO Bool -> IO () -> IO ()
         \end{verbatim}
-        so that \code{repeat test oper} has the effect of repeating \code{oper} until the condition \code{test} is \code{True}.
+        so that \code{repeat' test oper} has the effect of repeating \code{oper} until the condition \code{test} is \code{True}.
 
-    \item \cite[p. 461]{thompson} Define the higher-order function \code{while} in which the condition and the operation work over values of type \code{a}. Its type should be
+    \item \cite[p. 461]{thompson} Define the higher-order function \code{whileG} in which the condition and the operation work over values of type \code{a}. Its type should be
         \begin{verbatim}
     whileG :: (a -> IO Bool) -> (a -> IO a) -> (a -> IO a)
         \end{verbatim}
@@ -73,33 +160,6 @@
         \end{verbatim}
         What will be the result on an empty list?
 
-    \item {[sheet 15]} We consider a game of matches for two players. In the beginning, there are 10 matches on the table. The players take turns in taking matches off the table (at least $1$ and at most $5$). The winner is the player who takes the last match. \par
-        Define an IO action \code{match :: IO ()} that implements the game of matches. Before any player's turn the program should print the number of the player and of the remaining matches. When a player wins the program should print the winner and exit afterwards. The program should ensure that the player only takes a valid number of matches. If not enough matches remain, the player takes all of them. \par
-        You can use the function \code{putStrLn :: String -> IO ()} to print a string to standard output and \code{readLn :: Read a => IO a} to read from standard input.
-        \begin{alltt}
-    Matches: 10. Player 1?
-    \textit{4}
-    Matches: 6. Player 2?
-    \textit{6}
-    The input must be between 1 and 5.
-    \textit{5}
-    Matches: 1. Player 1?
-    \textit{1}
-    Player 1 wins!
-        \end{alltt}
-
-    \item {[endterm 2020]} Define an IO action \code{main :: IO ()} that waits for user input in form of a binary number. The binary number is given as a string $0bx$ where $x$ is a (potentially empty) string consisting of $0$s and $1$s. The string $0b$ represents $0$. The program should output \code{"Invalid input"} if the given number does not adhere to this format. Otherwise, the program should print the number to the standard output after converting it to decimal. For example, the program should output $5$ for the input $0b0101$. The program should continue to listen for the next input in either of the above cases. As an example, consider the following excerpt of the execution of the program.
-        \begin{verbatim}
-    >>> 0b12
-    Invalid input
-    >>> 0b010
-    2
-    >>> 0b111
-    7
-    ...
-        \end{verbatim}
-        You can read from standard input with the function \code{getLine :: IO String} and print a string to the standard output with \code{putStrLn :: String -> IO ()}.
-
     \item {[endterm 2013]} Define a IO action \code{vowelCounter :: IO ()} that reads strings line-wise from standard input and counts the number of lowercase vowels (\code{'a','e','i','o','u'}). The program should not terminate and print the total number of vowels in all inputs after every entered line. \par
         \textit{Example:}
         \begin{verbatim}
@@ -116,19 +176,22 @@ vowels: 12
 >>> aeiou
 vowels: 17
         \end{verbatim}
+
+    \item {[endterm 2020]} Define an IO action \code{main :: IO ()} that waits for user input in form of a binary number. The binary number is given as a string $0bx$ where $x$ is a (potentially empty) string consisting of $0$s and $1$s. The string $0b$ represents $0$. The program should output \code{"Invalid input"} if the given number does not adhere to this format. Otherwise, the program should print the number to the standard output after converting it to decimal. For example, the program should output $5$ for the input $0b0101$. The program should continue to listen for the next input in either of the above cases. As an example, consider the following excerpt of the execution of the program.
+        \begin{verbatim}
+    >>> 0b12
+    Invalid input
+    >>> 0b010
+    2
+    >>> 0b111
+    7
+    ...
+        \end{verbatim}
+        You can read from standard input with the function \code{getLine :: IO String} and print a string to the standard output with \code{putStrLn :: String -> IO ()}.
 \end{enumerate}
 
 \subsection{Evaluation}
 \begin{enumerate}
-    \item {[sheet 14]} Identify all redexes in the following \code{Integer}-expressions. Determine for each regex whether it is innermost, outermost, both, or neither.
-        \begin{enumerate}
-            \item \code{1 + (2 * 3)}
-            \item \code{(1 + 2) * (2 + 3)}
-            \item \code{fst (1 + 2, 2 + 3)}
-            \item \code{fst (snd (1, 2 + 3), 4)}
-            \item \code{(\textbackslash x -> 1 + x) (2 * 3)}
-        \end{enumerate}
-
     \item {[retake 2015]} Using Haskell's evaluation strategy as introduced in the lecture, evaluate the following expressions step-by-step as far as possible. Indicate infinite reductions by "..." as soon as nontermination becomes apparent.
         \begin{enumerate}
             \item \code{head (map (\textbackslash x -> x * x) [1,2,3])}
@@ -155,28 +218,6 @@ vowels: 17
       | otherwise = elem x ys
         \end{verbatim}
         \end{multicols}
-
-    \item {[sheet 14]} Evaluate the following expressions according to Haskell's evaluation strategy:
-        \begin{verbatim}
-    map (*2) (1 : threes) !! 1
-    (\f -> \x -> x + f 2) (\y -> y * 2) (3 + 1)
-    head (filter (/=3) threes)
-        \end{verbatim}
-        Which evaluations do not terminate? \par
-        The functions used in the expressions above are defined as follows:
-        \begin{verbatim}
-    map _ [] = []
-    map f (x:xs) = f x : map f xs
-
-    filter _ [] = []
-    filter f (x:xs) | f x = x : filter f xs
-                    | otherwise = filter f xs
-
-    (x:xs) !! n | n == 0 = x
-                | otherwise = xs !! (n - 1)
-
-    threes = 3 : threes
-        \end{verbatim}
 
     \item {[endterm 2020]} Given the following definitions:
         \begin{multicols}{2}
@@ -215,16 +256,13 @@ vowels: 17
 
 \subsection{Infinite data structures}
 \begin{enumerate}
-    \item \textit{(ranger)} Define a function
+    \item {[endterm 2015]} Given
         \begin{verbatim}
-    enumFromThen' :: Integer -> Integer -> [Integer]
+    f :: [a] -> [Bool] -> Bool
+    f _ (y:ys) = y
+    f [] _ = True
         \end{verbatim}
-        using list comprehensions such that \verb|enumFromThen' a b = [a,b..]|. \par
-        Use \code{enumFromThen'} to define a function
-        \begin{verbatim}
-    enumFromThenTo' :: Integer -> Integer -> Integer -> [Integer]
-        \end{verbatim}
-        such that \verb|enumFromThenTo' a b c = [a,b..c]|.
+        Find defined expressions $a$ and $b$ such that the evaluation of the expression \code{f $a$ $b$} fails.
 
     \item \cite[p. 443]{thompson} The \textit{Sieve of Eratosthenes} is an ancient algorithm for generating prime numbers. It works by cancelling out all the multiples of numbers, once they are established as prime. The primes are the only elements which remain in the list.
     \begin{enumerate}
@@ -234,7 +272,7 @@ vowels: 17
 
     \item \cite[p. 447]{thompson} Give a definition of the function
         \begin{verbatim}
-    factors :: Int -> [Int]
+    factors :: Integer -> [Integer]
         \end{verbatim}
         which returns a list containing the factors of a positive integer. For instance,
         \begin{verbatim}
@@ -244,36 +282,7 @@ vowels: 17
         \begin{verbatim}
     hamming = [1,2,3,4,5,6,8,9,10,12,15,...
         \end{verbatim}
-
-    \item {[endterm 2015]} Given
-        \begin{verbatim}
-    f :: [a] -> [Bool] -> Bool
-    f _ (y:ys) = y
-    f [] _ = True
-        \end{verbatim}
-        Find defined expressions $a$ and $b$ such that the evaluation of the expression \code{f $a$ $b$} fails.
-
-    \item Using the Prelude function \code{zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]} that given a list $[x_1, \dots, x_n]$, a list $[y_1, \dots y_n]$ and a function $f$ returns the list $[f(x_1, y_1), \dots, f(x_n, y_n)]$ define the function \code{fib :: [Integer]} that computes the (infinite) list of Fibonacci numbers. \par
-    Explain which components of the implementation require lazy evaluation such that the function can be (partially) evaluated. Which functions can we use to evaluate the function partially?
-
-    \item {[sheet 14]} Consider an alternative implementation for \code{fib}.
-        \begin{verbatim}
-    fib' :: [Integer]
-    fib' = map f [0..]
-      where
-        f 0 = 0
-        f 1 = 1
-        f n = fib' !! (n - 1) + fib' !! (n - 2)
-        \end{verbatim}
-        Compare the alternative implementation with the original one. Which function performs better and how could the slower function be improved? \par
-        Since normal Fibonacci numbers are boring, we want to generalise them to $n$-onacci numbers. We can construct the $n$-onacci numbers by letting $f_0 = 0, f_1 = 0, \dots, f_{n-2} = 0, f_{n-1} = 1$ and $f_a = f_{a-n} + f_{a-n+1} + \dots + f_{a-1}$. Implement the function \code{nonacci :: Int -> [Integer]} in two ways:
-        \begin{enumerate}
-            \item Come up with a function \code{zipWithN ([a] -> b) -> [[a]] -> [b]} and define \code{nonacci} analogously to \code{fib}.
-            \item Use \code{fib'} as a template to define \code{nonacci}.
-        \end{enumerate}
 \end{enumerate}
-
-\section{Homework}
 
 \printbibliography
 

@@ -27,9 +27,11 @@ engaging as possible.
 * [problem set 1](https://jonhue.github.io/teaching-fpv-rev/problem_set_1.pdf), [template](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/templates/problem_set_1.hs)
 * [problem set 2](https://jonhue.github.io/teaching-fpv-rev/problem_set_2.pdf), [template](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/templates/problem_set_2.hs)
 * [problem set 3](https://jonhue.github.io/teaching-fpv-rev/problem_set_3.pdf), [template](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/templates/problem_set_3.hs)
+* [problem set 4](https://jonhue.github.io/teaching-fpv-rev/problem_set_4.pdf), [template](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/templates/problem_set_4.hs)
 
 ### Solutions
 
 * [problem set 1](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/solutions/problem_set_1.hs)
 * [problem set 2](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/solutions/problem_set_2.hs), [Vector.hs](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/solutions/Vector.hs), [AssocList.hs](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/solutions/AssocList.hs), [AssocListTests.hs](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/solutions/AssocListTests.hs)
 * [problem set 3](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/solutions/problem_set_3.hs)
+* [problem set 4](https://raw.githubusercontent.com/jonhue/teaching-fpv-rev/sources/solutions/problem_set_4.hs)
