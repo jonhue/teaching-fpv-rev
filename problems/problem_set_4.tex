@@ -192,6 +192,14 @@ vowels: 17
 
 \subsection{Evaluation}
 \begin{enumerate}
+    \item {[endterm 2015]} Given
+        \begin{verbatim}
+    f :: [a] -> [Bool] -> Bool
+    f _ (y:ys) = y
+    f [] _ = True
+        \end{verbatim}
+        Find defined expressions $a$ and $b$ such that the evaluation of the expression \code{f $a$ $b$} fails.
+
     \item {[retake 2015]} Using Haskell's evaluation strategy as introduced in the lecture, evaluate the following expressions step-by-step as far as possible. Indicate infinite reductions by "..." as soon as nontermination becomes apparent.
         \begin{enumerate}
             \item \code{head (map (\textbackslash x -> x * x) [1,2,3])}
@@ -256,14 +264,6 @@ vowels: 17
 
 \subsection{Infinite data structures}
 \begin{enumerate}
-    \item {[endterm 2015]} Given
-        \begin{verbatim}
-    f :: [a] -> [Bool] -> Bool
-    f _ (y:ys) = y
-    f [] _ = True
-        \end{verbatim}
-        Find defined expressions $a$ and $b$ such that the evaluation of the expression \code{f $a$ $b$} fails.
-
     \item \cite[p. 443]{thompson} The \textit{Sieve of Eratosthenes} is an ancient algorithm for generating prime numbers. It works by cancelling out all the multiples of numbers, once they are established as prime. The primes are the only elements which remain in the list.
     \begin{enumerate}
         \item Define a function \code{sieve :: [Integer] -> [Integer]} that establishes the first element $x$ of the provided list as prime and cancels out all multiples of $x$. Given any list of integers $xs$ as first argument, \code{sieve} should return the list of primes in $xs$.

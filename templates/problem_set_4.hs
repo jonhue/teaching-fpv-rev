@@ -111,13 +111,18 @@ main :: IO ()
 main = undefined
 
 {-2.2.1
+  a =
+  b =
+-}
+
+{-2.2.2
   (a) head (map (\x -> x * x) [1,2,3])
       = ...
 
   (b)
 -}
 
-{-2.2.2
+{-2.2.3
   (a) (\f g -> g . map f) (+1) head odds
       = ...
 
@@ -125,20 +130,15 @@ main = undefined
       = ...
 -}
 
-{-2.3.1
-  a =
-  b =
--}
-
-{-2.3.2a-}
+{-2.3.1a-}
 sieve :: [Integer] -> [Integer]
 sieve = undefined
 
-{-2.3.2b-}
+{-2.3.1b-}
 primes :: [Integer]
 primes = undefined
 
-{-2.3.3-}
+{-2.3.2-}
 factors :: Integer -> [Integer]
 factors = undefined
 

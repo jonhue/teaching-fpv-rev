@@ -272,6 +272,13 @@ main = do
   main
 
 {-2.2.1
+  a = [True]
+  b = []
+
+  In general: if `a` is not empty, and `b` is empty.
+-}
+
+{-2.2.2
   (a) head (map (\x -> x * x) [1,2,3])
       = head ((\x -> x * x) 1 : map (\x -> (x * x) [2, 3]))
       = (\x -> x * x) 1
@@ -286,7 +293,7 @@ main = do
       = ...
 -}
 
-{-2.2.2
+{-2.2.3
   (a) (\f g -> g . map f) (+1) head odds
       = (\g -> g . map (+1)) head odds
       = (head . map (+1)) odds
@@ -303,22 +310,15 @@ main = do
       = ...
 -}
 
-{-2.3.1
-  a = [True]
-  b = []
-
-  In general: if `a` is not empty, and `b` is empty.
--}
-
-{-2.3.2a-}
+{-2.3.1a-}
 sieve :: [Integer] -> [Integer]
 sieve (x:xs) = [y | y <- xs, y `mod` x > 0]
 
-{-2.3.2b-}
+{-2.3.1b-}
 primes :: [Integer]
 primes = sieve [2..]
 
-{-2.3.3-}
+{-2.3.2-}
 factors :: Integer -> [Integer]
 factors n = [m | m <- [1..n], n `mod` m == 0]
 
