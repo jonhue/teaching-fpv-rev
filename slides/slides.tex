@@ -1383,7 +1383,7 @@ Each list \code{[$x_1$, ..., $x_n$]} represents the set $\{x_1, \dots, x_n\}$.
 In mathematical terms:
 \begin{alltt}
 \(\alpha\) :: [a] -> \(\{a\}\)
-\(\alpha\) [\(x_1\), ..., \(x_n\)]  = \(\{x_1, \dots, x_n\}\)
+\(\alpha\) [\(x\sb{1}\), ..., \(x\sb{n}\)]  = \(\{x\sb{1}, \dots, x\sb{n}\}\)
 \end{alltt}
 
 $\alpha$ is an \textcolor{blue}{abstraction function}.
@@ -1408,11 +1408,13 @@ invar []     = True\pause
 invar (x:xs) = not (elem x xs) && invar xs
 \end{alltt}
 
-Simulation requirements: \par\pause
-\textcolor{blue}{\code{$\alpha$ empty = $\{\}$}} \par\pause
-\textcolor{blue}{\code{invar xs $\implies$ $\alpha$ (insert x xs) = $\{$x$\}$ $\cup$ $\alpha$ xs}} \par\pause
-\textcolor{blue}{\code{invar xs $\implies$ isin x xs = x $\in$ $\alpha$ xs}} \par\pause
-\textcolor{blue}{\code{invar xs $\implies$ size xs = $\lvert \alpha$ xs$\rvert$}}
+Simulation requirements:\pause
+\begin{alltt}
+                 \textcolor{blue}{\(\alpha\) empty = \(\emptyset\)}\pause
+\textcolor{blue}{\(\alpha\) invar xs \(\implies\) \(\alpha\) (insert x xs) = \(\{\)x\(\}\) \(\cup\) \(\alpha\) xs}\pause
+\textcolor{blue}{\(\alpha\) invar xs \(\implies\) isin x xs = x \(\in\) \(\alpha\) xs}\pause
+\textcolor{blue}{\(\alpha\) invar xs \(\implies\) size xs = \(\lvert\)\(\alpha\) xs\(\rvert\)}
+\end{alltt}
 
 \pause
 
@@ -1667,27 +1669,23 @@ A reducible expression is also called \textcolor{blue}{redex}.
 
 \begin{frame}{Reduction strategies}
 
-\begin{block}{Innermost}
-Reduces innermost redex first. \par\pause
-$\implies$ arguments are evaluated before they are substituted into the function body. \par\pause
-$\implies$ corresponds to \textcolor{blue}{call by value}
-\end{block}
-
-\pause
-
-\begin{block}{Outermost}
-Reduces outermost redex first. \par\pause
-$\implies$ unevaluated arguments are substituted into the function body. \par\pause
-$\implies$ corresponds to \textcolor{blue}{call by name}
-\end{block}
-
-\pause
-
-\begin{block}{Lazy}
-Combines an outermost reduction strategy with the \textcolor{blue}{sharing} of expressions. \par\pause
-$\implies$ unevaluated arguments are substituted into the function body, but are only evaluated once for all copies of the same expression. \par\pause
-$\implies$ \textit{\textcolor{blue}{call by need}}
-\end{block}
+\begin{itemize}
+    \item \textcolor{blue}{innermost} reduces the innermost redex first\pause
+        \begin{itemize}
+            \item arguments are evaluated before they are substituted into the function body\pause
+            \item corresponds to \textcolor{blue}{call by value}
+        \end{itemize}\pause
+    \item \textcolor{blue}{outermost} reduces the outermost redex first\pause
+        \begin{itemize}
+            \item unevaluated arguments are substituted into the function body\pause
+            \item corresponds to \textcolor{blue}{call by name}
+        \end{itemize}\pause
+    \item \textcolor{blue}{lazy} combines an outermost reduction strategy with the \textcolor{blue}{sharing} of expressions.\pause
+        \begin{itemize}
+            \item unevaluated arguments are substituted into the function body, but are only evaluated once for all copies of the same expression\pause
+            \item \textit{\textcolor{blue}{call by need}}
+        \end{itemize}
+\end{itemize}
 
 \end{frame}
 
@@ -1705,8 +1703,8 @@ $\implies$ \textit{\textcolor{blue}{call by need}}
 \begin{frame}{Principles of lazy evaluation}
 
 \begin{itemize}
-    \item Arguments of functions are evaluated only if needed to continue the evaluation of the function.
-    \item Arguments are not necessarily evaluated fully, but only far enough to evaluate the function.
+    \item Arguments of functions are evaluated only if needed to continue the evaluation of the function.\pause
+    \item Arguments are not necessarily evaluated fully, but only far enough to evaluate the function.\pause
     \item Each argument is evaluated at most once. (sharing!)
 \end{itemize}
 
