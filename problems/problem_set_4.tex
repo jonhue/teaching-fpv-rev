@@ -29,7 +29,7 @@
 \begin{enumerate}
     \item Use the Prelude function \code{getLine} and the function \code{readMaybe} from \code{Text.Read} to define a function \code{getInt :: IO (Maybe Int)} that safely reads an integer from standard input.
 
-    \item {[sheet 11]} In this exercise you will implement the following game: The program selects a random number in the range \code{[0..100]} and asks the user to guess the number. If the user's guess is incorrect, the program tells them whether the actual number is larger or smaller amd waits for another guess. If the user guesses correctly, the program prints the number of guesses made. \par
+    \item {[sheet 11]} In this exercise you will implement the following game: The program selects a random number in the range \code{[0..100]} and asks the user to guess the number. If the user's guess is incorrect, the program tells them whether the actual number is larger or smaller and waits for another guess. If the user guesses correctly, the program prints the number of guesses made. \par
         \textit{Hints:}
         \begin{itemize}
             \item Use \code{getInt} from the previous exercise to read numbers from the user.
@@ -54,7 +54,7 @@
 
 \subsection{Evaluation}
 \begin{enumerate}
-    \item {[sheet 14]} Identify all redexes in the following \code{Integer}-expressions. Determine for each regex whether it is innermost, outermost, both, or neither.
+    \item {[sheet 14]} Identify all redexes in the following \code{Integer}-expressions. Determine for each redex whether it is innermost, outermost, both, or neither.
         \begin{enumerate}
             \item \code{1 + (2 * 3)}
             \item \code{(1 + 2) * (2 + 3)}

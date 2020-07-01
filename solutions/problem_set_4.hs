@@ -115,12 +115,7 @@ enumFromThen' a b =
   [a + d*i | i <- nats]
 
 enumFromThenTo' :: Integer -> Integer -> Integer -> [Integer]
-enumFromThenTo' a b c = aux $ enumFromThen' a b
-  where
-    aux :: [Integer] -> [Integer]
-    aux (x:xs)
-      | x <= c    = x : aux xs
-      | otherwise = []
+enumFromThenTo' a b c = takeWhile (<c) $ enumFromThen' a b
 
 {-1.3.2-}
 fib :: [Integer]
