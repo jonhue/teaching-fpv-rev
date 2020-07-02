@@ -307,7 +307,7 @@ main = do
 
 {-2.3.1a-}
 sieve :: [Integer] -> [Integer]
-sieve (x:xs) = [y | y <- xs, y `mod` x > 0]
+sieve (x:xs) = x : sieve [y | y <- xs, y `mod` x > 0]
 
 {-2.3.1b-}
 primes :: [Integer]
