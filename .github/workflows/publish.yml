@@ -17,7 +17,7 @@ jobs:
         cp ./slides/slides.tex ./slides/handout.tex
         sed -i "1s/.*/\\\\documentclass\[handout\]\{beamer\}/" ./slides/handout.tex
     - name: Compile LaTeX sources
-      uses: xu-cheng/latex-action@v2
+      uses: xu-cheng/latex-action@2.1.0
       with:
         pre_compile: tlmgr update --self && tlmgr update --all
         root_file: |
