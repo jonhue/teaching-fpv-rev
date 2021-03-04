@@ -14,18 +14,50 @@
   \setbeamertemplate{caption}[numbered]
   \setbeamertemplate{footline}[frame number]
   \setbeamertemplate{itemize items}[circle]
+  \setbeamertemplate{theorems}[numbered]
+  \setbeamercolor*{structure}{bg=white,fg=blue}
+  \setbeamerfont{block title}{size=\normalsize}
 }
+
+% \newtheorem{proposition}[theorem]{Proposition}
+% \theoremstyle{definition}
+% \newtheorem{algorithm}[theorem]{Algorithm}
+% \newtheorem{idea}[theorem]{Idea}
 
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{aligned-overset}
+\usepackage{alltt}
+\usepackage{amsmath}
+\usepackage{csquotes}
+% \usepackage{multicol}
+% \usepackage{stmaryrd}
 \usepackage{tabularx}
 
-\def\code#1{\texttt{#1}}
+% \renewcommand\tabularxcolumn[1]{m{#1}}
+% \newcolumntype{R}{>{\raggedleft\arraybackslash}X}=
+
+\def\code#1{\texttt{\frenchspacing#1}}
+\def\padding{\vspace{0.5cm}}
+\def\spadding{\vspace{0.25cm}}
+\def\b{\b}
+\def\r{\r}
+\def\g#1{{\usebeamercolor[fg]{block title example}{#1}}}
+
+% fix for \pause in align
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+  \save@measuring@true
+  \def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+  \def\beamer@sortzeroread##1<##2>{}%
+  \def\beamer@finalnospec{}%
+}
+\makeatother
 
 \title[FPV revision course]{Functional Programming and Verification \\ revision course}
 \author{Jonas Hübotter}
-\date{July 17, 2020}
 
 \begin{document}
 
@@ -138,7 +170,7 @@ Important for you:
 \pause
 
 Slides, problems, and solutions can be found on GitHub:
-\url{https://jonhue.github.io/teaching-fpv-rev}
+\url{https://github.com/jonhue/teaching-fpv-rev}
 
 \end{frame}
 
