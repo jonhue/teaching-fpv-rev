@@ -14,14 +14,47 @@
   \setbeamertemplate{caption}[numbered]
   \setbeamertemplate{footline}[frame number]
   \setbeamertemplate{itemize items}[circle]
+  \setbeamertemplate{theorems}[numbered]
+  \setbeamercolor*{structure}{bg=white,fg=blue}
+  \setbeamerfont{block title}{size=\normalsize}
 }
 
-\usepackage[english]{babel}
+% \newtheorem{proposition}[theorem]{Proposition}
+% \theoremstyle{definition}
+% \newtheorem{algorithm}[theorem]{Algorithm}
+% \newtheorem{idea}[theorem]{Idea}
+
+\usepackage[german]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{aligned-overset}
 \usepackage{alltt}
+\usepackage{amsmath}
+\usepackage{csquotes}
+% \usepackage{multicol}
+% \usepackage{stmaryrd}
+\usepackage{tabularx}
+
+% \renewcommand\tabularxcolumn[1]{m{#1}}
+% \newcolumntype{R}{>{\raggedleft\arraybackslash}X}=
 
 \def\code#1{\texttt{\frenchspacing#1}}
+\def\padding{\vspace{0.5cm}}
+\def\spadding{\vspace{0.25cm}}
+\def\b{\b}
+\def\r{\r}
+\def\g#1{{\usebeamercolor[fg]{block title example}{#1}}}
+
+% fix for \pause in align
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+  \save@measuring@true
+  \def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+  \def\beamer@sortzeroread##1<##2>{}%
+  \def\beamer@finalnospec{}%
+}
+\makeatother
 
 \title[FPV revision course]{Functional Programming and Verification \\ revision course}
 \author{Jonas Hübotter}
@@ -101,7 +134,7 @@ b = 1 : 2 : 3 : []   :: [Int]
 
 \pause
 
-Cons \code{(:)} and \code{[]} are \textcolor{blue}{constructors} of lists, that is a function that \textcolor{blue}{uniquely constructs} a value of the list type.
+Cons \code{(:)} and \code{[]} are \b{constructors} of lists, that is a function that \b{uniquely constructs} a value of the list type.
 
 \pause
 
@@ -239,7 +272,7 @@ factorial n = aux n 1
 
 \pause
 
-The resulting function is \textcolor{blue}{tail recursive}, that is the recursive call is located at the very end of its body. \par
+The resulting function is \b{tail recursive}, that is the recursive call is located at the very end of its body. \par
 Therefore, no computation is done after the recursive function call returns.
 
 \pause
@@ -288,9 +321,9 @@ null (_ : _) = False
 What is the difference between \code{True} and \code{Bool}?
 
 \begin{itemize}
-    \item \code{True} is a \textcolor{blue}{constructor}, \code{Bool} is a \textcolor{blue}{type}.
-    \item \code{True} can be used \textcolor{red}{in expressions} to build values of a type.
-    \item \code{Bool} can be used \textcolor{red}{in type signatures} to hint at the type of bindings.
+    \item \code{True} is a \b{constructor}, \code{Bool} is a \b{type}.
+    \item \code{True} can be used \r{in expressions} to build values of a type.
+    \item \code{Bool} can be used \r{in type signatures} to hint at the type of bindings.
 \end{itemize}
 
 \pause
@@ -298,11 +331,11 @@ What is the difference between \code{True} and \code{Bool}?
 \vspace{1cm}
 \begin{exampleblock}{Constructor?}
 \begin{itemize}
-    \item \makebox[2cm][l]{\code{False}}\pause \textcolor{green}{yes}
-    \item \makebox[2cm][l]{\code{(:)}}\pause \textcolor{green}{yes}
-    \item \makebox[2cm][l]{\code{Maybe}}\pause \textcolor{red}{no}
-    \item \makebox[2cm][l]{\code{Just}}\pause \textcolor{green}{yes}
-    \item \makebox[2cm][l]{\code{Nothing}}\pause \textcolor{green}{yes}
+    \item \makebox[2cm][l]{\code{False}}\pause \g{yes}
+    \item \makebox[2cm][l]{\code{(:)}}\pause \g{yes}
+    \item \makebox[2cm][l]{\code{Maybe}}\pause \r{no}
+    \item \makebox[2cm][l]{\code{Just}}\pause \g{yes}
+    \item \makebox[2cm][l]{\code{Nothing}}\pause \g{yes}
 \end{itemize}
 \end{exampleblock}
 
@@ -333,8 +366,8 @@ where $expr$ is an expression and each $E_i$ is a generator or a test.
 \pause
 
 \begin{itemize}
-    \item a \textcolor{blue}{generator} is of the form \code{$pattern$ <- $list expression$}\pause
-    \item a \textcolor{blue}{test} is a Boolean expression
+    \item a \b{generator} is of the form \code{$pattern$ <- $list expression$}\pause
+    \item a \b{test} is a Boolean expression
 \end{itemize}
 
 \end{frame}
@@ -435,15 +468,15 @@ Run \code{quickCheck prop\_max2} from GHCI to check the property.
 
 \vspace{1cm}
 \code{length :: [a] -> Int} is defined for all types \code{a} \\
-where \code{a} is a \textcolor{blue}{type variable}.
+where \code{a} is a \b{type variable}.
 
 \end{frame}
 
 \begin{frame}{Subtype vs parametric polymorphism}
 
 \begin{itemize}
-    \item \textcolor{blue}{parametric polymorphism} \\ types may contain universally quantified type variables that are then replaced by actual types.
-    \item \textcolor{blue}{subtype polymorphism} \\ any object of type \code{T'} where \code{T'} is a subtype of \code{T} can be used in place of objects of type \code{T}.
+    \item \b{parametric polymorphism} \\ types may contain universally quantified type variables that are then replaced by actual types.
+    \item \b{subtype polymorphism} \\ any object of type \code{T'} where \code{T'} is a subtype of \code{T} can be used in place of objects of type \code{T}.
 \end{itemize}
 
 \pause
@@ -455,13 +488,13 @@ Haskell uses parametric polymorphism.
 
 \begin{frame}[fragile]{Type constraints}
 
-Type variables can be constrained by \textcolor{blue}{type constraints}.
+Type variables can be constrained by \b{type constraints}.
 
 \begin{alltt}
-(+) :: \textcolor{red}{Num a =>} a -> a -> a
+(+) :: \r{Num a =>} a -> a -> a
 \end{alltt}
 
-Function \code{(+)} has type \code{a -> a -> a} for any type \code{a} of the \textcolor{blue}{type class} \code{Num}.
+Function \code{(+)} has type \code{a -> a -> a} for any type \code{a} of the \b{type class} \code{Num}.
 
 \pause
 
@@ -492,7 +525,7 @@ f x = [length u + v | (u,v) <- x ]\pause
 f :: [([a],Int)] -> [Int]
 
 f x y = [u ++ x | u <- y, length u < x ]\pause
-\textcolor{red}{invalid}
+\r{invalid}
 
 f x y = [[(u,v) | u <- w, u, v <- x] | w <- y]\pause
 f :: [a] -> [[Bool]] -> [[(Bool, a)]]
@@ -504,7 +537,7 @@ f :: [a] -> [[Bool]] -> [[(Bool, a)]]
 
 \begin{frame}{Currying}
 
-A function is \textcolor{blue}{curried} when it takes its arguments one at a time, each time returning a new function.
+A function is \b{curried} when it takes its arguments one at a time, each time returning a new function.
 
 \pause
 
@@ -529,7 +562,7 @@ A function is \textcolor{blue}{curried} when it takes its arguments one at a tim
 
 \begin{frame}[fragile]{Anonymous functions (lambdas)}
 
-An \textcolor{blue}{anonymous function} (or \textcolor{blue}{lambda abstraction}) is a function without a name.
+An \b{anonymous function} (or \b{lambda abstraction}) is a function without a name.
 
 \pause
 
@@ -552,7 +585,7 @@ What is the type of \code{\textbackslash n -> iter n succ} where \\
 \pause
 
 \vspace{0.25cm}
-\textcolor{red}{\code{Integer -> (Integer -> Integer)}}
+\r{\code{Integer -> (Integer -> Integer)}}
 
 \end{frame}
 
@@ -562,28 +595,28 @@ Every function of $n$ parameters can be applied to less than $n$ arguments.
 
 \pause
 
-A function is \textcolor{blue}{partially applied} when some arguments have already been applied to a function (some parameters are already \textit{fixed}), but some parameters are missing.
+A function is \b{partially applied} when some arguments have already been applied to a function (some parameters are already \textit{fixed}), but some parameters are missing.
 
 \pause
 
 \vspace{1cm}
 \begin{exampleblock}{Partially applied?}
 \begin{itemize}
-    \item \makebox[5cm][l]{\code{elem 5}}\pause \textcolor{green}{yes}
-    \item \makebox[5cm][l]{\code{(`elem` [1..5]) 0}}\pause \textcolor{red}{no}
+    \item \makebox[5cm][l]{\code{elem 5}}\pause \r{yes}
+    \item \makebox[5cm][l]{\code{(`elem` [1..5]) 0}}\pause \r{no}
 \end{itemize}
 \end{exampleblock}
 
 \pause
 
 \vspace{0.25cm}
-Expressions of the form \code{($infixop$ $expr$)} or \code{($expr$ $infixop$)} are called \textcolor{blue}{sections}.
+Expressions of the form \code{($infixop$ $expr$)} or \code{($expr$ $infixop$)} are called \b{sections}.
 
 \end{frame}
 
 \begin{frame}[fragile]{Higher-order functions}
 
-A \textcolor{blue}{higher-order function} is a function that takes another function as an argument or returns a function.
+A \b{higher-order function} is a function that takes another function as an argument or returns a function.
 
 \pause
 
@@ -781,10 +814,10 @@ data Tree a = Empty | Node a (Tree a) (Tree a)
 
 Terminology:\pause
 \begin{itemize}
-    \item a \textcolor{blue}{$n$-ary constructor} is a function that unambiguously constructs values of a type encapsulating $n$ arguments.\pause
-    \item nullary constructors are also called \textcolor{blue}{constants}.\pause
+    \item a \b{$n$-ary constructor} is a function that unambiguously constructs values of a type encapsulating $n$ arguments.\pause
+    \item nullary constructors are also called \b{constants}.\pause
     \item a type that expects a \textit{type argument} is called a \textit{parametrized type}.\pause
-    \item \textcolor{blue}{data constructors} are used at the \textit{term level}, \textcolor{blue}{type constructors} are used at the \textit{type level}.
+    \item \b{data constructors} are used at the \textit{term level}, \b{type constructors} are used at the \textit{type level}.
 \end{itemize}
 
 \end{frame}
@@ -796,9 +829,9 @@ A datatype can be thought of as the set of possible values of that type.
 \pause
 
 \begin{itemize}
-    \item the \textcolor{blue}{cardinality} of a datatype is the number of all its possible values.\pause
-    \item a \textcolor{blue}{sum type} is a type with more than one constructor (similar to a logical $\lor$).\pause
-    \item a \textcolor{blue}{product type} is a type whose data constructor takes more than one argument (similar to a logical $\land$).
+    \item the \b{cardinality} of a datatype is the number of all its possible values.\pause
+    \item a \b{sum type} is a type with more than one constructor (similar to a logical $\lor$).\pause
+    \item a \b{product type} is a type whose data constructor takes more than one argument (similar to a logical $\land$).
 \end{itemize}
 
 \end{frame}
@@ -852,21 +885,21 @@ exports only \code{T, f, ...}
 
 \code{module M (T) where} \par
 \code{data T = ...} \par
-\textcolor{blue}{exports only \code{T} but not its constructors}\pause
+\b{exports only \code{T} but not its constructors}\pause
 
 \vspace{0.25cm}
 \code{module M (T(C,D,...)) where} \par
 \code{data T = ...} \par
-\textcolor{blue}{exports \code{T} and its constructors \code{C, D, ...}}\pause
+\b{exports \code{T} and its constructors \code{C, D, ...}}\pause
 
 \vspace{0.25cm}
 \code{module M (T(..)) where} \par
 \code{data T = ...} \par
-\textcolor{blue}{exports \code{T} and all its constructors}\pause
+\b{exports \code{T} and all its constructors}\pause
 
 \vspace{0.25cm}
 Not allowed (why?): \par
-\textcolor{red}{\code{module M (T,C,D) where}}
+\r{\code{module M (T,C,D) where}}
 
 \pause
 
@@ -892,7 +925,7 @@ insert :: Eq a => a -> Set a -> Set a
 isin :: Eq a => a -> Set a -> Bool
 size :: Set a -> Int\pause
 -- Implementation
-\textcolor{blue}{newtype Set a = Set [a]}\pause
+\b{newtype Set a = Set [a]}\pause
 
 empty = Set []\pause
 insert x (Set xs) = Set (if elem x xs then xs else x:xs)\pause
@@ -1020,7 +1053,7 @@ Step 4 (cont.)\pause
             \item \code{concat :: [[f]] -> [f]}\pause
             \item \code{last :: [[f]] -> [f]}\pause
         \end{itemize}
-    \item no further simplification possible, \\ return \textcolor{blue}{\code{f :: Ord f => [f] -> [[f]] -> f}}
+    \item no further simplification possible, \\ return \b{\code{f :: Ord f => [f] -> [[f]] -> f}}
 \end{enumerate}
 \end{exampleblock}
 
@@ -1037,21 +1070,21 @@ Step 4 (cont.)\pause
 
 \pause
 
-To prove property \textcolor{blue}{\code{P(x)}} for all finite values \code{x} of type $T$, \par
-prove \textcolor{blue}{\code{P(C)}} for each constructor $C$ of $T$.
+To prove property \b{\code{P(x)}} for all finite values \code{x} of type $T$, \par
+prove \b{\code{P(C)}} for each constructor $C$ of $T$.
 
 \pause
 
 \vspace{0.5cm}
 \begin{itemize}
-    \item \textcolor{blue}{base cases} are represented by proofs for non-recursive constructors\pause
-    \item \textcolor{blue}{inductive cases} are represented by proofs for recursive constructors
+    \item \b{base cases} are represented by proofs for non-recursive constructors\pause
+    \item \b{inductive cases} are represented by proofs for recursive constructors
 \end{itemize}
 
 \pause
 
 \vspace{0.5cm}
-\textcolor{red}{Each recursive type parameter has a separate induction hypothesis. (Why?)}
+\r{Each recursive type parameter has a separate induction hypothesis. (Why?)}
 
 \end{frame}
 
@@ -1071,7 +1104,7 @@ id x = x
 
 \pause
 
-Prove \textcolor{blue}{\code{(mirror . mirror) t .=. id t}}.
+Prove \b{\code{(mirror . mirror) t .=. id t}}.
 \end{exampleblock}
 
 \end{frame}
@@ -1080,9 +1113,9 @@ Prove \textcolor{blue}{\code{(mirror . mirror) t .=. id t}}.
 
 \begin{exampleblock}{Example (cont.)}
 \small\begin{alltt}
-\textcolor{blue}{Lemma: (mirror . mirror) t .=. id t}\pause
+\b{Lemma: (mirror . mirror) t .=. id t}\pause
 Proof by induction on Tree t\pause
-\textcolor{blue}{Case Leaf}\pause
+\b{Case Leaf}\pause
   To show: (mirror . mirror) Leaf .=. id Leaf
   Proof
                         (mirror . mirror) Leaf\pause
@@ -1100,11 +1133,11 @@ Proof by induction on Tree t\pause
 
 \begin{exampleblock}{Example (cont.)}
 \small\begin{alltt}
-\textcolor{blue}{Case Node l v r}\pause
+\b{Case Node l v r}\pause
   To show: (mirror . mirror) (Node l v r)
            .=. id (Node l v r)\pause
-  \textcolor{blue}{IH1}:     (mirror . mirror) l .=. id l
-  \textcolor{blue}{IH2}:     (mirror . mirror) r .=. id r
+  \b{IH1}:     (mirror . mirror) l .=. id l
+  \b{IH2}:     (mirror . mirror) r .=. id r
   Proof
                         (mirror . mirror) (Node l v r)\pause
     (by def .)      .=. \underline{mirror (mirror (Node l v r))}\pause
@@ -1127,8 +1160,8 @@ Proof by induction on Tree t\pause
 \small\begin{alltt}
   To show: (mirror . mirror) (Node l v r)
            .=. id (Node l v r)
-  \textcolor{blue}{IH1}:     (mirror . mirror) l .=. id l
-  \textcolor{blue}{IH2}:     (mirror . mirror) r .=. id r
+  \b{IH1}:     (mirror . mirror) l .=. id l
+  \b{IH2}:     (mirror . mirror) r .=. id r
   Proof
     \vdots
     (by def .)
@@ -1154,10 +1187,10 @@ data [a] = [] | a : [a]
 
 \pause
 
-To prove property \textcolor{blue}{\code{P(xs)}} for all finite lists \code{xs} \par
+To prove property \b{\code{P(xs)}} for all finite lists \code{xs} \par
 \begin{itemize}
-    \item \textcolor{blue}{Base case:} Prove \textcolor{blue}{\code{P([])}} \par
-    \item \textcolor{blue}{Inductive case:} Prove \textcolor{blue}{\code{P(xs)} $\implies$ \code{P(x:xs)}}
+    \item \b{Base case:} Prove \b{\code{P([])}} \par
+    \item \b{Inductive case:} Prove \b{\code{P(xs)} $\implies$ \code{P(x:xs)}}
 \end{itemize}
 
 \pause
@@ -1179,8 +1212,8 @@ For conditionals consider separate proofs for the cases \code{True} and \code{Fa
 \begin{exampleblock}{Example}
 \small\begin{alltt}
 To show: if x < y then \(A\) else \(B\) .=. f x y\pause
-\textcolor{blue}{Proof by case analysis on Bool x < y}
-\textcolor{blue}{Case True}
+\b{Proof by case analysis on Bool x < y}
+\b{Case True}
   Assumption: x < y .=. True
   Proof
                         if x < y then \(A\) else \(B\)\pause
@@ -1188,7 +1221,7 @@ To show: if x < y then \(A\) else \(B\) .=. f x y\pause
     (by ifTrue)     .=. \(A\)
     ...
   QED\pause
-\textcolor{blue}{Case False}
+\b{Case False}
   ...
 QED
 \end{alltt}\normalsize
@@ -1201,7 +1234,7 @@ QED
 \begin{frame}{Generalization}
 
 \begin{center}
-    \textcolor{blue}{When using the IH, variables may be replaced by arbitrary expressions, only} \textcolor{red}{the induction variable must stay fixed}.
+    \b{When using the IH, variables may be replaced by arbitrary expressions, only} \r{the induction variable must stay fixed}.
 \end{center}
 
 \pause
@@ -1234,7 +1267,7 @@ We have to prove\pause
 \begin{frame}[fragile]{Extensionality}
 
 \begin{center}
-    \textcolor{blue}{Two functions are equal \\ if for all arguments they yield the same result}.
+    \b{Two functions are equal \\ if for all arguments they yield the same result}.
 \end{center}
 
 \pause
@@ -1243,7 +1276,7 @@ We have to prove\pause
 \begin{exampleblock}{Example}
 \begin{alltt}
 Lemma: f .=. g
-\textcolor{blue}{Proof by extensionality with xs}
+\b{Proof by extensionality with xs}
   To show: f xs .=. g xs
   Proof by induction on List xs
     ...
@@ -1263,19 +1296,19 @@ QED
 
 \pause
 
-To prove property \textcolor{blue}{\code{P($x_1, \dots, x_k$)}} for all $x_1$, \dots, $x_k$, \par
+To prove property \b{\code{P($x_1, \dots, x_k$)}} for all $x_1$, \dots, $x_k$, \par
 for every defining equation
 
 \begin{center}
-\textcolor{blue}{\code{f $p_1, \dots, p_k$ = ... f $e_{11}, \dots, e_{1k}$ ... f $e_{n1}, \dots, e_{nk}$ ...}}
+\b{\code{f $p_1, \dots, p_k$ = ... f $e_{11}, \dots, e_{1k}$ ... f $e_{n1}, \dots, e_{nk}$ ...}}
 \end{center}
 
-prove \textcolor{blue}{\code{P($e_{11}, \dots, e_{1k}$)}, \dots, \code{P($e_{n1}, \dots, e_{nk}$)} $\implies$ \code{P($p_1, \dots, p_k$)}}.
+prove \b{\code{P($e_{11}, \dots, e_{1k}$)}, \dots, \code{P($e_{n1}, \dots, e_{nk}$)} $\implies$ \code{P($p_1, \dots, p_k$)}}.
 
 \pause
 
 \vspace{0.5cm}
-Also referred to as an \textcolor{blue}{induction on the computation} of a function \code{f} or \textcolor{blue}{\code{f}-induction}.
+Also referred to as an \b{induction on the computation} of a function \code{f} or \b{\code{f}-induction}.
 
 \end{frame}
 
@@ -1298,12 +1331,12 @@ splice (x:xs) ys = x : splice ys xs
 \pause
 
 \vspace{0.5cm}
-Prove \textcolor{blue}{\code{length (splice xs ys) .=. length xs + length ys}}.
+Prove \b{\code{length (splice xs ys) .=. length xs + length ys}}.
 
 \pause
 
 \vspace{0.25cm}
-\textcolor{red}{Structural induction does not work (why?)}
+\r{Structural induction does not work (why?)}
 \end{exampleblock}
 
 \end{frame}
@@ -1312,9 +1345,9 @@ Prove \textcolor{blue}{\code{length (splice xs ys) .=. length xs + length ys}}.
 
 \begin{exampleblock}{Example (cont.)}
 \small\begin{alltt}
-\textcolor{blue}{Lemma: length (splice xs ys) .=. length xs + length ys}\pause
+\b{Lemma: length (splice xs ys) .=. length xs + length ys}\pause
 Proof by splice-induction on xs and ys\pause
-\textcolor{blue}{Case 1}\pause
+\b{Case 1}\pause
   To show: length (splice [] ys) .=. length [] + length ys
   Proof
                         length (splice [] ys)\pause
@@ -1333,7 +1366,7 @@ Proof by splice-induction on xs and ys\pause
 
 \begin{exampleblock}{Example (cont.)}
 \small\begin{alltt}
-\textcolor{blue}{Case 2}\pause
+\b{Case 2}\pause
   To show: length (splice (x:xs) ys)
            .=. length (x:xs) + length ys\pause
   IH:      length (splice ys xs)
@@ -1356,8 +1389,8 @@ QED
 \begin{frame}{Structural vs computation induction}
 
 \begin{itemize}
-    \item \textcolor{blue}{structural induction} \\ inductive proof over the structural definition of a datatype.
-    \item \textcolor{blue}{computation induction} \\ inductive proof over the structural definition of a function.
+    \item \b{structural induction} \\ inductive proof over the structural definition of a datatype.
+    \item \b{computation induction} \\ inductive proof over the structural definition of a function.
 \end{itemize}
 
 \end{frame}
@@ -1387,12 +1420,12 @@ In mathematical terms:
 \(\alpha\) [\(x\sb{1}\), ..., \(x\sb{n}\)]  = \(\{x\sb{1}, \dots, x\sb{n}\}\)
 \end{alltt}
 
-$\alpha$ is an \textcolor{blue}{abstraction function}.
+$\alpha$ is an \b{abstraction function}.
 
 \pause
 
 \vspace{1cm}
-Lists simulate sets $\implies$ \textcolor{red}{$\alpha$ must be a homomorphism}.
+Lists simulate sets $\implies$ \r{$\alpha$ must be a homomorphism}.
 
 \end{frame}
 
@@ -1411,10 +1444,10 @@ invar (x:xs) = not (elem x xs) && invar xs
 
 Simulation requirements:\pause
 \begin{alltt}
-                 \textcolor{blue}{\(\alpha\) empty = \(\emptyset\)}\pause
-\textcolor{blue}{\(\alpha\) invar xs \(\implies\) \(\alpha\) (insert x xs) = \(\{\)x\(\}\) \(\cup\) \(\alpha\) xs}\pause
-\textcolor{blue}{\(\alpha\) invar xs \(\implies\) isin x xs = x \(\in\) \(\alpha\) xs}\pause
-\textcolor{blue}{\(\alpha\) invar xs \(\implies\) size xs = \(\lvert\)\(\alpha\) xs\(\rvert\)}
+                 \b{\(\alpha\) empty = \(\emptyset\)}\pause
+\b{\(\alpha\) invar xs \(\implies\) \(\alpha\) (insert x xs) = \(\{\)x\(\}\) \(\cup\) \(\alpha\) xs}\pause
+\b{\(\alpha\) invar xs \(\implies\) isin x xs = x \(\in\) \(\alpha\) xs}\pause
+\b{\(\alpha\) invar xs \(\implies\) size xs = \(\lvert\)\(\alpha\) xs\(\rvert\)}
 \end{alltt}
 
 \pause
@@ -1432,16 +1465,16 @@ Let $C$ and $A$ be two modules that have the same interface: a type $T$ and a se
 
 To prove that $C$ is a correct implementation of $A$ define
 \begin{enumerate}
-    \item an \textcolor{blue}{abstraction function} \code{$\alpha$ :: $C.T$ -> $A.T$}
-    \item and an \textcolor{blue}{invariant} \code{invar :: $C.T$ -> Bool}
+    \item an \b{abstraction function} \code{$\alpha$ :: $C.T$ -> $A.T$}
+    \item and an \b{invariant} \code{invar :: $C.T$ -> Bool}
 \end{enumerate}
 and prove for each $f \in F$:\pause
 \begin{itemize}
     \item \code{invar} is invariant \\
-        \textcolor{blue}{\code{invar $x_1$ $\land \dots \land$ invar $x_n$ $\implies$ invar ($C.f$ $x_1$ $\dots$ $x_n$)}}\pause
+        \b{\code{invar $x_1$ $\land \dots \land$ invar $x_n$ $\implies$ invar ($C.f$ $x_1$ $\dots$ $x_n$)}}\pause
     \item $C.f$ simulates $A.f$ \\
-        \textcolor{blue}{\code{invar $x_1$ $\land \dots \land$ invar $x_n$ $\implies$}} \\
-        \textcolor{blue}{\code{$\alpha$ ($C.f$ $x_1$ $\dots$ $x_n$) = $A.f$ ($\alpha$ $x_1$) $\dots$ ($\alpha$ $x_n$)}}
+        \b{\code{invar $x_1$ $\land \dots \land$ invar $x_n$ $\implies$}} \\
+        \b{\code{$\alpha$ ($C.f$ $x_1$ $\dots$ $x_n$) = $A.f$ ($\alpha$ $x_1$) $\dots$ ($\alpha$ $x_n$)}}
 \end{itemize}
 
 \end{frame}
@@ -1455,11 +1488,11 @@ Up until now we only considered programs that do not have side effects.
 
 \pause
 
-To reason about programs like in mathematics, the programming language must have \textcolor{blue}{referential transparency}. That is, any expression can be replaced by its value without changing the meaning of the program.
+To reason about programs like in mathematics, the programming language must have \b{referential transparency}. That is, any expression can be replaced by its value without changing the meaning of the program.
 
 \pause
 
-Programming languages that have referential transparency are called \textcolor{blue}{pure}.
+Programming languages that have referential transparency are called \b{pure}.
 \end{block}
 
 \end{frame}
@@ -1468,7 +1501,7 @@ Programming languages that have referential transparency are called \textcolor{b
 
 \begin{frame}{I/O in Haskell}
 
-Haskell distinguishes expressions without side effects (\textcolor{blue}{pure expressions}) from expressions with side effects (\textcolor{blue}{actions}) by their type:
+Haskell distinguishes expressions without side effects (\b{pure expressions}) from expressions with side effects (\b{actions}) by their type:
 
 \begin{block}{\centering \code{IO a}}
 \end{block}
@@ -1495,14 +1528,14 @@ is the type of (I/O) actions that return a value of type \code{a}.
 \begin{frame}{Basic actions}
 
 \begin{itemize}
-    \item \textcolor{blue}{\code{getChar :: IO Char}} \\
+    \item \b{\code{getChar :: IO Char}} \\
         Reads a \code{Char} from standard input, \\
         echoes it to standard output, \\
         and returns it as the result\pause
-    \item \textcolor{blue}{\code{putChar :: Char -> IO ()}} \\
+    \item \b{\code{putChar :: Char -> IO ()}} \\
         Writes a \code{Char} to standard output, \\
         and returns no result\pause
-    \item \textcolor{blue}{\code{return :: a -> IO a}} \\
+    \item \b{\code{return :: a -> IO a}} \\
         Performs no action, \\
         just returns the given value as a result
 \end{itemize}
@@ -1514,13 +1547,13 @@ is the type of (I/O) actions that return a value of type \code{a}.
 \begin{itemize}
     \item \code{Read}: parsing \code{String}
 \begin{alltt}
-\textcolor{blue}{class Read a where}
-  \textcolor{blue}{read :: String -> a}
+\b{class Read a where}
+  \b{read :: String -> a}
 \end{alltt}\pause
     \item \code{Show}: converting to \code{String}
 \begin{alltt}
-\textcolor{blue}{class Show a where}
-  \textcolor{blue}{show :: a -> String}
+\b{class Show a where}
+  \b{show :: a -> String}
 \end{alltt}
 \end{itemize}
 
@@ -1529,11 +1562,11 @@ is the type of (I/O) actions that return a value of type \code{a}.
 \begin{frame}{Important actions}
 
 \begin{itemize}
-    \item \textcolor{blue}{\code{putStr :: String -> IO ()}} \\
+    \item \b{\code{putStr :: String -> IO ()}} \\
         Prints a string to standard output\pause
-    \item \textcolor{blue}{\code{putStrLn :: String -> IO ()}} \\
+    \item \b{\code{putStrLn :: String -> IO ()}} \\
         Prints a string followed by a newline to standard output\pause
-    \item \textcolor{blue}{\code{getLine :: IO String}} \\
+    \item \b{\code{getLine :: IO String}} \\
         Reads everything up until a newline from standard input
 \end{itemize}
 
@@ -1543,7 +1576,7 @@ is the type of (I/O) actions that return a value of type \code{a}.
 
 \begin{frame}[fragile]{Sequencing}
 
-A sequence of actions can be combined into a single action with the keyword \textcolor{blue}{\code{do}}.
+A sequence of actions can be combined into a single action with the keyword \b{\code{do}}.
 
 \pause
 
@@ -1606,14 +1639,14 @@ class Monad m where\pause
 
 \vspace{0.25cm}
 \begin{alltt}
-\textcolor{blue}{do x <- act1}
-   \textcolor{blue}{act2}
+\b{do x <- act1}
+   \b{act2}
 \end{alltt}
 
 is syntactic sugar for
 
 \begin{alltt}
-\textcolor{blue}{act1 >>= ({\textbackslash}x -> act2)}
+\b{act1 >>= ({\textbackslash}x -> act2)}
 \end{alltt}
 
 \end{frame}
@@ -1622,11 +1655,11 @@ is syntactic sugar for
 
 \begin{exampleblock}{Example: \code{Maybe} as a monad}
 \begin{alltt}
-\textcolor{blue}{instance Monad Maybe where}
-  \textcolor{blue}{m >>= f = case m of}
-              \textcolor{blue}{Nothing -> Nothing}
-              \textcolor{blue}{Just x  -> f x}
-  \textcolor{blue}{return v = Just v}
+\b{instance Monad Maybe where}
+  \b{m >>= f = case m of}
+              \b{Nothing -> Nothing}
+              \b{Just x  -> f x}
+  \b{return v = Just v}
 \end{alltt}
 
 \pause
@@ -1653,7 +1686,7 @@ sum2 = do
 
 \begin{frame}[fragile]{Evaluation}
 
-Expressions are evaluated (\textcolor{blue}{reduced}) by successively applying definitions until no further reduction is possible.
+Expressions are evaluated (\b{reduced}) by successively applying definitions until no further reduction is possible.
 
 \pause
 
@@ -1664,27 +1697,27 @@ An expression may have many reducible sub-expressions:
 \centering \underline{sq \underline{(3+4)}}
 \end{alltt}
 
-A reducible expression is also called \textcolor{blue}{redex}.
+A reducible expression is also called \b{redex}.
 
 \end{frame}
 
 \begin{frame}{Reduction strategies}
 
 \begin{itemize}
-    \item \textcolor{blue}{innermost} reduces the innermost redex first\pause
+    \item \b{innermost} reduces the innermost redex first\pause
         \begin{itemize}
             \item arguments are evaluated before they are substituted into the function body\pause
-            \item corresponds to \textcolor{blue}{call by value}
+            \item corresponds to \b{call by value}
         \end{itemize}\pause
-    \item \textcolor{blue}{outermost} reduces the outermost redex first\pause
+    \item \b{outermost} reduces the outermost redex first\pause
         \begin{itemize}
             \item unevaluated arguments are substituted into the function body\pause
-            \item corresponds to \textcolor{blue}{call by name}
+            \item corresponds to \b{call by name}
         \end{itemize}\pause
-    \item \textcolor{blue}{lazy} combines an outermost reduction strategy with the \textcolor{blue}{sharing} of expressions.\pause
+    \item \b{lazy} combines an outermost reduction strategy with the \b{sharing} of expressions.\pause
         \begin{itemize}
             \item unevaluated arguments are substituted into the function body, but are only evaluated once for all copies of the same expression\pause
-            \item \textit{\textcolor{blue}{call by need}}
+            \item \textit{\b{call by need}}
         \end{itemize}
 \end{itemize}
 
@@ -1731,22 +1764,22 @@ ones :: [Int]
 ones = 1 : ones
 \end{alltt}
 
-\code{ones} defines an infinite list of $1$s. \code{ones} is called a \textcolor{blue}{producer}.
+\code{ones} defines an infinite list of $1$s. \code{ones} is called a \b{producer}.
 
 \pause
 
 \vspace{0.5cm}
 Outermost reduction: \par
-\textcolor{blue}{\code{head ones}} \par\pause
-\textcolor{blue}{\code{= head (1 : ones)}} \par\pause
-\textcolor{blue}{\code{= 1}}
+\b{\code{head ones}} \par\pause
+\b{\code{= head (1 : ones)}} \par\pause
+\b{\code{= 1}}
 
 \vspace{0.5cm}
 Innermost reduction: \par
-\textcolor{red}{\code{head ones}} \par\pause
-\textcolor{red}{\code{= head (1 : ones)}} \par\pause
-\textcolor{red}{\code{= head (1 : 1 : ones)}} \par
-\textcolor{red}{\code{= ...}}
+\r{\code{head ones}} \par\pause
+\r{\code{= head (1 : ones)}} \par\pause
+\r{\code{= head (1 : 1 : ones)}} \par
+\r{\code{= ...}}
 \end{exampleblock}
 
 \end{frame}
@@ -1765,12 +1798,12 @@ Innermost reduction: \par
 
 \begin{frame}{Time complexity analysis}
 
-Assumption: \textcolor{blue}{One reduction step takes one time unit}
+Assumption: \b{One reduction step takes one time unit}
 
 \pause
 
 \vspace{0.5cm}
-\textcolor{blue}{$T_f(n) = $} number of steps for the evaluation of $f$ when applied to an argument of size $n$ in the worst case
+\b{$T_f(n) = $} number of steps for the evaluation of $f$ when applied to an argument of size $n$ in the worst case
 
 \pause
 
@@ -1800,7 +1833,7 @@ Calculating $T_f(n)$:
 
 $T_{\code{++}}(0, n) = O(1)$ \par\pause
 $T_{\code{++}}(m + 1, n) = T_{\code{++}}(m, n) + O(1)$ \par\pause
-$\implies$ \textcolor{blue}{$T_{\code{++}}(m, n) = O(m)$}
+$\implies$ \b{$T_{\code{++}}(m, n) = O(m)$}
 \end{exampleblock}
 
 \end{frame}
