@@ -14,11 +14,11 @@ jobs:
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           files: |
+            slides/slides.tex
+            slides/organization.tex
             problems/problem_set_1.tex
             problems/problem_set_2.tex
             problems/problem_set_3.tex
             problems/problem_set_4.tex
-            slides/organization.tex
-            slides/slides.tex
           handouts: |
             slides/slides.tex
