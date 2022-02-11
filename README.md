@@ -18,7 +18,7 @@ engaging as possible.
 
 ## Materials
 
-* [**handout**](https://jonhue.github.io/teaching-fpv-rev/handout.pdf)
+* [**handout**](https://jonhue.github.io/teaching-fpv-rev/slides_handout.pdf)
 * [slides](https://jonhue.github.io/teaching-fpv-rev/slides.pdf) (with animations)
 * [organization](https://jonhue.github.io/teaching-fpv-rev/organization.pdf)
 

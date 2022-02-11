@@ -3,41 +3,22 @@ name: Publish
 on:
   push:
     branches:
-    - sources
-
+      - main
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@master
-    - name: Prepare handout
-      run: |
-        cp ./slides/slides.tex ./slides/handout.tex
-        sed -i "1s/.*/\\\\documentclass\[handout\]\{beamer\}/" ./slides/handout.tex
-    - name: Compile LaTeX sources
-      uses: xu-cheng/latex-action@2.4.0
-      with:
-        pre_compile: tlmgr update --self && tlmgr update --all
-        root_file: |
-          problems/problem_set_1.tex
-          problems/problem_set_2.tex
-          problems/problem_set_3.tex
-          problems/problem_set_4.tex
-          slides/handout.tex
-          slides/organization.tex
-          slides/slides.tex
-    - name: Move PDFs
-      run: mv ./*.pdf ./dist
-    - name: Move readme
-      run: cp ./README.md ./dist/index.md
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3.8.0
-      with:
-        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        publish_branch: master
-        publish_dir: ./dist
-        allow_empty_commit: true
-        force_orphan: true
-        enable_jekyll: true
+      - uses: actions/checkout@main
+      - name: Compile and Deploy
+        uses: jonhue/pubtex-action@main
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          files: |
+            problems/problem_set_1.tex
+            problems/problem_set_2.tex
+            problems/problem_set_3.tex
+            problems/problem_set_4.tex
+            slides/organization.tex
+            slides/slides.tex
+          handouts: |
+            slides/slides.tex
